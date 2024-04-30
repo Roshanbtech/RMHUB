@@ -25,7 +25,7 @@ const payment = async (req, res) => {
     try {
         // Validate request data
         if (!req.body || !req.body.amount) {
-            return res.status(400).send('Amount is required');
+            return res.status(400).send('Amount is required');git 
         }
 
         const { amount, address, couponCode } = req.body;
