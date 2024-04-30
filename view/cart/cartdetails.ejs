@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
+    <style>
+        /* Add your CSS here */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            margin-top: 0px;
+            padding: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #3cf696;
+            /* Header th color */
+        }
+
+        .table td {
+            background-color: #e5e6de;
+            /* Table cell color */
+        }
+
+        .table td.actions button {
+            margin-right: 5px;
+        }
+
+        .table th,
+        .table td:hover {
+            background-color: #d8f0dd;
+            /* Hover color */
+        }
+
+        .btn-warning {
+            background-color: #FFD166;
+            border-color: #FFD166;
+            color: #000000;
+            text-decoration: none;
+            /* Remove underline */
+            padding: 10px 20px;
+            /* Increase button size */
+            border-radius: 10px;
+            /* Add border radius */
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-success {
+            background-color: #3cf696;
+            border-color: #3cf696;
+            color: #ffffff;
+            text-decoration: none;
+            /* Remove underline */
+            padding: 10px 20px;
+            /* Increase button size */
+            border-radius: 10px;
+            /* Add border radius */
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-danger,
+        .btn-info {
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: red;
+
+        }
+
+        .btn-info:hover {
+            background-color: blue;
+        }
+
+        .btn-info i.fa-eye {
+            color: blue;
+            /* Set color for refresh icon */
+        }
+
+        .btn-danger i.fa-trash-o {
+            color: red;
+            /* Set color for delete icon */
+        }
+
+        .btn-info i.fa-eye:hover {
+            color: #fff;
+        }
+
+        .btn-danger i.fa-trash-o:hover {
+            color: #fff;
+
+        }
+
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%
+        }
+
+        .nav img {
+            height: 50px;
+            width: auto;
+            /* Add this to maintain aspect ratio */
+        }
+
+        @keyframes zoomInAndOut {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .logo-small {
+
+            animation: zoomInAndOut 1s infinite;
+            animation-direction: alternate;
+            animation-timing-function: ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div>
+    <br>
+    <div class="container" style="margin-top:50px">
+        <h2 class="text-center" style="display: flex; justify-content:center"><img
+                src="/images/shopping-cart-fill-svgrepo-com.svg" alt="Logo" class="logo-small"
+                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+            MY CART</h2>
+        <p>User : <%= userEmail %>
+        </p>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="cartTable" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width:5%;background-color: #3cf696">SI No.</th>
+                            <th style="width:30%;background-color: #3cf696">Product</th>
+                            <th style="width:20%;background-color: #3cf696">Price</th>
+                            <th style="width:10%;background-color:#3cf696">Quantity</th>
+                            <th style="width:20%;background-color: #3cf696">Subtotal</th>
+                            <th style="width:20%;background-color: #3cf696">Actions</th> <!-- Added Actions column -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (userCart && userCart.cartItems.length> 0) { %>
+                            <% let totalPrice=0; %>
+                                <% userCart.cartItems.forEach((item,index)=> { %>
+                                    <% const subtotal=item.quantity * item.price; %>
+                                        <% totalPrice +=subtotal; %>
+                                            <tr>
+                                                <td>
+                                                    <%= index+1 %>
+                                                </td>
+                                                <td data-th="Product">
+                                                    <div class="row">
+                                                        <div class="col-sm-2 hidden-xs"><img
+                                                                src="/<%= item.productId.image[0] %>" alt="..."
+                                                                class="img-responsive"
+                                                                style="max-width: 100px; max-height: 100px;" /></div>
+                                                        <div class="col-sm-10">
+                                                            <h4 class="nomargin">
+                                                                <%= item.productId.model %>
+                                                            </h4>
+                                                            <p>
+                                                                <%= item.productId.description %>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <!-- <td data-th="Price">₹<%= item.price %></td> -->
+                                                <td data-th="Price">
+                                                    <% if (item.onOffer) { %>
+                                                        ₹<%= item.offerPrice %>
+                                                            <!-- Display the discounted price if an offer is applied -->
+                                                            <% } else { %>
+                                                                ₹<%= item.price %>
+                                                                    <!-- Display the original price if no offer is applied -->
+                                                                    <% } %>
+                                                </td>
+                                                <td data-th="Quantity">
+                                                    <!-- <input type="number" class="form-control text-center" value="<%= item.quantity %>"> -->
+                                                    <input type="number" class="form-control text-center" min="1"
+                                                        value="<%= item.quantity %>"
+                                                        onchange="updateQuantity('<%= item._id %>', this.value)">
+
+                                                </td>
+                                                <td data-th="Subtotal" id="subtotal_<%= item._id %>">₹<%= subtotal %>
+                                                </td>
+                                                <td class="actions" data-th="">
+                                                    <button class="btn btn-info btn-sm"
+                                                        onclick="location.href='/proddes/<%= item.productId._id %>'"><i
+                                                            class="fa fa-eye"></i></button>
+                                                    <button class="btn btn-danger btn-sm"
+                                                        onclick="confirmRemove('<%= item._id %>')"><i
+                                                            class="fa fa-trash-o"></i></button>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <!-- <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                               
+                                <td></td>
+                                <td >Cart is empty</td>
+                                <td></td>
+                            </tr> -->
+                                                    <h2>Cart is empty</h2>
+                                                    <% } %>
+                    </tbody>
+                    <tfoot>
+
+                        <tr>
+                            <td></td>
+                            <td><a href="/home" class="btn btn-warning">Continue Shopping</a></td>
+
+                            <td colspan="2" class="hidden-xs"></td>
+                            <td id="totalPrice" class="hidden-xs text-center" style="text-align:center"><strong>Total:₹
+                                    <%= totalPrice %></strong></td>
+                            <td><a href="/cart/checkout" class="btn btn-success btn-block">Checkout</a></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#cartTable').DataTable(); // Initialize DataTable
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        function confirmRemove(itemId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3cf696",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, remove it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If the user confirms, make a GET request to remove the item
+                    fetch(`/cart/removeitem/${itemId}`, {
+                        method: 'GET'
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to remove item from cart');
+                            }
+                            // Handle success response (e.g., update UI)
+                            // For example, you can reload the page or update the cart UI
+                            location.reload(); // Reload the page after successful removal
+
+                            Swal.fire({
+
+                                text: 'Item removed from cart',
+                                icon: 'success',
+                                timer: 2000
+                            });
+                        })
+                        .catch(error => {
+                            // Handle error response (if any)
+                            console.error(error);
+                            Swal.fire("Error", "Failed to remove item from cart!", "error");
+                        });
+                }
+            });
+        }
+    </script>
+    <script>
+        // Function to update item quantity using AJAX
+        function updateQuantity(itemId, newQuantity) {
+            // Make a fetch request to update the quantity in the backend
+            fetch(`/cart/updateitem/${itemId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ quantity: newQuantity })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update quantity');
+                    }
+                    // Handle success response (e.g., update UI)
+                    // For example, you can update the subtotal and total displayed on the page
+                    return response.json();
+                })
+                .then(data => {
+
+                    // Update subtotal and total displayed on the page
+                    const subtotal = data.subtotal;
+                    console.log(subtotal);
+                    const totalPrice = data.totalPrice;
+                    console.log(totalPrice);
+                    document.getElementById(`subtotal_${itemId}`).innerText = `₹${subtotal}`;
+                    document.getElementById('totalPrice').innerText = `Total: ₹${totalPrice}`;
+                })
+                .catch(error => {
+                    // Handle error response (if any)
+                    console.error(error);
+                    Swal.fire("Error", "Requested quantity exceeds stock limit!", "error");
+                });
+        }
+    </script>
+
+
+</body>
+
+</html>

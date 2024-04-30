@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: black;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #3cf696;
+            position: relative;
+            /* Add position relative for absolute positioning */
+            margin-top: 10%;
+
+        }
+
+       
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #3cf696;
+        }
+
+        @keyframes drawInwards {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .profile-image {
+            max-width: 150px;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: block;
+            border: 5px solid #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: drawInwards 1s ease-in-out infinite alternate;
+            /* Apply the animation */
+            background-color: black;
+        }
+
+        .profile-details {
+            margin-bottom: 20px;
+            text-align: center;
+            
+        }
+
+        .profile-details label {
+            font-weight: bold;
+            color: #3cf696;
+            margin-right: 10px;
+        }
+
+        .profile-details span {
+            color: #777;
+        }
+
+        .social-icons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: #555;
+            font-size: 20px;
+            margin: 0 10px;
+        }
+
+        .social-icons a:hover {
+            color: #3cf696;
+            box-shadow: 0 0 10px #3cf696;
+        }
+
+        .add-address-button {
+            position: absolute;
+            top: 90px;
+            right: 30px;
+            background-color: black;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid black;
+            box-shadow: 0 0 10px #3cf696;
+
+        }
+
+        .edit-profile-button {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            border: none;
+            background-color: black;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid black;
+            box-shadow: 0 0 10px #3cf696;
+
+        }
+
+        .change-password-button {
+            position: absolute;
+            top: 150px;
+            right: 30px;
+            border: none;
+            border: 2px solid black;
+            background-color: black;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 0 0 10px #3cf696;
+
+        }
+
+        .order-summary-button {
+            position: absolute;
+            top: 210px;
+            right: 30px;
+            background-color: black;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid black;
+            box-shadow: 0 0 10px #3cf696;
+
+        }
+
+        .wallet-button {
+            position: absolute;
+            top: 270px;
+            right: 30px;
+            background-color: black;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid black;
+            box-shadow: 0 0 10px #3cf696;
+
+        }
+
+        .edit-address-button {
+            background-color: black;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            border: 2px solid black;
+            box-shadow: 0 0 10px #3cf696;
+
+
+        }
+
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav img {
+            height: 50px;
+            width: auto;
+            /* Add this to maintain aspect ratio */
+        }
+
+        .address-card {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #3cf696;
+            margin-bottom: 20px;
+        }
+
+        .address-card label {
+            font-weight: bold;
+            color: #3cf696;
+        }
+
+        .address-card span {
+            color: #777;
+        }
+
+        .address-card:hover {
+            background-color: #d8f0dd;
+            border-color: black;
+        }
+
+        .remove-address-form {
+            position: relative;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-button {
+            color: black;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+            top: -10px;
+            /* Adjust as needed */
+            left: 20px;
+            /* Adjust as needed */
+            z-index: 2;
+            /* Ensure it's above other content */
+            margin-top: 20px;
+        }
+
+        .back-button i {
+            margin-right: 5px;
+            /* Adjust as needed */
+
+        }
+
+        .referral-code-button {
+            background-color: #3cf696;
+            color: black;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.3;
+            border-radius: 10px;
+            transition: all .2s ease-in-out;
+        }
+        
+       
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <a href="/aftlan">
+            <img src="/images/NavImg.jpg" alt="Logo">
+        </a>
+    </div>
+    <div class="container">
+        <a href="/home" class="back-button" style="color:#3cf696">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <h1>Hey <%= user.firstName%>!...</h1>
+        <img src="/images/users-avatar-svgrepo-com.svg" alt="User Photo" class="profile-image"
+            style="margin-bottom: 20px;border-color:#3cf696">
+        <div style="display:flex; justify-content:center">
+            <button class="add-address-button" onclick="location.href='/profile/addaddress'" title="Add Address">
+                <img src="/images/address-svgrepo-com.svg" style=" width:30px;height:30px;" alt="Password Icon">
+            </button>
+            <button class="edit-profile-button" onclick="location.href='/profile/editprofile/<%= user._id %>'"
+                title="Edit Profile">
+                <img src="/images/edit-profile-svgrepo-com.svg" style=" width:30px;height:30px;" alt="Password Icon">
+            </button>
+            <button type="button" class="change-password-button"
+                onclick="location.href='/profile/changepassword/<%= user._id %>'" title="Change Password">
+                <img src="/images/change-password-svgrepo-com.svg" style=" width:30px;height:30px;" alt="Password Icon">
+            </button>
+            <button type="button" class="order-summary-button" onclick="location.href='/cart/orderhistory'"
+                title="My Orders">
+                <img src="/images/orders-svg.svg" style=" width:30px;height:30px;" alt="Password Icon">
+            </button>
+            <button type="button" class="wallet-button" onclick="location.href='/profile/wallet'" title="My Wallet">
+                <img src="/images/wallet.svg" style=" width:30px;height:30px;" alt="Password Icon">
+            </button>
+            <% if (user.referalCode !=="Not created" ) { %>
+                <div class="profile-details">
+                    <label for="referalCode">Referral Code:</label>
+                    <span id="referalCode"><strong>
+                            <%= user.referalCode %>
+                        </strong></span>
+                    <button onclick="copyReferralCode()" title="Copy Referral Code" style="border: 1px solid #3cf696">
+                        <i class="fas fa-copy" style="color:#777"></i>
+                    </button>
+                </div>
+                <% } else { %>
+                    <button type="button" class="referral-code-button" onclick="location.href='/profile/genreferalcode'"
+                        title="Generate Referral Code">
+                        Generate Referral Code
+                    </button>
+                    <% } %>
+
+        </div>
+        
+        <div class="profile-details">
+            <label for="username">Username:</label>
+            <span id="username">
+                <%= user.firstName+" "+user.lastName %></span>
+        </div>
+        <div class="profile-details">
+                    <label for="email">Email:</label>
+                    <span id="email">
+                        <%= user.email %>
+                    </span>
+        </div>
+        <div class="profile-details">
+            <label for="firstName">First Name:</label>
+            <span id="firstName">
+                <%= user.firstName %>
+            </span>
+        </div>
+        <div class="profile-details">
+            <label for="lastName">Last Name:</label>
+            <span id="lastName">
+                <%= user.lastName %>
+            </span>
+        </div>
+    
+        <% if (user.address.length> 0) { %>
+            <% user.address.forEach(function(address) { %>
+                <div class="address-card">
+
+                    <form action="/profile/removeaddress/<%= address._id %>" method="GET" class="remove-address-form">
+                        <button type="button" class="close-button" onclick="confirmDelete('<%= address._id %>', this)"
+                            title="Remove Address">
+                            <img src="/images/button-close-svgrepo-com.svg" style="width:25px;height:25px;">
+                        </button>
+                    </form>
+                    <button class="edit-address-button"
+                        onclick="location.href='/profile/editaddress/<%= address._id %>'" title="Edit Address">
+                        <img src="/images/edit-svgrepo-com.svg" alt="Edit Icon"
+                            style="width: 20px; height: 20px;background-color: black">
+                    </button>
+
+                    <div class="profile-details">
+                        <label for="address">Address:</label>
+                        <span id="address">
+                            <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city %>, <%=
+                                            address.state %>, <%= address.pincode %>
+                        </span>
+                    </div>
+                    <div class="profile-details">
+                        <label for="city">City:</label>
+                        <span id="city">
+                            <%= address.city %>
+                        </span>
+                    </div>
+                    <div class="profile-details">
+                        <label for="pincode">Pincode:</label>
+                        <span id="pincode">
+                            <%= address.pincode %>
+                        </span>
+                    </div>
+                    <div class="profile-details">
+                        <label for="state">State:</label>
+                        <span id="state">
+                            <%= address.state %>
+                        </span>
+                    </div>
+                    <div class="profile-details">
+                        <label for="addressType">AddressType:</label>
+                        <span id="addressType">
+                            <%= address.addressType %>
+                        </span>
+                    </div>
+                </div>
+                <% }); %>
+                    <% } else { %>
+                        <div class="profile-details">
+                            <label for="address">Address:</label>
+                            <span id="address">No address found</span>
+                        </div>
+                        <% } %>
+
+                            <div class="social-icons">
+                                <a href="#"><i class="fab fa-facebook"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        // Function to handle delete confirmation
+        function confirmDelete(addressId, closeButton) {
+            // Show SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to delete this address!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3cf696',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                // If user confirms deletion, submit the form to delete address
+                if (result.isConfirmed) {
+                    // Traverse up the DOM to find the parent form element
+                    const form = closeButton.closest('.remove-address-form');
+                    // Submit the form
+                    form.submit();
+                }
+            });
+        }
+
+        function copyReferralCode() {
+            // Get the referral code element
+            var referralCode = document.getElementById("referalCode");
+            // Create a textarea element
+            var textarea = document.createElement("textarea");
+            // Set the value of the textarea to the referral code
+            textarea.value = referralCode.innerText;
+            // Append the textarea to the document body
+            document.body.appendChild(textarea);
+            // Select the textarea
+            textarea.select();
+            // Copy the selected text
+            document.execCommand("copy");
+            // Remove the textarea from the document body
+            document.body.removeChild(textarea);
+            // Show a confirmation message
+            Swal.fire({
+                icon: 'success',
+                title: 'Referral code copied to clipboard!',
+                showConfirmButton: false,
+                timer: 1500,
+                position: 'top-end',
+                toast: true
+            })
+        }
+
+    </script>
+    <script>
+        // Function to parse URL query parameters
+        const getParameterByName = (name, url = window.location.href) => {
+            name = name.replace(/[[\]]/g, '\\$&');
+            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+            const results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        };
+
+        // Check if 'success' query parameter exists and display the message
+        const successMessage = getParameterByName('success');
+        if (successMessage) {
+            // Display success message using SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                position: 'top-end', // Position the alert to top right corner
+                showConfirmButton: false,
+                timer: 1500,
+                toast: true, // Set to true for toast style
+                timerProgressBar: true // Enable timer progress bar
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #3cf696;
+            height: 60px;
+        }
+
+        .navbar img {
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px #3cf696;
+            animation: slideIn 1s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-small {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #3cf696;
+            border-radius: 50%;
+            background-color: #e5e6de;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .btn-success {
+            background-color: #3cf696;
+            border-color: #3cf696;
+            color: #fff;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #36e687;
+            border-color: #36e687;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .btn-link {
+            color: #3cf696;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+            color: #36e687;
+        }
+
+        .login-title {
+            background-color: #3cf696;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: black;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #3cf696;
+            padding: 10px;
+            width: 100%;
+            background-color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #3cf696;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+
+        }
+
+        .btn-primary:hover {
+            background-color: #32c084;
+        }
+
+
+        .forgot-password {
+            margin-right: auto;
+            /* Pushes the login button to the right */
+        }
+
+        .login-button {
+            margin-left: auto;
+            /* Pushes the login button to the right */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- <div class="navbar">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div> -->
+
+    <div class="container">
+        <div class="form-container">
+            <div class="login-title">😍Get Ready to Dive In!...</div>
+            <% if(locals.message) { %>
+                <div class="error" style="text-align: center;">
+                    <%= message %>
+                </div>
+                <% } %>
+                    <!-- <div class="text-center">
+                <img src="/images/user-authentication-svgrepo-com.svg" alt="Logo" class="logo-small">
+            </div> -->
+                    <form action="/login" method="post" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email">
+                            <div class="error" id="emailError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control" placeholder="Enter Password" name="password"
+                                id="password">
+                            <div class="error" id="passwordError"></div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <a href="/forpasmail" class="btn-link">Forgot Password?</a>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+
+                        <p style="text-align: center;">New here? <a href="/signup" class="btn-link">Sign Up</a></p>
+                    </form>
+        </div>
+    </div>
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function validateForm() {
+            var email = document.getElementById("email").value.trim();
+            var password = document.getElementById("password").value.trim();
+
+            var isValid = true;
+
+            // Validate Email
+            if (email === "") {
+                document.getElementById("emailError").innerHTML = "*Please enter your email";
+                document.getElementById("email").style.borderColor = "red";
+                isValid = false;
+            } else {
+                document.getElementById("emailError").innerHTML = "";
+                document.getElementById("email").style.borderColor = "#3cf696";
+            }
+
+            // Validate Password
+            if (password === "") {
+                document.getElementById("passwordError").innerHTML = "*Please enter your password";
+                document.getElementById("password").style.borderColor = "red";
+                isValid = false;
+            } else {
+                document.getElementById("passwordError").innerHTML = "";
+                document.getElementById("password").style.borderColor = "#3cf696";
+            }
+
+            return isValid;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" id="sweetalert2"></script>
+    <script>
+
+
+        // Parse URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const message = urlParams.get('message');
+
+        // If message is present, show SweetAlert
+        if (message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: message,
+                timer: 5000,
+                position: 'top-end',
+                confirmButtonColor: '#3cf696',
+                confirmButtonText: 'Ok',
+                innerHeight: 200,
+                innerWidth: 200,
+                background: '#fff',
+                backdrop: `
+              rgba(0,0,0,0.4)
+            `,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';
+                }
+
+
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>

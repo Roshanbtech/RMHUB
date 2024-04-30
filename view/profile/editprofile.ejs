@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav img {
+            height: 50px;
+            width: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 70px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #3cf696;
+            color: #fff;
+            padding: 15px;
+            border-radius: 20px;
+            font-size: 28px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: black;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #3CF696;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #3CF696;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #36e687;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .in-exs {
+            color: red;
+            text-align: center;
+            font-size: large;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div>
+    <div class="container">
+        <h2>Edit Profile</h2>
+        <form id="profileForm" action="/profile/editprofile/<%= user._id %>" method="POST"
+            onsubmit="return validateForm()">
+            <div>
+                <% if(locals.exists) { %>
+                    <div class="in-exs">
+                        <%= exists %>
+                    </div>
+                    <% } %>
+            </div>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" placeholder="Enter your first name" value="<%= user.firstName %>"
+                name="firstName">
+            <div class="error" id="firstNameError"></div>
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" placeholder="Enter your last name" name="lastName"
+                value="<%= user.lastName %>">
+            <div class="error" id="lastNameError"></div>
+
+            <input type="submit" value="Save Changes">
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            var firstName = document.getElementById("firstName").value.trim();
+            var lastName = document.getElementById("lastName").value.trim();
+
+            isValid = true;
+
+            if (firstName === "") {
+                document.getElementById("firstNameError").innerHTML = "*Please enter your first name.";
+                document.getElementById("firstName").style.borderColor = "red";
+                isValid = false;
+            } else {
+                document.getElementById("firstNameError").innerHTML = "";
+            }
+            if (lastName === "") {
+                document.getElementById("lastNameError").innerHTML = "*Please enter your last name.";
+                document.getElementById("lastName").style.borderColor = "red";
+                isValid = false;
+            } else {
+                document.getElementById("lastNameError").innerHTML = "";
+            }
+            return isValid;
+
+        }
+    </script>
+</body>
+
+</html>

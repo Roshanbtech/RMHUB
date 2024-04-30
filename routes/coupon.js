@@ -1,0 +1,16 @@
+const express = require('express');
+const router = express.Router();
+const couponcontroller = require('../controller/couponcontroller');
+const coupon = require('../model/admin/couponmodel');
+const isAdminAuthenticated = require('../middleware/authenticitymiddleware');
+
+router.post('/addcoupon',isAdminAuthenticated, couponcontroller.addcoupon)
+router.get('/coupon',isAdminAuthenticated, couponcontroller.coupon)
+router.get('/delcoupon/:id',isAdminAuthenticated, couponcontroller.deletecoupon)
+
+
+
+
+
+
+module.exports = router

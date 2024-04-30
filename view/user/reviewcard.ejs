@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/reviews.css">
+    <title>Product Reviews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        #reviews-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+        
+        .review-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+        }
+        
+        .review-card h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Reviews</h1>
+    <div id="reviews-container">
+        <!-- <% reviews.forEach(function(review,index) { %>
+            <div class="review-card">
+                <h2><%= review.title %></h2>
+                <p><%= review.content %></p>
+                <span>Rating: <%= review.rating %>/5</span>
+            </div>
+        <% }); %> -->
+        <p><%= product.reviews%></p>
+    </div>
+</body>
+</html>

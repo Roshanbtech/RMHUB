@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Font Awesome for icons -->
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .column {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #3cf696;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-details {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .user-details label {
+            font-weight: bold;
+        }
+
+        .user-details span {
+            margin-left: 10px;
+        }
+
+        .user-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .user-action {
+            margin: 10px;
+        }
+
+        .user-action button {
+            background-color: #3cf696;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-action button svg {
+            margin-right: 5px;
+        }
+
+        .user-action button:hover {
+            background-color: #31b382;
+        }
+
+        /* Address Card Styles */
+        .address-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.3s ease;
+            border: 1px solid #ced4da;
+        }
+
+        .address-card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .address-details {
+            margin-bottom: 10px;
+        }
+
+        .address-details label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .address-details span {
+            color: #6c757d;
+        }
+
+        /* Edit and Delete Button Styles */
+        .edit-button,
+        .delete-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            outline: none;
+        }
+
+        .edit-button svg,
+        .delete-button svg {
+            margin-right: 5px;
+        }
+
+        .edit-button:hover,
+        .delete-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Tooltip Styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 1st Column -->
+        <div class="column">
+            <h2>Additional Buttons</h2>
+            <div class="user-action">
+                <button onclick="location.href='/cart/orderhistory'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1a1 1 0 0 1 1-1h2.25a.75.75 0 0 1 .65.4l1.5 3A.75.75 0 0 0 5.25 4h5.5a.75.75 0 0 0 .85-.57l1.5-6A1 1 0 0 1 13.75 1H3z" />
+                        <path
+                            d="M14.128 4H5.108l-.483-1.933A1.25 1.25 0 0 0 3.392 1H1a1 1 0 0 0 0 2h1.23l.62 2.483a2.25 2.25 0 0 0 2.122 1.517h6.448a2.25 2.25 0 0 0 2.122-1.517L15 4.707A.5.5 0 0 0 14.628 4h-.5zM5.635 11.5a2.5 2.5 0 1 0 4.73 0H5.635z" />
+                    </svg>
+                    Order History
+                </button>
+            </div>
+            <div class="user-action">
+                <button onclick="location.href='/profile/wallet'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-wallet-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M3 5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1H3V5zm9 2.5V9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7.5h8zM5 10v2a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2H5z" />
+                        <path
+                            d="M13 2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h10zm0 1H3v10h10V3z" />
+                    </svg>
+                    My Wallet
+                </button>
+            </div>
+        </div>
+
+        <!-- 2nd Column -->
+        <div class="column">
+            <h1>User Profile</h1>
+
+            <!-- Generate Referral Code Button -->
+            <% if (user.referalCode !== "Not created") { %>
+            <div class="user-action">
+                <button onclick="copyReferralCode()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-clipboard" viewBox="0 0 16 16">
+                        <path
+                            d="M5.5 1a.5.5 0 0 1 .5.5V3h5V1.5a.5.5 0 0 1 1 0V3h1a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1V1.5a.5.5 0 0 1 .5-.5zM3 4h10v10H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" />
+                    </svg>
+                    Copy Referral Code
+                </button>
+            </div>
+            <% } else { %>
+            <div class="user-action">
+                <button onclick="location.href='/profile/genreferalcode'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-gift" viewBox="0 0 16 16">
+                        <path
+                            d="M13.5 0a2.5 2.5 0 0 1 2.5 2.5v4.794a2 2 0 0 1-.316 1.077l-2.667 4A2.5 2.5 0 0 1 11.794 14H4.206a2.5 2.5 0 0 1-1.923-.885l-2.667-4A2 2 0 0 1 .5 7.294V2.5A2.5 2.5 0 0 1 3 0h10zM2 8l1.5-2h9L14 8H2zm6-4.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5V5h-2V3.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5V5H5V3.5z" />
+                    </svg>
+                    Generate Referral Code
+                </button>
+            </div>
+            <% } %>
+
+            <!-- User Details -->
+            <div class="user-details">
+                <div>
+                    <label for="username">Username:</label>
+                    <span><%= user.username %></span>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <span><%= user.email %></span>
+                </div>
+                <div>
+                    <label for="firstName">First Name:</label>
+                    <span><%= user.firstName %></span>
+                </div>
+                <div>
+                    <label for="lastName">Last Name:</label>
+                    <span><%= user.lastName %></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3rd Column -->
+        <div class="column">
+            <h2>Address Management</h2>
+            <!-- Iterate over user's addresses -->
+            <% if (user.address.length > 0) { %>
+            <% user.address.forEach(function(address) { %>
+            <div class="address-card">
+                <!-- Display address details -->
+                <div class="address-details">
+                    <label for="address">Address:</label>
+                    <span><%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city %>,
+                        <%= address.state %>, <%= address.pincode %></span>
+                </div>
+                <div class="address-details">
+                    <label for="addressType">Address Type:</label>
+                    <span><%= address.addressType %></span>
+                </div>
+                <!-- Edit and Delete buttons with tooltips -->
+                <div class="address-details">
+                    <div class="tooltip">
+                        <button class="edit-button" onclick="location.href='/profile/editaddress/<%= address._id %>'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path
+                                    d="M2.648 11.362a1.15 1.15 0 0 0 0 1.625l3.172 3.172a1.15 1.15 0 0 0 1.625 0l8.098-8.098a1.15 1.15 0 0 0 0-1.625l-3.172-3.172a1.15 1.15 0 0 0-1.625 0l-8.098 8.098zm10.953-9.82a.65.65 0 0 1 .92 0l1.415 1.414a.65.65 0 0 1 0 .92L11.986 9.01l-2.335.584.584-2.335 6.366-6.366z" />
+                            </svg>
+                            <span class="tooltiptext">Edit</span>
+                        </button>
+                        <form action="/profile/removeaddress/<%= address._id %>" method="GET"
+                            class="remove-address-form">
+                            <button class="delete-button" type="button"
+                                onclick="confirmDelete('<%= address._id %>')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path
+                                        d="M1.5 5.5a.5.5 0 0 1 .5-.5h12a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-12a.5.5 0 0 1-.5-.5v-9zm1-1V14a1.5 1.5 0 0 0 1.5 1.5h8a1.5 1.5 0 0 0 1.5-1.5V4.5h-11z" />
+                                    <path fill-rule="evenodd"
+                                        d="M10.5 1.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zM4.204 1.757a.5.5 0 0 1 .758-.648L6.5 2.852 7.038 2.21a.5.5 0 0 1 .648-.042l.11.075a.5.5 0 0 1 .184.417v.5a.5.5 0 0 1-.5.5H6.5a.5.5 0 0 1-.5-.5v-.354L4.204 1.757zM2 4.5V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5H2z" />
+                                </svg>
+                                <span class="tooltiptext">Delete</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+            <% } else { %>
+            <div class="profile-details">
+                <p>No addresses found.</p>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        function copyReferralCode() {
+            var referralCode = '<%= user.referalCode %>';
+            navigator.clipboard.writeText(referralCode).then(function () {
+                alert("Referral code copied to clipboard: " + referralCode);
+            }, function () {
+                alert("Failed to copy referral code to clipboard.");
+            });
+        }
+
+        function confirmDelete(addressId) {
+            if (confirm("Are you sure you want to delete this address?")) {
+                document.querySelector('.remove-address-form').submit();
+            }
+        }
+    </script>
+</body>
+
+</html>

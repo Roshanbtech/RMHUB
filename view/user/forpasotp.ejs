@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #3CF696;
+            height: 60px;
+            padding: 0 20px;
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px);
+            background: #fff;
+        }
+
+        .otp-container {
+            background: #e5e6de;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-family: 'Zen Dots', sans-serif;
+            color: #000;
+        }
+
+        .userInput {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            margin: 0 5px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #3CF696;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: #3CF696;
+            color: black;
+            cursor: pointer;
+        }
+
+        .resendOtp {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #3CF696;
+        }
+
+        .timer {
+            font-size: 0.9rem;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <img class="logo" src="/images/NavImg.jpg" alt="Logo">
+    </div>
+
+    <div class="container">
+        <div class="otp-container">
+            <form action="/forpasotp" method="post">
+                <h1>ENTER OTP</h1>
+                <div class="userInput">
+                    <input type="text" id='ist1' name='otp1' maxlength="1" onkeyup="clickEvent(this,'ist2')">
+                    <input type="text" id="ist2" name='otp2' maxlength="1" onkeyup="clickEvent(this,'ist3')">
+                    <input type="text" id="ist3" name='otp3' maxlength="1" onkeyup="clickEvent(this,'ist4')">
+                    <input type="text" id="ist4" name='otp4' maxlength="1">
+                </div>
+                <div class="timer" id="timer">Time remaining: 30 seconds</div>
+                <button id="confirmButton" type="submit">Confirm</button>
+                <div class="resendOtp" id="resendOtp" style="display: none;"><a href="/resOtp">Resend OTP</a></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function clickEvent(first, last) {
+            if (first.value.length === 1) {
+                document.getElementById(last).focus();
+            }
+        }
+
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            var otp = '';
+            for (var i = 1; i <= 4; i++) {
+                otp += document.getElementById('ist' + i).value;
+            }
+            // Send the OTP to your server to verify it
+            fetch('/valOtp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ otp: otp }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // OTP verification was successful
+                        console.log('OTP verification successful');
+                    } else {
+                        // OTP verification failed
+                        console.log('Invalid OTP');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Timer for OTP expiry
+        let timeLeft = 30;
+        const timer = document.getElementById('timer');
+        const resendOtp = document.getElementById('resendOtp');
+        const confirmButton = document.getElementById('confirmButton');
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timer.textContent = 'Time expired';
+                resendOtp.style.display = 'block';
+                confirmButton.disabled = true;
+            } else {
+                timer.textContent = `Time remaining: ${timeLeft} seconds`;
+            }
+            timeLeft -= 1;
+        }, 1000);
+    </script>
+
+</body>
+
+</html>

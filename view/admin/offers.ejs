@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .main-content {
+            margin-left: 222px;
+            /* This is equal to the width of the sidebar (200px) plus its padding (15px) */
+            padding: 15px;
+            position: relative;
+            z-index: 0;
+            top: px;
+            /* Add this to move it down from the navbar */
+        }
+
+        .user-search {
+            gap: 10px;
+            background-color: #e5e6de;
+            margin-left: 220px;
+            width: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            /* Add this to move it down from the search bar */
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #e5e6de;
+            color: #3cf696;
+        }
+
+        td button {
+            display: flex;
+            justify-content: center;
+        }
+
+        .block-button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        td.last {
+            display: flex;
+            justify-content: center;
+        }
+
+
+        #example tbody tr td.active {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #example tbody tr td.inactive {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #example thead th {
+            background-color: #3cf696;
+            /* Header background color */
+            color: black;
+            /* Header text color */
+            border: none;
+            /* Remove border */
+            padding: 10px;
+            /* Add padding */
+        }
+
+        #example tbody tr td:nth-child(odd) {
+            background-color: #e5e6de;
+            /* Odd row background color */
+        }
+
+        #example tbody tr:hover {
+            background-color: #c9c9c9;
+            /* Hovered row background color */
+        }
+
+        /* Alternate row color for better visibility */
+        #example tbody tr td:nth-child(even) {
+            background-color: #f9f9f9;
+            /* Even row background color */
+        }
+
+        @keyframes zoomInAndOut {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .logo-small {
+
+            animation: zoomInAndOut 1s infinite;
+            animation-direction: alternate;
+            animation-timing-function: ease-in-out;
+        }
+
+        .action button {
+            margin-bottom: 5px;
+            /* Add margin to separate buttons */
+        }
+
+        .toggle-offer-btn {
+            background-color: #e5e6de;
+            /* Toggle button color */
+            color: #3cf696;
+            /* Toggle button text color */
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .toggle-offer-btn:hover {
+            background-color: #3cf696;
+            /* Hover color */
+            color: #e5e6de;
+            /* Hover text color */
+        }
+
+        [type=button]:not(:disabled),
+        [type=reset]:not(:disabled),
+        [type=submit]:not(:disabled),
+        button:not(:disabled) {
+            cursor: pointer;
+            background-color: #3cf696;
+            color: white;
+        }
+    </style>
+    <!-- DataTable HEADER -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
+
+</head>
+
+<body>
+    <%- include("nav") %>
+        <%- include("sidebar") %>
+
+
+            <div class="main-content">
+
+                <h3 style="text-align:center; font-weight: bold">Product Offers</h3>
+                <!-- <table class="table table-hover"> -->
+                <table id="example" class="table table-hover table-responsive container" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Si. No</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Offer Rate</th>
+                            <th>Offer Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach((product,index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index+1 %>
+                                </td>
+                                <td>
+                                    <%= product.model %>
+                                </td>
+                                <td>
+                                    <%= product.price %>
+                                </td>
+                                <td>
+                                    <%= product.discount %>
+                                </td>
+                                <td>
+                                    <%= product.offerPrice %>
+                                </td>
+
+                                <td class="status">
+                                    <span class="offer-status <%= product.onOffer ? 'active' : 'inactive' %>">
+                                        <%= product.onOffer ? 'Active' : 'Inactive' %>
+                                    </span>
+                                </td>
+
+                                <td class="action">
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#offerModal" data-product-id="<%= product._id %>">Add
+                                        Offer</button>
+                                    <br>
+                                    <button class="toggle-offer-btn btn btn-sm btn-secondary"
+                                        data-product-id="<%= product._id %>"
+                                        data-current-status="<%= product.onOffer %>">
+                                        <%= product.onOffer ? 'Deactivate' : 'Activate' %> Offer
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }) %>
+
+
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card">
+                                <form id="offerForm" class="card-body" method="POST">
+                                    <div class="row">
+                                        <fieldset class="col card mx-2">
+                                            <legend id="product_name">Product : </legend>
+                                            <div class="mb-3">
+                                                <label for="offerDiscountRate" class="form-label">Offer Discount
+                                                    (%)</label>
+                                                <input name="offerDiscountRate" type="number" min="0"
+                                                    class="form-control" id="offerDiscountRate">
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <!-- Add more form fields as needed -->
+                                    <button type="submit" class="btn btn-primary m-2 w-100">Add/Modify Offer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"></script>
+
+
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+                integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+                crossorigin="anonymous"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+
+            <!-- Sweet Alert CDN -->
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+            <script>
+                const offerModal = document.getElementById('offerModal');
+                const offerForm = document.getElementById('offerForm');
+
+                offerModal.addEventListener('show.bs.modal', async function (event) {
+                    const button = event.relatedTarget; // Button that triggered the modal
+                    const productId = button.getAttribute('data-product-id');
+                    try {
+
+
+                        const response = await fetch(`/admin/prod-details/${productId}`, {
+                            method: 'GET',
+
+                        })
+                        const data = await response.json();
+
+                        if (data.success) {
+                            document.getElementById('product_name').innerText = data.product.model;
+                            document.getElementById("offerDiscountRate").value = data.product.discount;
+                            offerForm.action = `/admin/prod-offers/${productId}`
+
+
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                })
+
+                offerForm.addEventListener('submit', async function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(offerForm);
+                    const body = Object.fromEntries(formData);
+                    try {
+                        const response = await fetch(offerForm.action, {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(body)
+                        });
+
+                        const data = await response.json();
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            // Show Sweet Alert for invalid discount rate
+                            swal("Discount Error!", data.message, "error");
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+
+                })
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const toggleOfferButtons = document.querySelectorAll('.toggle-offer-btn');
+
+                    toggleOfferButtons.forEach(button => {
+                        button.addEventListener('click', async function () {
+                            const productId = this.getAttribute('data-product-id');
+                            const currentStatus = JSON.parse(this.getAttribute('data-current-status'));
+                            console.log(currentStatus, productId)
+
+                            try {
+                                const response = await fetch(`/admin/toggle-offer/${productId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        newStatus: !currentStatus
+                                    })
+                                });
+
+                                const data = await response.json();
+                                if (data.success) {
+
+
+
+                                    location.reload();
+                                }
+                            } catch (error) {
+                                console.error('Error toggling offer:', error);
+                            }
+                        });
+                    });
+                });
+            </script>
+            <!-- Include jQuery -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+            <!-- Include Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"></script>
+            <!-- Include DataTables JS -->
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#example').DataTable({
+                        responsive: true // Enable responsiveness
+                    });
+                });
+            </script>
+
+</body>
+
+</html>

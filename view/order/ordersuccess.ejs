@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <link rel="stylesheet" href="/styles.css">
+    <!-- Assuming your site's CSS file is named styles.css and located in the public directory -->
+    <style>
+        /* Additional styles specific to the success page */
+        .container {
+            max-width: 700px;
+            max-height: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #e5e6de;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 60px;
+
+        }
+
+        h1 {
+            color: #3cf696;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .order-details {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border: 2px solid #3cf696;
+            border-radius: 5px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .order-summary-btn {
+            background-color: #3cf696;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            top: 0;
+            left: 0;
+            /* Add this line */
+            right: 0;
+            /* Add this line */
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav img {
+            height: 50px;
+            width: auto;
+            /* Add this to maintain aspect ratio */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="nav">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div>
+
+    <div class="container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50" fill="#e5e6de"
+            style="background-color:#3cf696; border-radius:50%">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
+        </svg>
+        <h1>Order Placed Successfully</h1>
+        <p>Your order has been successfully placed. Thank you for shopping with us!</p>
+
+        <!-- Display order details if needed -->
+        <% if (order) { %>
+            <div class="order-details">
+                <h2 style="text-align: center">Order Details</h2>
+
+                <p style="text-align: center"><strong>User:</strong>
+                    <%= user.firstName+" "+user.lastName %></p>
+                <p style=" text-align: center"><strong>Order ID:</strong>
+                        <%= order._id %>
+                </p>
+
+
+
+                <!-- Display other order details as needed -->
+            </div>
+            <% } %>
+
+                <a href="/cart/orderhistory" class="order-summary-btn">View Order History</a>
+                <!-- Assuming this is the link to the order summary page -->
+    </div>
+</body>
+
+</html>

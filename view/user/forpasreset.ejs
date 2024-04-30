@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            width: 90%;
+            /* Adjusted width for responsiveness */
+            max-width: 400px;
+            /* Added max-width to limit width on larger screens */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h3 {
+            background-color: #3cf696;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        input[type="password"] {
+            border-radius: 10px;
+            border: 1px solid #3cf696;
+            padding: 10px;
+            width: calc(100% - 22px);
+            /* Adjusted width to account for padding and border */
+            background-color: #ffffff;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            /* Ensure padding and border are included in width */
+        }
+
+        button {
+            background-color: #3cf696;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #32c084;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #3CF696;
+            padding: 10px;
+            width: 100%;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center">
+        <div class="form-container">
+            <h3>🫣Reset Password</h3>
+            <form action="/forpasreset" method="post" onsubmit="return validatePassword()">
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="New Password" id="password"
+                        name="password">
+                    <div class="error" id="passwordError"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Confirm Password" id="confirmPassword"
+                        name="confirmPassword">
+                    <div class="error" id="confirmPasswordError"></div>
+                </div>
+                <button type="submit">Reset</button>
+            </form>
+        </div>
+    </div>
+    <!-- Script section -->
+    <script>
+        function validatePassword() {
+            var password = document.getElementById("password").value.trim();
+            var confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+            var isValid = true;
+
+            if (password === "") {
+                document.getElementById("passwordError").textContent = "*Please enter a valid password.";
+                document.getElementById("password").style.borderColor = "red";
+                document.getElementById("passwordError").style.color = 'red';
+                isValid = false;
+            } else {
+                document.getElementById("passwordError").textContent = "";
+                document.getElementById("password").style.borderColor = "#3cf696";
+            }
+            if (confirmPassword === "") {
+                document.getElementById("confirmPasswordError").textContent = "*Please confirm your password.";
+                document.getElementById("confirmPassword").style.borderColor = "red";
+                document.getElementById("confirmPasswordError").style.color = 'red';
+                isValid = false;
+            } else if (password !== confirmPassword) {
+                document.getElementById("confirmPasswordError").textContent = "*Passwords do not match.";
+                document.getElementById("confirmPassword").style.borderColor = "red";
+                document.getElementById("confirmPasswordError").style.color = 'red';
+                isValid = false;
+            } else {
+                document.getElementById("confirmPasswordError").textContent = "";
+                document.getElementById("confirmPassword").style.borderColor = "#3cf696";
+            }
+
+            return isValid;
+
+
+        }
+    </script>
+</body>
+
+</html>

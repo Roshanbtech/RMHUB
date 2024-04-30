@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            width: fit-content
+        }
+
+        .main-content {
+            margin-left: 222px;
+            /* This is equal to the width of the sidebar (200px) plus its padding (15px) */
+            padding: 15px;
+            position: relative;
+            z-index: 0;
+            top: px;
+            /* Add this to move it down from the navbar */
+        }
+
+        .user-search {
+            gap: 10px;
+            background-color: #e5e6de;
+            margin-left: 220px;
+            width: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            /* Add this to move it down from the search bar */
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #e5e6de;
+            color: #3cf696;
+        }
+
+        td button {
+            display: flex;
+            justify-content: center;
+        }
+
+        .block-button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        td.last {
+            display: flex;
+            justify-content: center;
+        }
+
+        .active {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .inactive {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #example thead th {
+            background-color: #3cf696;
+            /* Header background color */
+            color: black;
+            /* Header text color */
+            border: none;
+            /* Remove border */
+            padding: 10px;
+            /* Add padding */
+        }
+
+        #example tbody tr td:nth-child(odd) {
+            background-color: #e5e6de;
+            /* Odd row background color */
+        }
+
+        #example tbody tr:hover {
+            background-color: #c9c9c9;
+            /* Hovered row background color */
+        }
+
+        /* Alternate row color for better visibility */
+        #example tbody tr td:nth-child(even) {
+            background-color: #f9f9f9;
+            /* Even row background color */
+        }
+
+        /* Button styling */
+        .add-product-button {
+            float: right;
+            margin-bottom: 10px;
+            background-color: #3cf696;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .button-wrapper {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        @keyframes zoomInAndOut {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .logo-small {
+
+            animation: zoomInAndOut 1s infinite;
+            animation-direction: alternate;
+            animation-timing-function: ease-in-out;
+        }
+
+        strong {
+            color: black;
+            font-weight: bold;
+        }
+
+        strong.pmt {
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase
+        }
+
+        button {
+            background-color: #3cf696;
+        }
+
+        /* Form styles */
+        #returnRequestModal .modal-body {
+            padding: 20px;
+        }
+
+        #returnRequestModal .modal-body .return-request {
+            margin-bottom: 20px;
+            border: 1px solid #3CF696;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #ffffff;
+        }
+
+        #returnRequestModal .modal-body .return-request h3 {
+            font-weight: bold;
+            color: black;
+            margin-top: 0;
+        }
+
+        #returnRequestModal .modal-body .return-request p {
+            color: #3CF696;
+        }
+
+        #returnRequestModal .modal-body .return-request button {
+            margin-top: 10px;
+        }
+
+        /* Title styles */
+        #returnRequestModal .modal-title {
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+
+        #returnRequestModal .modal-header {
+            background-color: #3CF696;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            padding: 15px 20px;
+        }
+    </style>
+
+
+    <!-- DataTable HEADER -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+</head>
+
+<body>
+    <%- include("nav") %>
+        <%- include("sidebar") %>
+
+
+            <div class="main-content">
+                <button class="return-requests-button" data-toggle="modal" data-target="#returnRequestModal">Return
+                    Requests</button>
+
+
+                <h3 style="text-align: center; font-weight: bold"><img src="/images/orders-svgrepo-com.svg" alt="Logo"
+                        class="logo-small"
+                        style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+                    Orders List</h3>
+                <table id="example" class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Si No.</th>
+                            <!-- <th>IDs</th> -->
+                            <th>User</th>
+                            <th>Products</th>
+                            <th>Stock</th>
+                            <th>Date & Time</th>
+                            <th>Order Status</th>
+                            <th>Price</th>
+                            <th>Shipping Address</th>
+                            <th>Payment</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach((order, index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <!-- <td> <strong>OrderID:</strong><br><%= order._id %>
+                             <strong>UserID:</strong><br><%= order.userId._id %>
+                             <strong>ProductIDs:</strong><br><%= order.orderItems.map(item => item.productId._id).join(', ')%>
+                             <strong>AddressID:</strong><br><%=  order.shippingAddress %>
+                        </td> -->
+                                <td>
+                                    <%= order.userId.firstName %>
+                                        <%= order.userId.lastName %>
+                                </td>
+                                <td>
+                                    <% let products=order.orderItems.map(item=> item.productId.model).join(', '); %>
+                                        <%= products %>
+                                </td>
+                                <td>
+                                    <% let stock=order.orderItems.map(item=> item.productId.availableStock).join(', ');
+                                        %>
+                                        <%= stock %>
+                                </td>
+                                <td>
+                                    <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata'
+                                        , weekday: 'long' }) %>
+                                        <%= new Date(order.orderDate).toLocaleDateString('en-IN', {
+                                            timeZone: 'Asia/Kolkata' , day: 'numeric' , month: 'long' , year: 'numeric'
+                                            }) %>
+                                            <%= new Date(order.orderDate).toLocaleTimeString('en-US', {
+                                                timeZone: 'Asia/Kolkata' , hour12: true }) %>
+                                </td>
+                                <td>
+                                    <form action="/admin/updateOrderStatus/<%= order._id %>" method="POST">
+                                        <select class="form-select order-status-select" name="status"
+                                            style="width:150px; padding:5px; background-color:#d8f0dd" <% if
+                                            (order.orderStatus==='cancelled' || order.orderStatus==='returned' ) { %>
+                                            disabled <% } %>>
+                                                <% orderStatusOptions.forEach(option=> { %>
+                                                    <option value="<%= option %>" <%=order.orderStatus===option
+                                                        ? 'selected' : '' %>><%= option %>
+                                                    </option>
+                                                    <% }); %>
+                                        </select>
+                                        <% if (order.orderStatus==='Cancelled' || order.orderStatus==='Returned' ) { %>
+                                            <div style="display:flex;justify-content:center; padding:10px">Status: <%=
+                                                    order.orderStatus %>
+                                            </div>
+                                            <% } else { %>
+                                                <div style="display:flex;justify-content:center; padding:10px"><button
+                                                        type="submit">Update</button></div>
+                                                <% } %>
+                                    </form>
+                                </td>
+                                <td>₹<%= order.totalPrice %>
+                                </td>
+                                <td>
+                                    <% order.userId.address.forEach((address, index)=> { %>
+                                        <strong>Address <%= index + 1 %>:</strong><br>
+                                        <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city
+                                                    %>, <%= address.state %>, <%= address.pincode %><br>
+                                                            <% if (index !==order.userId.address.length - 1) { %>
+                                                                <br>
+                                                                <% } %>
+                                                                    <% }) %>
+                                </td>
+                                <td><strong class="pmt">
+                                        <%= order.paymentMethod %>
+                                    </strong></td>
+
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            </div>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+                integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+            <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#example').DataTable();
+                });
+            </script>
+            <!-- Modal for return request details -->
+            <div class="modal fade" id="returnRequestModal" tabindex="-1" role="dialog"
+                aria-labelledby="returnRequestModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="returnRequestModalLabel">Return Request Details</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <% returnRequests.forEach((request,index)=> { %>
+                                <div class="return-request">
+                                    <h3>Request <%= index+1 %>
+                                    </h3>
+                                    <p><strong>Request ID:</strong>
+                                        <%= request._id %>
+                                    </p>
+                                    <p><strong>User:</strong>
+                                        <%= request.userId.firstName %>
+                                            <%= request.userId.lastName %>
+                                    </p>
+                                    <p><strong>Order Total:</strong> ₹<%= request.totalPrice %>
+                                    </p>
+                                    <p><strong>Order Details:</strong></p>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="background-color: #3cf696">Image</th>
+                                                    <th style="background-color: #3cf696">Product</th>
+                                                    <th style="background-color: #3cf696">Quantity</th>
+                                                    <th style="background-color: #3cf696">Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% request.orderItems.forEach((item)=> { %>
+
+                                                    <tr>
+                                                        <td><img src="/<%= item.productId.image[0] %>"
+                                                                alt="<%= item.productId.model %>"
+                                                                style="max-width: 50px; max-height: 50px;"></td>
+                                                        <td>
+                                                            <%= item.productId.model %>
+                                                        </td>
+                                                        <td>
+                                                            <%= item.quantity %>
+                                                        </td>
+                                                        <td>₹<%= item.price %>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <p><strong>Reason:</strong>
+                                        <%= request.returnRequest %>
+                                    </p>
+                                    <!-- Approve button -->
+                                    <% if (request.orderStatus !=='returned' || request.orderStatus==='delivered' ) { %>
+                                        <button class="btn btn-success approve-return-button"
+                                            data-id="<%= request._id %>">Approve</button>
+                                        <% } %>
+                                            <!-- Reject button -->
+                                            <!-- <button class="btn btn-danger reject-return-button" data-id="<%= request._id %>">Reject</button> -->
+
+                                </div>
+                                <% }); %>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const approveButtons = document.querySelectorAll('.approve-return-button');
+
+                    approveButtons.forEach(button => {
+                        button.addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent the default behavior of the button
+                            event.stopPropagation(); // Stop event propagation
+
+                            // Get the request ID from the data-id attribute of the button
+                            const requestId = button.getAttribute('data-id');
+                            console.log(requestId); // Log the request ID to the console
+
+                            // Send a fetch POST request to the server
+                            fetch(`/admin/approve-return/${requestId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                // You can include body if needed, for example:
+                                // body: JSON.stringify({ requestId: requestId })
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    // Handle the response from the server
+                                    console.log(data);
+                                    if (data.success) {
+                                        // Remove the button from the DOM
+                                        button.parentNode.removeChild(button);
+                                        // Optionally, display a success message or update the UI
+                                        //alert('Return request approved successfully');
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Return request approved successfully',
+                                        })
+                                    } else {
+                                        // If there was an error, display an error message or handle it accordingly
+                                        alert('Error: ' + data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    // Handle errors from the fetch request
+                                    console.error('Error:', error);
+                                    alert('Error: Failed to send request to the server');
+                                });
+                        });
+                    });
+                });
+            </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #444;
+        }
+
+        .container {
+            max-width: 60rem;
+            margin: 0 auto;
+            background-color: #e5e6de;
+            /* Set container background color */
+            padding: 20px;
+            /* Add some padding */
+            margin-top: 60px;
+            border-radius: 20px;
+        }
+
+        .page-header {
+            border-bottom: 2px solid #444;
+            margin: 0.5rem auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .page-header h1 {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            letter-spacing: 2px;
+            margin: 0;
+            font-weight: 900;
+        }
+
+        .page-header small {
+            font-size: 1rem;
+            letter-spacing: initial;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .page-link {
+            padding: 5px 10px;
+            margin: 0 5px;
+            background-color: #3cf696;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Hover effect for pagination links */
+        .page-link:hover {
+            background-color: #1cc061;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-flow: column nowrap;
+        }
+
+        .flex-row {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+        }
+
+        .flex-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 0 1 25%;
+        }
+
+        .flex-item:nth-child(n+2) {
+            justify-content: flex-end;
+        }
+
+        .flex-end-cap {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: center;
+            align-items: center;
+            flex: 0 0 3rem;
+            height: 3rem;
+            margin-left: 1rem;
+            background: #aaa;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .order-container {
+            padding: 0 1rem 0 2rem;
+            margin: 2px 2px 0 2px;
+            border-bottom: 2px solid #aaa;
+        }
+
+        .order-details {
+            box-sizing: border-box;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        .order-details .flex-end-cap {
+            background: transparent;
+            color: transparent;
+        }
+
+        .product-details {
+            padding-left: 1rem;
+        }
+
+        .product {
+            box-sizing: border-box;
+            position: relative;
+            padding-left: 1rem;
+            border: 2px solid #aaa;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0;
+            font-weight: 700;
+            color: #aaa;
+            overflow: hidden;
+        }
+
+        .product:hover {
+            border-color: black;
+            background-color: #d8f0dd;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .product .flex-end-cap {
+            color: #fff;
+        }
+
+        @media (max-width: 576px) {
+            .order-container {
+                padding-left: 1rem;
+            }
+
+            .product {
+                padding-left: 0.5rem;
+            }
+        }
+
+        @media (max-width: 320px) {
+            html {
+                font-size: 10px;
+            }
+        }
+
+        /* Button styles */
+        .continue-shopping-btn,
+        .cancel-btn {
+            background-color: #ffd166;
+            /* Button background color */
+            color: black;
+            /* Button text color */
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cancel-btn {
+            background-color: #ff0000;
+            /* Cancel button background color */
+            color: black;
+            font-weight: bold;
+        }
+
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            top: 0;
+            left: 0;
+            /* Add this line */
+            right: 0;
+            /* Add this line */
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav img {
+            height: 50px;
+            width: auto;
+            /* Add this to maintain aspect ratio */
+        }
+
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            /* Hide the modal by default */
+            position: fixed;
+            /* Position the modal overlay */
+            z-index: 1;
+            /* Set the z-index to ensure it appears on top of other elements */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            /* Enable scrolling if needed */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black background with transparency */
+        }
+
+        /* Modal content styles */
+        .modal-content {
+            background-color: #fefefe;
+            /* White background */
+            margin: 10% auto;
+            /* Center the modal vertically and horizontally */
+            padding: 20px;
+            border: 1px solid #3CF696;
+            /* Green border */
+            border-radius: 10px;
+            max-width: 600px;
+            /* Set maximum width of the modal */
+            position: relative;
+            /* Ensure proper positioning of the close button */
+        }
+
+        /* Close button styles */
+        .close {
+            color: #3CF696;
+            /* Green color for close button */
+            position: absolute;
+            /* Position close button relative to modal content */
+            top: 10px;
+            right: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            /* Change color on hover/focus */
+            text-decoration: none;
+        }
+
+        #cancelledOrderTable {
+            width: 100%;
+            /* Set table width to 100% */
+            max-width: 100%;
+            /* Set maximum width to 100% */
+            margin: auto;
+            /* Center the table */
+        }
+
+        #cancelledOrderTable thead th {
+            position: sticky;
+            /* Stick the header */
+            top: 0;
+            /* Stick to the top */
+            z-index: 1;
+            /* Ensure it's above other elements */
+            background-color: #3cf696;
+            /* Set background color for header */
+            color: #fff;
+            /* Set text color for header */
+        }
+
+        #cancelledOrderTable td {
+            padding: 10px;
+            /* Add padding to table cells */
+            border: 1px solid#fff;
+        }
+
+        #cancelledOrderTable img {
+            max-width: 30px;
+            /* Reduce image size */
+            max-height: 30px;
+            margin-right: 5px;
+            /* Add margin between images and text */
+        }
+
+        #cancelledOrderTable div {
+            margin-bottom: 5px;
+            /* Add margin between rows */
+        }
+
+        td:hover {
+            cursor: pointer;
+            background-color: #fff;
+        }
+    </style>
+    <!-- DataTable CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+
+    <!-- DataTable JavaScript -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+
+</head>
+
+<body>
+    <div class="nav">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div>
+
+
+    <div class="container">
+
+        <button type="button" class="btn btn-primary" style=" background-color: #3cf696; border-radius: 10px;"
+            data-toggle="modal" data-target="#cancelledOrderModal">
+            Cancelled Orders
+        </button>
+
+
+        <div class="page-header">
+            <h1> MY ORDERS <small>TOTAL ORDERS: <%= orderDetails.length %></small></h1>
+
+            <!-- Pagination controls -->
+            <div class="pagination">
+                <% if (currentPage> 1) { %>
+                    <a href="/cart/orderhistory?page=<%= currentPage - 1 %>" class="page-link">&laquo; Previous</a>
+                    <% } %>
+                        <% if (currentPage < totalPages) { %>
+                            <a href="/cart/orderhistory?page=<%= currentPage + 1 %>" class="page-link">Next &raquo;</a>
+                            <% } %>
+            </div>
+            <!-- End of pagination controls -->
+            <button class="continue-shopping-btn" onclick="location.href='/home'">Continue Shopping</button>
+
+        </div>
+
+        <% orderDetails.forEach((order,index)=> { %>
+            <div class="order-container">
+                <div class="order-details">
+                    <div class="order-info">
+                        <div>Order No. : <%= index+1 %>
+                        </div>
+                        <div>
+                            Order Date: <%= new Date(order.orderDate).toLocaleDateString('en-IN', {
+                                timeZone: 'Asia/Kolkata' , weekday: 'long' }) %>
+                                <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' ,
+                                    day: 'numeric' , month: 'long' , year: 'numeric' }) %>
+                                    <%= new Date(order.orderDate).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'
+                                        , hour12: true }) %>
+                                        <div>Order Total: ₹<%= order.totalPrice %>
+                                        </div>
+                                                      
+
+
+                        </div>
+                    </div>
+                    <div class="product-details">
+                      
+                        <% if (order.orderItems && order.orderItems.length> 0) { %>
+                            <% order.orderItems.forEach(item=> { %>
+                                <div class="product">
+                                    <div style="margin: 10px 10px 0 0; float:right; width:fit-content; border: 2px solid black">
+                                        <% if (order.appliedCoupon) { %>
+                                          <span style="background-color: black; color:#fff">Coupon Applied</span>
+                                        <% } %>
+                                     </div> 
+                                    <img src="/<%= item.productId.image[0]%>" style="max-width:100px; max-height:100px"
+                                        alt="<%= item.productId.model %>">
+                                    <div class="product-info">
+                                        <div>Name: <%= item.productId.model %>
+                                        </div>
+                                        <div>Quantity: <%= item.quantity %>
+                                        </div>
+                                        <div>Actual Price: ₹<%= item.price * item.quantity %>
+                                        </div>
+                                        <div>Payment Method: <%= order.paymentMethod %>
+                                        </div>
+                                        <div>Order Status: <%= order.orderStatus %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <div>No items in this order</div>
+                                        <% } %>
+                    </div>
+                </div>
+                <div class="order-actions">
+                    <!-- Add buttons for order actions -->
+                    <% if (order.orderStatus !=='cancelled' && order.orderStatus !=='delivered' && order.orderStatus
+                        !=='returned' ) { %>
+                        <button class="cancel-btn" onclick="location.href='/cart/cancelorder/<%= order._id %>'">Cancel
+                            Order</button>
+                        <% } %>
+
+                            <% if (order.orderStatus==='delivered' && order.orderStatus !=='returned' ) { %>
+                                <button class="return-btn" style=" background-color: #3CF696;"
+                                    onclick="openReturnModal('<%= order._id %>')">Return Order</button>
+                                <% } %>
+
+
+
+                                    <!-- Add other buttons as needed -->
+                </div>
+            </div>
+            <% }); %>
+
+
+
+                <!-- Return Modal -->
+                <div id="returnModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 style="color: #3CF696; margin-bottom: 20px;">Return Order</h2>
+                        <form id="returnForm" method="POST" onsubmit="return validateForm()">
+                            <div style="margin-bottom: 10px;">
+                                <label for="reason" style="color: #3CF696;">Reason for Return:</label><br>
+                                <textarea id="reason" name="reason" rows="4"
+                                    style="border-radius: 5px; border: 1px solid #3CF696; width: 100%;"></textarea>
+                                <div id="reasonError" class="error"></div>
+                            </div>
+                            <button type="submit"
+                                style="background-color: #3CF696; color: white; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Submit
+                                Return Request</button>
+                        </form>
+                    </div>
+                </div>
+    </div>
+
+    <!-- Modal for cancelled order details -->
+    <div class="modal fade" id="cancelledOrderModal" tabindex="-1" role="dialog"
+        aria-labelledby="cancelledOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="cancelledOrderModalLabel" style="color: #3cf696; text-align:center">
+                        Cancelled Orders</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="cancelledOrderTable" class="table table-bordered">
+                            <thead style="background-color: #3cf696">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Order Details</th>
+                                    <th>Product Details</th>
+                                </tr>
+                            </thead>
+                            <tbody style="background-color: #e5e6de">
+                                <% cancelledOrders.forEach((order, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= new Date(order.orderDate).toLocaleDateString('en-US', {
+                                                timeZone: 'Asia/Kolkata' , hour12: true }) %>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <strong>ID:</strong>
+                                                <%= order._id %>
+                                            </div>
+                                            <div>
+                                                <strong>Amount:</strong> ₹<%= order.totalPrice %>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <% order.orderItems.forEach(item=> { %>
+                                                <div>
+                                                    <img src="/<%= item.productId.image[0] %>"
+                                                        alt="<%= item.productId.model %>"
+                                                        style="max-width: 50px; max-height: 50px;">
+                                                    <br>
+                                                    <%= item.productId.model %> (Qty: <%= item.quantity %>)
+                                                </div>
+                                                <% }); %>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Pagination controls -->
+    <div class="pagination">
+        <% if (currentPage> 1) { %>
+            <a href="/cart/orderhistory?page=<%= currentPage - 1 %>" class="page-link">&laquo; Previous</a>
+            <% } %>
+                <% if (currentPage < totalPages) { %>
+                    <a href="/cart/orderhistory?page=<%= currentPage + 1 %>" class="page-link">Next &raquo;</a>
+                    <% } %>
+    </div>
+    <!-- End of pagination controls -->
+
+    </div>
+
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JavaScript library -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- DataTable JavaScript -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#cancelledOrderTable').DataTable({
+                "rowCallback": function (row, data, index) {
+                    if (index % 2 === 0) {
+                        $(row).css("background-color", "#d8f0dd");
+                    } else {
+                        $(row).css("background-color", "#e5e6de");
+                    }
+                }
+            });
+        });
+
+    </script>
+    <script>
+        // Define the modal variable outside of the function
+        var modal = document.getElementById("returnModal");
+
+        function openReturnModal(orderId) {
+            modal.style.display = "block";
+            var form = document.getElementById("returnForm");
+            form.action = "/cart/return/" + orderId; // Set the action URL dynamically
+        }
+
+        // Get the close button
+        var closeBtn = modal.querySelector('.close');
+
+        // Close the modal when the close button is clicked
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+
+        //validate reason field
+        function validateForm() {
+
+            var reason = document.getElementById("reason").value;
+            var reasonError = document.getElementById("reasonError");
+
+            if (reason.trim() === "") {
+                reasonError.innerHTML = "*Please enter a valid reason for returning your order";
+                reasonError.style.color = "red";
+                reasonError.style.borderColor = "red";
+                return false;
+            } else {
+                reasonError.innerHTML = "";
+                reasonError.style.borderColor = "#3CF696";
+
+                return true;
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>

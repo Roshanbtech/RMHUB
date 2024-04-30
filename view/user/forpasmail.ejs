@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h3 {
+            background-color: #3cf696;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        p {
+            color: #32c084;
+            line-height: 1.5;
+        }
+
+        label {
+            font-weight: bold;
+            color: black;
+        }
+
+        input[type="email"] {
+            border-radius: 5px;
+            border: 1px solid #3cf696;
+            padding: 10px;
+            width: 80%;
+            background-color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #3cf696;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #32c084;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center">
+        <div class="form-container">
+            <h3>🤔Forgot Something?..</h3>
+            <p>Please enter your email address below to receive a password reset OTP.</p>
+            <form action="/forpasmail" method="post" onsubmit="return validateEmail()">
+
+                <input style="background-color:#d8f0dd" type="email" id="email" placeholder="Enter your email"
+                    name="email">
+                <div id="emailError" class="error"></div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function validateEmail() {
+            var email = document.getElementById("email").value.trim();
+
+            isValid = true;
+
+            if (email === "") {
+                document.getElementById("emailError").innerHTML = "*Please enter your email address";
+                document.getElementById("email").style.borderColor = "red";
+                document.getElementById("emailError").style.color = 'red';
+                isValid = false;
+
+            }
+            return isValid;
+
+        }   
+    </script>
+</body>
+
+</html>

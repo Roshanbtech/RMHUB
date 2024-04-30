@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB - Technology Simplified</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #3CF696;
+        }
+
+        /* Dropdown container */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Dropdown content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #e5e6de;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #3CF696;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .navbar-nav .nav-item a {
+            display: inline-block;
+            position: relative;
+        }
+
+        .navbar-nav .nav-item a span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-nav .nav-item a:hover span {
+            animation: jump 0.5s ease-in-out forwards;
+        }
+
+        @keyframes jump {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            25% {
+                transform: translateY(-5px);
+            }
+
+            50% {
+                transform: translateY(0);
+            }
+
+            75% {
+                transform: translateY(-2px);
+            }
+        }
+
+
+        /* Adjustments for better alignment and appearance */
+        .carousel-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+
+        .mycontainer {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        .mycontainer img {
+            width: 100%;
+            height: auto;
+        }
+
+        .c1 {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .b {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: #3CF696;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .b:hover {
+            background-color: #33bb88;
+        }
+
+        .discover img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .img-small {
+            width: 150px;
+            /* Adjust the size of the category images */
+            height: 150px;
+            /* Adjust the size of the category images */
+        }
+
+        .carousel-item img.img {
+            max-height: 400px;
+            /* Adjust the height of the secondary carousel images */
+        }
+
+        #carouselExampleIndicators {
+            margin-top: 70px;
+        }
+
+        .snake-btn {
+            position: relative;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background-color: #3CF696;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: background-color 0.4s, color 0.4s;
+            display: flex;
+            justify-content: center;
+        }
+
+        .col-sm {
+            margin-bottom: 20px;
+            /* Add margin between each column */
+        }
+
+        h5 {
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        .snake-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            animation: snake 3s infinite linear;
+        }
+
+        @keyframes snake {
+            0% {
+                transform: translateX(-100%);
+                border-color: rgba(0, 0, 0, 0);
+            }
+
+            50% {
+                transform: translateX(100%);
+                border-color: rgba(0, 0, 0, 0.6);
+            }
+
+            100% {
+                transform: translateX(200%);
+                border-color: rgba(0, 0, 0, 0);
+            }
+        }
+
+        .snake-btn:hover {
+            background-color: #3CF696;
+            color: black;
+            border: 2px solid black;
+            font-weight: bold;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 20px #2a2a29;
+            /* Updated box-shadow on hover */
+            overflow: hidden
+        }
+
+        .card img {
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .card img:hover {
+            box-shadow: 0 0 20px #2a2a29;
+            transform: scale(1.1);
+            background-color: #d8f0dd;
+            overflow: hidden
+        }
+
+        .title-bg {
+            background-color: #3CF696;
+            /* Background color for the title */
+            padding: 10px 20px;
+            /* Padding around the title */
+            border-radius: 10px;
+            /* Rounded corners for the background */
+            display: inline-block;
+            /* Ensures the background only wraps around the title */
+
+        }
+
+        .title-bg h2 {
+            margin: 0;
+            /* Remove default margin for the title */
+        }
+
+        .navbar-toggler-icon {
+            color: #fff;
+            background-color: black;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        /* Custom CSS for the modal */
+        .modal-content {
+            background-color: #f8f9fa;
+            /* Background color */
+            border-radius: 20px;
+            /* Rounded corners */
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            /* Box shadow */
+        }
+
+        .modal-header {
+            border-bottom: none;
+            /* Remove bottom border */
+        }
+
+        .modal-title {
+            font-weight: bold;
+            /* Make title bold */
+        }
+
+        .modal-body {
+            padding: 20px;
+            /* Add padding */
+        }
+
+        .navbar-nav .nav-link {
+            color: #333;
+            /* Text color */
+            font-weight: bold;
+            /* Make links bold */
+        }
+
+      
+
+        .list-group-item {
+            border: 1px solid #3cf696;
+            background-color: black;
+        }
+      
+        a{
+            color: #3cf696;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+        }
+      
+        .list-group-flush>.list-group-item {
+            border-width: 3px 2px 3px 2px;
+            border-color: #3cf696;
+            border-style: ridge;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar">
+        <div class="container" style="height:60px">
+            <a class="navbar-brand custom-logo" href="/home">
+                <img class="navbar-logo" src="/images/NavImg.jpg" style="height:70px;" alt="rmhub">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#navbarModal">
+                <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link ml-3" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ml-3" href="/phones">Phones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ml-3" href="/wearables">Watches</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ml-3" href="/tablets">Tablets</a>
+                    </li>
+                </ul>
+                <!-- Search form with dropdown and price field -->
+                <form action="/home" method="GET" class="form-inline my-2 my-lg-0"
+                    style="border:2px solid #d8f0dd; border-radius: 5px">
+                    <div class="input-group">
+                        <input class="form-control mr-sm-0" type="search" placeholder="Search" aria-label="Search"
+                            name="query" style="border-color:#3cf696">
+                        <!-- <input class="form-control ml-0" type="number" placeholder="Price" min="1" aria-label="price"
+                        name="price" style="border-color:#3cf696"> -->
+
+                        <!-- Dropdown for sorting -->
+                        <!-- <select class="custom-select" name="sortBy"
+                        style="width:20px;background-color:#d8f0dd;border-color:#3cf696">
+                        <option value="">Sort By</option>
+                        <option value="nameAsc">Name (A-Z)</option>
+                        <option value="nameDesc">Name (Z-A)</option>
+                        <option value="priceAsc">Price (Low to High)</option>
+                        <option value="priceDesc">Price (High to Low)</option>
+                    </select> -->
+                        <!-- Price field -->
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                                style="background-color:#3cf696;">
+                                <i class="fas fa-search" style="color:#fff;"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="navbar-nav ml-auto">
+                    <a class="nav-link" href="/wishlist/getwishlist" title="Wishlist">
+                        <i class="fas fa-heart navbar-icon" style="color:black;"></i>
+                    </a>
+                    <a class="nav-link" href="/cart/getcart" title="Cart">
+                        <i class="fas fa-shopping-cart navbar-icon" style="color:black;"></i>
+                    </a>
+                    <div class="dropdown">
+                        <button class="nav-link dropbtn" style="background: none; border: none; cursor: pointer;">
+                            <i class="fas fa-user navbar-icon" style="color: black;"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="/profile/getprofile">Profile</a>
+                            <a href="/logout">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Carousel -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100 img" src="/images/Slide1.png" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 img" src="/images/Slide2.webp" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 img" src="/images/Slide3.jpg" alt="Third slide">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-sm">
+                <div class="mycontainer">
+                    <img src="/images/below1.png" alt="Image 1">
+                    <div class="c1 container text-left">
+                        <h3>HONOR 90 5G</h3>
+                        <p>Share Your Vibe</p>
+                        <button class="b" onclick="window.location.href='/phones'">Shop Now</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="mycontainer">
+                    <img src="/images/below2.jpg" alt="Image 2">
+                    <div class="c1 container text-right">
+                        <h3>realme C53</h3>
+                        <p>108MP Camera Under 10K</p>
+                        <button class="b" onclick="window.location.href='/phones'">Shop Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Categories -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-4 text-center">
+                <a href="/phones"><img src="/images/phone.gif" style="border:2px solid #3cf696"
+                        class="img-fluid rounded-circle category-icon" alt="Phones"></a>
+                <h4 class="mt-3">Phones</h4>
+            </div>
+            <div class="col-sm-4 text-center">
+                <a href="/wearables"><img src="/images/watches.gif" style="border: 2px solid #3cf696"
+                        class="img-fluid rounded-circle category-icon" alt="Watches"></a>
+                <h4 class="mt-3">Watches</h4>
+            </div>
+            <div class="col-sm-4 text-center">
+                <a href="/tablets"><img src="/images/tablet.gif" style="border: 2px solid #3cf696"
+                        class="img-fluid rounded-circle category-icon" alt="Tablets"></a>
+                <h4 class="mt-3">Tablets</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="text-center">
+                <div class="title-bg">
+                    <h2 class="text-white">Our Products</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="container mt-5">
+        <% for (let i=0; i < data4.length; i +=4) { %>
+            <div class="row mt-4">
+                <% for (let j=i; j < i + 4 && j < data4.length; j++) { %>
+                    <div class="col-sm">
+                        <div class="card h-100" style="border-radius: 20px;">
+                            <img src="/<%= data4[j].image[0] %>" class="card-img-top" alt="...">
+                            <div class="card-body d-flex flex-column"
+                                style="background-color: #e5e6de;border-radius: 20px;">
+                                <h5 class="card-title">
+                                    <%= data4[j].model %>
+                                </h5>
+                                <p class="card-text">
+                                    <%= data4[j].color %>
+                                </p>
+                                <p class="card-text">
+                                    <%= data4[j].category?.name %>
+                                </p>
+                                <p class="card-text">₹<%= data4[j].price %>
+                                </p>
+                                <a href="/proddes/<%= data4[j].id %>" class="snake-btn">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+            <% } %>
+    </div>
+
+
+    <!-- Secondary Carousel -->
+    <div id="carouselExampleIndicators2" class="carousel slide mt-5" data-ride="carousel" data-interval="5000">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators2" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators2" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators2" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100 img" src="/images/mobc.png" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 img" src="/images/watc.png" alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100 img" src="/images/tabc.jpg" alt="Third slide">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="site-footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <h6>About</h6>
+                    <p class="text-justify">R.M.HUB - <i>TECHNOLOGY SIMPLIFIED</i> is an initiative to redefine your
+                        gadget experience. Our focus is on providing the latest and most sophisticated Android phones,
+                        watches, and tablets. We believe in delivering not just products, but experiences that enhance
+                        and simplify your digital life. Thank you for choosing R.M.HUB as your trusted partner in your
+                        technology journey. We look forward to serving you!</p>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h6>Get Help</h6>
+                    <ul class="footer-links">
+                        <li><a href="#">Order Status</a></li>
+                        <li><a href="#">Delivery</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Track Your Order</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                    <h6>Quick Links</h6>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Contribute</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="container" style="background-color: #3CF696; height:50px">
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12" style="padding-top:10px">
+                    <p class="copyright-text" style="float:left">Copyright &copy; 2020-24 All Rights Reserved by
+                        <a href="/home">R.M.HUB</a>.
+                    </p>
+                </div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <ul class="social-icons" style="padding-top:4px">
+                        <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
+                        <li><a class="linkedin" href="#"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="/js/script.js"></script> -->
+    <!-- <script>
+      document.querySelectorAll('.navbar-nav .nav-item a').forEach(item => {
+        let text = item.textContent;
+        let newText = '';
+        for (let i = 0; i < text.length; i++) {
+            newText += '<span>' + text[i] + '</span>';
+        }
+        item.innerHTML = newText;
+    });
+    </script> -->
+    <div class="modal fade" id="navbarModal" tabindex="-1" role="dialog" aria-labelledby="navbarModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color: #d8f0dd">
+            <div class="modal-header" style="background-color: #3CF696; color: #fff">
+                <h5 class="modal-title" id="navbarModalLabel">Navigation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" >
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" >
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/phones">Phones</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/wearables">Watches</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/tablets">Tablets</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/wishlist/getwishlist">Wishlist</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/cart/getcart">Cart</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/profile/getprofile">Profile</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

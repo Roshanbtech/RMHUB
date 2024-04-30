@@ -1,0 +1,142 @@
+<div class="sidebar">
+  <h4><img src="/images/users-avatar-svgrepo-com.svg" alt="Logo" class="logo-small"
+      style="width:40px;height:40px;border:1px solid black;border-radius:50px;background-color:black"><span> Hello
+      Admin!..</span></h4>
+  <hr style="border: 1px solid black;"> <!-- Reduce border thickness -->
+  <button onclick="location.href='/admin/dashboard'"><img src="/images/dashboard-svgrepo-com.svg" alt="Logo"
+      class="logo-small" style="width:30px;height:30px"><span>Dashboard</span></button>
+  <button onclick="location.href='/admin/users'"><img src="/images/Users.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Users</span></button>
+  <button onclick="location.href='/admin/products'"><img src="/images/product.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Products</span></button>
+  <button onclick="location.href='/admin/category'"><img src="/images/Category.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Category</span></button>
+  <button onclick="location.href='/admin/orders'"><img src="/images/orders-svgrepo-com.svg" alt="Logo"
+      class="logo-small" style="width:30px;height:30px"><span>Orders</span></button>
+  <button onclick="location.href='/admin/sales-report'"><img src="/images/product.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Sales Report</span></button>
+  <button onclick="location.href='/admin/banners'"><img src="/images/product.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Banners</span></button>
+  <button onclick="location.href='/coupon/coupon'"><img src="/images/c2.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Coupons</span></button>
+
+
+  <button onclick="location.href='/admin/logout'"><span>Logout</span><img src="/images/logout-svgrepo-com.svg"
+      alt="Logo" class="logo-small" style="float:right;width:30px;height:30px;"></button>
+</div>
+
+<style>
+  .sidebar {
+    background-color: #3cf696;
+    color: #fff;
+    height: 100%;
+    /* Set height to 100% */
+    width: 220px;
+    position: fixed;
+    /* Set position to fixed */
+    top: 0;
+    left: 0;
+    padding: 15px;
+    z-index: 0;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+
+  }
+
+  .sidebar h3 {
+    margin-bottom: 20px;
+    /* Increase margin */
+  }
+
+  .sidebar h3,
+  .sidebar button {
+    color: #fff;
+    margin-bottom: 15px;
+    /* Add spacing between items */
+  }
+
+  .sidebar button {
+    display: block;
+    background: none;
+    border: none;
+    width: 100%;
+    /* Set width to 100% */
+    height: 45px;
+    border-radius: 20px;
+    text-align: left;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .sidebar button img {
+    margin-right: 10px;
+    /* Add spacing between icon and text */
+  }
+
+  .sidebar button:hover {
+    background-color: #e5e6de;
+    color: #000;
+    /* Change text color on hover */
+  }
+
+  @keyframes zoomInOut {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.2);
+    }
+  }
+
+  .sidebar button img {
+    animation: zoomInOut 1s infinite;
+  }
+
+  .sidebar hr {
+    margin-top: 10px;
+    /* Add margin to hr */
+    margin-bottom: 20px;
+    /* Add margin to hr */
+  }
+
+  @keyframes bounce {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .sidebar button:hover img {
+    animation: bounce 0.6s;
+  }
+
+  .sidebar button span {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  @keyframes colorChange {
+    0% {
+      color: #fff;
+    }
+
+    100% {
+      color: #000;
+    }
+  }
+
+  h4 span {
+    animation: colorChange 2s steps(10, end) infinite;
+    font-size: large;
+    font-weight: bold;
+
+  }
+</style>

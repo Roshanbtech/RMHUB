@@ -1,0 +1,77 @@
+<!-- error.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 48px;
+            color: #dc3545; /* Red color for error */
+            margin-bottom: 20px;
+            /* Animate the icon */
+            animation: bounce 1s ease infinite;
+        }
+        .error-message {
+            font-size: 24px;
+            color: #dc3545; /* Red color for error */
+            margin-bottom: 20px;
+        }
+        .home-button {
+            background-color: #3cf696; /* Blue color for button */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .home-button:hover {
+            background-color: #3cf696; /* Darker shade of blue on hover */
+        }
+
+        /* Keyframes for the animation */
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i> <!-- Example icon: Font Awesome -->
+        </div>
+        <div class="error-message">
+            Unauthorized Access!<br>
+            <img src="/images/jungle-auth.gif" alt="Shocked Man" style="width: 200px; height: auto;">
+        </div>
+        <button class="home-button" onclick="goToHome()">Go to Home</button>
+    </div>
+
+    <!-- JavaScript to handle button click event -->
+    <script>
+        function goToHome() {
+            window.location.href = "/"; // Replace "/" with your home page URL
+        }
+    </script>
+</body>
+</html>

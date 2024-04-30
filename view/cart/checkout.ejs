@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .nav img {
+            height: 50px;
+            width: auto;
+            /* Add this to maintain aspect ratio */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        th {
+            background-color: #3cf696;
+        }
+
+        td {
+            background-color: #e5e6de;
+        }
+
+        th,
+        td:hover {
+            background-color: #d8f0dd;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .btn-warning {
+            background-color: #ffd166;
+            border-color: #ffd166;
+            color: #000;
+        }
+
+        .btn-success {
+            background-color: #3cf696;
+            border-color: #3cf696;
+            color: #fff;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .address-area,
+        .payment-area {
+            background-color: #e5e6de;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        input[type="radio"]:checked::before {
+            background-color: #3cf696;
+        }
+
+        /* Responsive Styles */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .address-area,
+            .payment-area {
+                padding: 10px;
+            }
+
+            /* Adjust any other styles as needed for smaller screens */
+        }
+
+        @keyframes zoomInAndOut {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .logo-small {
+
+            animation: zoomInAndOut 1s infinite;
+            animation-direction: alternate;
+            animation-timing-function: ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div>
+    <div class="container" style="margin-top: 50px;">
+        <h2 style="display: flex; justify-content:center"><img src="/images/checkout-svgrepo-com.svg" alt="Logo"
+                class="logo-small"
+                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">Checkout
+        </h2>
+
+        <!-- Shipping Address -->
+        <div class="address-area">
+            <h2 style="display: flex"><img src="/images/home-address-residential-address-svgrepo-com.svg " alt="Logo"
+                    class="logo-small"
+                    style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+                Shipping Address</h2>
+
+            <form action="/cart/checkout" method="POST" id="checkoutForm">
+                <select name="shippingAddress" id="shippingAddress"
+                    style="width:100%; height:30px; border-radius: 13px;background-color:#d8f0dd">
+                    <% user.address.forEach((address)=> { %>
+                        <option value="<%= address._id %>">
+                            <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city %>, <%=
+                                            address.state %>, <%= address.pincode %>
+                        </option>
+                        <% }); %>
+                </select>
+
+                <!-- Hidden input field to store selected address -->
+                <input type="hidden" name="selectedAddress" id="selectedAddress">
+
+                <!-- Use This Address Button -->
+                <button type="button" class="btn btn-success" onclick="useAddress()" style="margin-top: 10px">Use This
+                    Address</button>
+
+        </div>
+
+        <!-- Cart Details -->
+        <h2>Order Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>SI No.</th>
+                    <th>Product Image</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Total Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% cartItems.forEach((item, index)=> { %>
+                    <tr>
+                        <td>
+                            <%= index + 1 %>
+                        </td>
+                        <td><img src="/<%= item.productId.image[0] %>" alt="..." class="img-responsive"
+                                style="max-width: 100px; max-height: 100px;" /></td>
+                        <td>
+                            <h4>
+                                <%= item.productId.model %>
+                            </h4>
+                        </td>
+                        <td>
+                            <%= item.productId.description %>
+                        </td>
+                        <td>₹<%= item.price %>
+                        </td>
+                        <td>
+                            <%= item.quantity %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+
+        <!-- Order Summary -->
+        <div class="coupon-area">
+            <h2 style="display: flex">
+                <img src="/images/c2.svg" alt="Coupon" class="logo-small"
+                    style="width: 35px; height: 35px; border: 2px solid #3cf696; border-radius: 50%; background-color: #e5e6de;">
+                Apply Coupon
+            </h2>
+
+            <!-- Coupon Dropdown -->
+            <select name="coupon" id="coupon"
+                style="width: 100%; height: 30px; border-radius: 13px; background-color: #d8f0dd;">
+                <% if (coupon.isApplied) { %>
+                    <option value="<%= coupon.couponCode %>" disabled selected>
+                        <%= coupon.couponCode %> - Applied
+                    </option>
+                    <% } else { %>
+
+                        <option value="" selected disabled>Select Coupon</option>
+                        <% } %>
+                            <% coupons.forEach((item)=> { %>
+                                <% if (!coupon.isApplied) { %>
+                                    <option value="<%= item.code %>">
+                                        <%= item.code %> - ₹<%= item.discountValue %> OFF
+                                    </option>
+
+
+                                    <% } %>
+                                        <% }); %>
+            </select>
+            <input type="hidden" name="couponCode" id="couponCode">
+            <input type="hidden" id="couponsData" value='<%- JSON.stringify(coupons) %>'>
+
+
+            <!-- Apply Coupon Button -->
+            <button type="button" class="btn btn-warning" onclick="applyCoupon()" <% if (coupon.isApplied) { %>
+                disabled
+                <% } %>
+                    style="margin-top: 10px;">Apply
+            </button>
+        </div>
+
+        <!-- Total Price and Discounted Amount -->
+        <div class="payment-area" style="margin-top:50px">
+            <h2 style="text-align: center; margin-bottom:30px;">Amount Summary</h2>
+            <ul>
+                <li>Total Price: ₹ <span id="totalPrice">
+                        <%= totalPrice %>
+                    </span></li>
+                <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">Discounted
+                    Amount: ₹ <span id="discountedPrice"><%- coupon.discountValue %></span>
+                </li>
+                <li id="finalAmount">Net Amount: ₹ <span id="finalPrice">
+                        <%= coupon.discountValue ? totalPrice - coupon.discountValue : totalPrice %>
+                    </span></li>
+            </ul>
+            <button type="button" class="btn btn-danger" <% if (!coupon.isApplied) { %>
+                disabled
+                <% } %> onclick="removeCoupon()">Remove Coupon
+            </button>
+
+            <!-- <h3>Total Price: ₹ <span id="totalPrice"><%= totalPrice %></span></h3>
+<h3 id="discountedAmount" style="display: none;">Discounted Amount: ₹ <span id="discountedPrice"></span></h3>
+<h3 >Net Amount: ₹ <span id="finalPrice"></span></h3> -->
+        </div>
+
+        <!-- <h3 style="text-align: center; font-size:larger; font-weight:bold">Total Price: ₹ <%= totalPrice %></h3> -->
+
+        <!-- Payment Options -->
+        <div class="payment-area">
+            <h2 style="display: flex"><img src="/images/payment-method-svgrepo-com.svg " alt="Logo" class="logo-small"
+                    style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+                Payment Method</h2>
+            <div>
+                <label>
+                    <input type="radio" name="paymentMethod" value="cod" onclick="selectPaymentMethod('cod')"> Cash on
+                    Delivery
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="paymentMethod" value="Wallet" <% if (insufficient) { %>
+                    disabled
+                    <% } %> onclick="selectPaymentMethod('Wallet')">
+                        Wallet (Balance: ₹<span id="walletBalance" style="font-weight: bold;">
+                            <%= user.wallet.balance %>
+                        </span> <i class="fa fa-wallet" style="color: #3cf696;"></i>
+                        )
+
+                        <% if (insufficient) { %>
+                            <small style="color:red" class="text-danger">Insufficient Balance</small>
+                            <% } %>
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="paymentMethod" value="paypal" onclick="selectPaymentMethod('paypal')">
+                    PayPal
+                </label>
+
+            </div>
+
+            <!-- Hidden input field to store selected payment method -->
+            <input type="hidden" name="selectedPaymentMethod" id="selectedPaymentMethod">
+
+            <!-- Proceed Button -->
+            <div style="display:flex; justify-content:center"><button type="button" class="btn btn-success"
+                    onclick="confirmOrder()">Proceed</button></div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- SweetAlert2 library for showing alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script>
+        const coupons = <%- JSON.stringify(coupons) %>;
+    </script> -->
+    <script>
+        // Access the hidden input field
+        const couponsDataInput = document.getElementById('couponsData');
+
+        // Parse the JSON string into a JavaScript object
+        const coupons = JSON.parse(couponsDataInput.value);
+
+        // Now you can use the 'coupons' object as needed
+        console.log(coupons);
+    </script>
+    <script>
+        function useAddress() {
+            // Get the selected address
+            const selectedAddressId = document.getElementById('shippingAddress').value;
+            const selectedAddress = document.querySelector(`option[value="${selectedAddressId}"]`).text;
+
+            // Set the selected address into the hidden input field
+            document.getElementById('selectedAddress').value = selectedAddress;
+        }
+
+
+    </script>
+
+
+    <script>
+        function selectPaymentMethod(method) {
+            // Set the selected payment method into the hidden input field
+            document.getElementById('selectedPaymentMethod').value = method;
+
+            // Call the appropriate function based on the selected payment method
+           
+        }
+
+        function confirmOrder() {
+            // Get the selected payment method
+            const selectedPaymentMethod = document.getElementById('selectedPaymentMethod').value;
+
+            // Show order confirmation alert
+            Swal.fire({
+                title: "Order Confirmation",
+                text: "Are you sure you want to place this order?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3cf696",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirm Order"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (selectedPaymentMethod === 'paypal') {
+                       return initiatePayPalPayment();
+                    }
+        
+                    // Submit the form
+                    document.getElementById('checkoutForm').submit();
+                }
+            });
+        }
+
+        async function applyCoupon() {
+            const selectedCoupon = document.getElementById('coupon').value;
+            console.log(`Selected coupon: ${selectedCoupon}`);
+
+            let couponCode = selectedCoupon.toString();
+            try {
+                let body = { couponCode: couponCode };
+                console.log(body, 'body');
+                let response = await fetch('/applyCoupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body),
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to apply coupon');
+                }
+                let data = await response.json();
+                if (data.success) {
+                    Swal.fire({
+                        title: "Coupon Applied",
+                        text: data.message,
+                        icon: "success",
+                        confirmButtonColor: "#3cf696",
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    throw new Error(data.message);
+                }
+
+            } catch (e) {
+                console.log(e);
+                Swal.fire({
+                    title: "Coupon Not Applicable",
+                    text: e.message,
+                    icon: "error",
+                });
+            }
+            // Set the selected coupon code into the hidden input field
+            document.getElementById('couponCode').value = selectedCoupon;
+
+            const coupon = coupons.find(coupon => coupon.code === selectedCoupon);
+            const totalPriceElement = document.getElementById('totalPrice');
+            let totalPrice = parseFloat(totalPriceElement.innerText);
+
+            if (coupon) {
+                const discount = coupon.discountValue;
+
+                // Check if the discount is greater than total price
+                if (discount > totalPrice) {
+                    Swal.fire({
+                        title: "Coupon Not Applicable",
+                        text: "The coupon discount exceeds the total order price.",
+                        icon: "error",
+                        confirmButtonColor: "#3cf696",
+                    });
+                    // Reset the coupon field and return
+                    document.getElementById('coupon').value = '';
+                    return;
+                }
+
+                const discountedPrice = totalPrice - discount;
+                console.log(`Discounted price: ${discountedPrice}`);
+                // Update UI with discounted price
+                document.getElementById('discountedAmount').style.display = 'block';
+                document.getElementById('discountedPrice').innerText = discount;
+                document.getElementById('finalPrice').innerText = discountedPrice;
+            } else {
+                // If no coupon applied, proceed with the original total price
+                document.getElementById('discountedAmount').style.display = 'none'; // Hide discount section
+                document.getElementById('finalPrice').innerText = totalPrice; // Update final price to original total price
+                document.getElementById('netAmountInput').value = totalPrice; // Pass original total price to backend
+            }
+        }
+
+        async function removeCoupon() {
+            // Clear the selected coupon from the hidden input field
+            document.getElementById('couponCode').value = '';
+
+            Swal.fire({
+                title: "Coupon Removed",
+                text: "Coupon removed successfully",
+                icon: "success",
+            }).then(async () => {
+                try {
+                    let response = await fetch('/removeCoupon', {
+                        method: 'POST',
+                    })
+                    if (!response.ok) {
+                        throw new Error('Failed to remove coupon');
+                    }
+                    let data = await response.json();
+                    if (data.success) {
+                        Swal.fire({
+                            title: "Coupon Removed",
+                            text: "Coupon removed successfully",
+                            icon: "success", showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            location.reload();
+                        })
+                    }
+                    else {
+                        throw new Error(data.message);
+                    }
+                } catch (e) {
+                    console.log(e);
+                    Swal.fire({
+                        title: "Coupon Not Removed",
+                        text: e.message,
+                        icon: "error", showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload();
+                    })
+                }
+            });
+
+            // Update UI to reflect no applied coupon
+            document.getElementById('discountedAmount').style.display = 'none'; // Hide discount section
+            document.getElementById('finalPrice').innerText = parseFloat(document.getElementById('totalPrice').innerText); // Update final price to original total price
+            document.getElementById('netAmountInput').value = parseFloat(document.getElementById('totalPrice').innerText); // Pass original total price to backend
+        }
+
+        function initiatePayPalPayment() {
+
+
+
+            let finalPrice;
+            const couponCode = document.getElementById('couponCode').value;
+            if (couponCode) {
+                // If a coupon is applied, use the discounted price
+                finalPrice = parseFloat(document.getElementById('finalPrice').innerText);
+                console.log(`Final price (with coupon): ${finalPrice}`);
+                console.log(`Coupon code: ${couponCode}`);
+            } else {
+                // If no coupon applied, use the original total price
+                finalPrice = parseFloat(document.getElementById('totalPrice').innerText);
+                console.log(`Final price (without coupon): ${finalPrice}`);
+            }
+
+            const selectedAddressId = document.getElementById('shippingAddress').value;
+            const selectedAddress = document.querySelector(`option[value="${selectedAddressId}"]`).text;
+            console.log(`Shipping address: ${selectedAddress}`);
+
+            // Send a POST request to the backend endpoint to initiate PayPal payment
+            fetch('/payment/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: finalPrice,
+                    address: selectedAddress,
+                    couponCode: couponCode
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Redirect the user to the PayPal payment page
+                    window.location.href = data.approvalUrl;
+                })
+                .catch(error => {
+                    console.error('Error initiating PayPal payment:', error);
+                    // Handle error, display error message to the user, etc.
+                });
+            console.log('Payment initiated');
+
+        }
+
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .main-content {
+            margin-left: 222px; /* This is equal to the width of the sidebar (200px) plus its padding (15px) */
+            padding: 15px;
+            position: relative;
+            z-index: 0;
+            top: px; /* Add this to move it down from the navbar */
+        }
+       
+        .user-search {
+            gap: 10px;
+           background-color:#e5e6de;
+            margin-left:220px;
+            width:1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Add this to move it down from the search bar */
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        th {
+            background-color: #e5e6de;
+            color: #3cf696;
+        }
+        td button{
+            display:flex;
+            justify-content: center;
+        }
+        
+        .block-button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius:20px;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+      
+        td.last{
+            display: flex;
+            justify-content: center;
+        }
+        .active {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .inactive {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        #example thead th {
+            background-color: #3cf696; /* Header background color */
+            color: black; /* Header text color */
+            border: none; /* Remove border */
+            padding: 10px; /* Add padding */
+        }
+    
+        #example tbody tr td:nth-child(odd) {
+            background-color: #e5e6de; /* Odd row background color */
+        }
+    
+        #example tbody tr:hover {
+            background-color: #c9c9c9; /* Hovered row background color */
+        }
+    
+        /* Alternate row color for better visibility */
+        #example tbody tr td:nth-child(even) {
+            background-color: #f9f9f9; /* Even row background color */
+        }
+
+        .action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .action button {
+            margin-top: 5px; /* Adjust as needed */
+        }
+        
+        
+        .add-category-button {
+            float: right;
+            margin-bottom: 10px;
+            background-color: #3cf696;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            color: white;
+        }
+        .button-wrapper {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        @keyframes zoomInAndOut{
+            0%{
+                transform: scale(1);
+            }
+            50%{
+                transform: scale(1.1);
+            }
+            100%{
+                transform: scale(1);
+            }
+        }
+        .logo-small {
+          
+            animation: zoomInAndOut 1s infinite;
+            animation-direction: alternate;
+            animation-timing-function: ease-in-out;
+        }
+    </style>
+    <!-- DataTable HEADER -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+</head>
+<body>
+    <%- include("nav") %>
+    <%- include("sidebar") %>
+
+    
+    <div class="main-content">
+        <div class="button-wrapper">
+            <button class="add-category-button"><a href="/admin/addbanner">Add Banners</a></button>
+        </div>
+        <h3 style="text-align: center; font-weight:bold"><img src="/images/Category.svg" alt="Logo" class="logo-small"style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;"> Category List</h3>
+        <!-- <button class="btn" style="float:right;margin-bottom:30px;background-color:#3cf696"><a href="/admin/addcategory">Add Category</a></button> -->
+        <table id="example" class="table table-hover" style="width:100%">
+
+        <thead>
+            <tr>
+                <th>Si. No</th>
+                <th>Banner Name</th>
+                <th>Banner Image</th>
+                <th>Banner Link</th>
+                <th>Banner Description</th>
+                <!-- <th>Status</th>
+                <th>Actions</th>
+                <th>Others</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <% banners.forEach((banner, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= banner.bannerName %></td>
+                    <td><img src="<%= banner.bannerImage %>" alt="Banner Image" width="150" height="100"></td>
+                    <td><%= banner.bannerLink %></td>
+                    <td><%= banner.bannerDescription %></td>
+                    <!-- Other table data -->
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(bannerId) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3cf696",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user confirms, redirect to the delete route
+                window.location.href = `/admin/delcategory/${categoryId}`;
+            }
+        });
+    }
+</script>
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+<script>
+    new DataTable('#example');
+</script>
+</body>
+</html>

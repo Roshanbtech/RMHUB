@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Font Awesome for icons -->
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        h1,
+        h2 {
+            color: #3cf696;
+            text-align: center;
+        }
+
+        .balance-container,
+        .add-amount-container,
+        .transaction-history-container {
+            margin-bottom: 20px;
+        }
+
+        .balance-container,
+        .add-amount-container {
+            background-color: #d8f0dd;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .transaction-history-container {
+            background-color: #d8f0dd;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 90px);
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #3cf696;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #31b382;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3cf696;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .credit {
+            color: green;
+        }
+
+        .debit {
+            color: red;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
+        }
+
+        .back-btn i {
+            margin-right: 5px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                max-width: 90%;
+                margin: 20px auto;
+                padding: 10px;
+            }
+
+            h1,
+            h2 {
+                font-size: 24px;
+            }
+
+            input[type="number"] {
+                width: calc(100% - 80px);
+            }
+
+            button[type="submit"] {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <button type="button" class="back-btn" onclick="location.href ='/profile/getprofile'"><i
+            class="fas fa-arrow-left"></i> Back To Profile</button>
+    <div class="container">
+        <h1>My Wallet</h1>
+
+        <!-- Wallet Balance -->
+        <div class="balance-container">
+            <% if (user && user.wallet) { %>
+                <h2>Wallet Balance</h2>
+                <% if (user.wallet.balance> 0) { %>
+                    <p style="text-align: center"><strong>₹<%= user.wallet.balance %></strong></p>
+                    <% } else { %>
+                        <p style="text-align: center"><strong class="debit">-₹<%= Math.abs(user.wallet.balance) %>
+                                    </strong></p>
+                        <% } %>
+                            <% } %>
+        </div>
+
+        <!-- Add Amount to Wallet -->
+        <div class="add-amount-container">
+            <h2>Add Amount to Wallet</h2>
+            <form id="addAmountForm">
+                <input type="number" id="amount" name="amount" min="1" required>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="transaction-history-container">
+            <h2>Transaction History</h2>
+            <table id="transactionHistoryTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% user.wallet.transactions.forEach(transaction=> { %>
+                        <tr>
+                            <td>
+                                <%= new Date(transaction.date).toLocaleString() %>
+                            </td>
+                            <td>
+                                <% if (transaction.amount> 0) { %>
+                                    <% if (transaction.description==='Item Purchased' || transaction.description==='Order Placed' ) { %>
+                                        <span class="debit">-₹<%= transaction.amount %></span>
+                                        <% } else { %>
+                                            <span class="credit">+₹<%= transaction.amount %></span>
+                                            <% } %>
+                                                <% } else { %>
+                                                    <span class="debit">-₹<%= Math.abs(transaction.amount) %></span>
+                                                    <% } %>
+                            </td>
+                            <td>
+                                <%= transaction.description %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script>
+        const addAmountForm = document.getElementById('addAmountForm');
+        addAmountForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            initiatePaypalPayment();
+        })
+        function initiatePaypalPayment() {
+            let amount = document.getElementById('amount').value;
+            // Send a POST request to the backend endpoint to initiate PayPal payment
+            fetch('/payment/addtowallet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Redirect the user to the PayPal payment page
+                    window.location.href = data.approvalUrl;
+                })
+                .catch(error => {
+                    console.error('Error initiating PayPal payment:', error);
+                    // Handle error, display error message to the user, etc.
+                });
+            console.log('Payment initiated');
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#transactionHistoryTable').DataTable({
+                "rowCallback": function (row, data, index) {
+                    if (index % 2 === 0) {
+                        $(row).css("background-color", "#d8f0dd");
+                    } else {
+                        $(row).css("background-color", "#e5e6de");
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

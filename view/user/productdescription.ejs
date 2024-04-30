@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-4RPSIlbkI9XK3Xy3w1sCBmbPrAgY+Rlj/ETD6ZIu3YLFjPd1l0s7Ly6mvJTuQw3Bvn53AfB4L2j7sfuk2JLqmA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <style>
+        /* Add your CSS here */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .card-wrapper {
+            max-width: 1000px;
+            margin: 100px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .product-imgs {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-imgs .img-display {
+            overflow: hidden;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        .product-imgs .img-display img {
+            width: 100%;
+            height: auto;
+        }
+
+        .product-imgs .img-select {
+            display: flex;
+            justify-content: center;
+        }
+
+        .product-imgs .img-select .img-item {
+            margin: 0 10px;
+        }
+
+        .product-imgs .img-select .img-item img {
+            width: 80px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .product-content {
+            width: 100%;
+            padding: 0 20px;
+            background-color: #e5e6de;
+            margin-right: 20px;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-radius: 30px;
+        }
+
+        .product-content h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .product-content .product-detail ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .product-content .product-detail ul li {
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            color: #000;
+            border: 1px solid #000;
+            margin: 0 5px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.5s ease;
+        }
+
+        .social-links a:hover {
+            background: #000;
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .zoomContainer {
+            z-index: 9999;
+            /* Ensure zoom container is above everything else */
+            height: 50px
+        }
+
+        @media screen and (min-width: 768px) {
+            .card {
+                flex-direction: row;
+            }
+
+            .product-imgs,
+            .product-content {
+                width: 50%;
+            }
+        }
+
+        .fas.fa-star.filled {
+            color: gold;
+        }
+
+        .far.fa-star {
+            color: black;
+        }
+
+        .product-rating {
+            position: relative;
+            display: inline-block;
+        }
+
+        .rating-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .product-rating:hover .rating-dropdown-content {
+            display: block;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include("nav") %>
+        <br>
+        <div class="card-wrapper">
+            <div class="card" style="background-color:#fff;border-color:#3cf696">
+                <!-- card left -->
+                <div class="product-imgs">
+                    <div class="img-display">
+                        <div class="img-showcase">
+                            <img id="mainImage" src="/<%= product.image[0].replace(/\\/g, '/') %>" alt="shoe image">
+                        </div>
+                    </div>
+                    <div class="img-select">
+                        <div class="img-item">
+                            <img src="/<%= product.image[0].replace(/\\/g, '/') %>" alt="shoe image"
+                                onclick="changeImage('/<%= product.image[0].replace(/\\/g, '/') %>')">
+                        </div>
+                        <div class="img-item">
+                            <% if (product.image[1]) { %>
+                                <img src="/<%= product.image[1].replace(/\\/g, '/') %>" alt="shoe image"
+                                    onclick="changeImage('/<%= product.image[1].replace(/\\/g, '/') %>')">
+                            <% } %>
+                        </div>
+                        <div class="img-item">
+                            <% if (product.image[2]) { %>
+                                <img src="/<%= product.image[1].replace(/\\/g, '/') %>" alt="shoe image"
+                                    onclick="changeImage('/<%= product.image[2].replace(/\\/g, '/') %>')">
+                            <% } %>
+                        </div>
+                        <div class="img-item">
+                            <% if (product.image[3]) { %>
+                                <img src="/<%= product.image[3].replace(/\\/g, '/') %>" alt="shoe image"
+                                    onclick="changeImage('/<%= product.image[1].replace(/\\/g, '/') %>')">
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <!-- card right -->
+                <div class="product-content" style="margin-top:30px">
+                    <h2 class="product-title">
+                        <%= product.model %>
+                    </h2>
+                    <div class="product-rating">
+                        <span style="background-color:#3cf696"><strong>
+                                <%= product.ratings %>
+                            </strong></span>
+
+                        <% for (let i=1; i <=5; i++) { %>
+                            <% if (i <=product.ratings) { %>
+                                <!-- Output a filled star if the index is less than or equal to the product's rating -->
+                                <i class="fas fa-star filled"></i>
+                                <% } else { %>
+                                    <!-- Output an empty star if the index is greater than the product's rating -->
+                                    <i class="far fa-star"></i>
+                                    <% } %>
+                                        <% } %>
+                                            <div class="rating-dropdown-content">
+                                                <a>See Reviews</a>
+                                            </div>
+                    </div>
+                    <div class="product-price">
+                        <!-- <p class="last-price">Real Price: <span style="background-color:#3cf696"><strong>₹<%= product.price %></strong></span></p> -->
+                        <p class="last-price">Price: <span style="background-color:#3cf696"><strong>
+                                    <% if (product.onOffer) { %>
+                                        ₹<%= product.offerPrice %>
+                                            <!-- Display the discounted price if an offer is applied -->
+                                            <% } else { %>
+                                                ₹<%= product.price %>
+                                                    <!-- Display the original price if no offer is applied -->
+                                                    <% } %>
+                                </strong></span></p>
+
+                        <!-- <p class="new-price">Offer Price: <span><%= product.price %> (₹2000 off)</span></p> -->
+                    </div>
+                    <div class="product-detail">
+                        <h2>About this item:</h2>
+                        <p>
+                            <%= product.description %>
+                        </p>
+                        <ul>
+                            <li>Color: <span>
+                                    <%= product.color %>
+                                </span></li>
+                            <li>Available Stock: <span>
+                                    <%= product.availableStock %>
+                                </span></li>
+                            <li>Category: <span>
+                                    <%= product.category?.name %>
+                                </span></li>
+                            <li>Shipping Area: <span>All over the world</span></li>
+                            <!-- <li>Shipping Fee: <span>Free</span></li> -->
+                        </ul>
+                    </div>
+                    <div class="purchase-info">
+                        <form action="/cart/addtocart" method="post">
+                            <input type="hidden" name="productId" value="<%= product._id %>">
+                            <input type="number" name="quantity" id="quantity" min="1" value="1">
+                            <button type="submit" class="btn">Add to Cart <i class="fas fa-shopping-cart"></i></button>
+                        </form>
+                        <button type="button" class="btn" id="rateButton" style="background-color:#3cf696">Rate this
+                            product</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <!-- Footer -->
+        <%- include("footer") %>
+
+            <!-- Rating Modal -->
+            <%- include("ratingmodal", { productId: productId }) %>
+
+                <!-- Scripts -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+                <script>
+                    $(document).ready(function () {
+                        $('#mainImage').elevateZoom();
+                    });
+
+                    function changeImage(imageUrl) {
+                        $('#mainImage').attr('src', imageUrl).data('zoom-image', imageUrl).elevateZoom();
+                    }
+
+                </script>
+                <script>
+                    document.getElementById('rateButton').addEventListener('click', function () {
+                        // Get the productId from the hidden input field in the product description page
+                        var productId = document.querySelector('input[name="productId"]').value;
+
+                        // Set the value of the productId input field in the modal form
+                        document.querySelector('#ratingReviewForm input[name="productId"]').value = productId;
+
+                        // Show the modal
+                        $('#ratingReviewModal').modal('show');
+                    });
+                </script>
+
+</body>
+
+</html>

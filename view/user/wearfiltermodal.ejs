@@ -1,0 +1,122 @@
+<style>
+    /* Modal styles */
+    .modal-content {
+        border-radius: 20px;
+    }
+
+    .modal-header {
+        background-color: #3CF696;
+        color: #ffffff;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .modal-title {
+        font-weight: bold;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-footer {
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    /* Input styles */
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 10px;
+    }
+
+    /* Button styles */
+    .btn-primary {
+        background-color: #3CF696;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .btn-primary:hover {
+        background-color: #32c084;
+    }
+
+    .btn-secondary {
+        background-color: #ffffff;
+        border: 1px solid #3CF696;
+        border-radius: 10px;
+        color: #3CF696;
+    }
+
+    .btn-secondary:hover {
+        background-color: #f2f2f2;
+    }
+</style>
+<!-- Filtering Modal -->
+<div id="WfilterModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Filter Products</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Filtering form -->
+                <form id="filterForm" action="/wearables" method="GET">
+                    <div class="form-group">
+                        <label for="brandFilter">Filter by brand:</label>
+                        <select class="form-control" id="brandFilter" name="productName"
+                            style="background-color:#d8f0dd">
+                            <% brands.forEach(name=> { %>
+                                <option value="<%= name %>">
+                                    <%= name %>
+                                </option>
+                                <% }); %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="minPrice">Minimum price:</label>
+                        <input type="number" class="form-control" min="0" id="minPrice" name="minPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxPrice">Maximum price:</label>
+                        <input type="number" class="form-control" min="0" id="maxPrice" name="maxPrice">
+                    </div>
+                    <div class="form-group">
+                        <label for="colorFilter">Filter by color:</label>
+                        <select class="form-control" id="colorFilter" name="color" style="background-color:#d8f0dd">
+                            <option value="" selected>Select Color</option> <!-- Default option -->
+                            <% colors.forEach(name=> { %>
+                                <option value="<%= name %>">
+                                    <%= name %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <!-- Add more filtering options as needed -->
+
+                    <div class="form-group">
+                        <label for="sortBy">Sort by:</label>
+                        <select class="form-control" id="sortBy" name="sortBy" style="background-color:#d8f0dd">
+                            <option value="nameAsc">Name (A-Z)</option>
+                            <option value="nameDesc">Name (Z-A)</option>
+                            <option value="priceAsc">Price (Low to High)</option>
+                            <option value="priceDesc">Price (High to Low)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

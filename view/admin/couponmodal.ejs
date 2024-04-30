@@ -1,0 +1,149 @@
+<style>
+    /* Form styles */
+    #couponForm {
+        padding: 20px;
+    }
+
+    #couponForm .form-group {
+        margin-bottom: 20px;
+    }
+
+    #couponForm .form-label {
+        font-weight: bold;
+        color: black;
+    }
+
+    #couponForm .form-control {
+        border-radius: 10px;
+        border: 1px solid #3CF696;
+        padding: 10px;
+        width: 100%;
+        background-color: #ffffff;
+        /* Set background color to white */
+    }
+
+    #couponForm .btn-primary {
+        background-color: #3CF696;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    #couponForm .btn-primary:hover {
+        background-color: #32c084;
+    }
+
+    /* Title styles */
+    #addCouponModal .modal-title {
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 0;
+    }
+
+    #addCouponModal .modal-header {
+        background-color: #3CF696;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        padding: 15px 20px;
+    }
+</style>
+
+
+<!-- Add Coupon Modal -->
+<div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCouponModalLabel">Add Coupon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="couponForm" action="/coupon/addcoupon" method="POST" onsubmit="return validateForm()">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Coupon Code</label>
+                        <input type="text" class="form-control" id="code" name="code">
+                        <div id="codeError" class="error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="discountType" class="form-label">Discount Type</label>
+                        <select class="form-control" id="discountType" name="discountType">
+                            <option value="fixed">Fixed Discount</option>
+                            <option value="percentage">Percentage Discount</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="discountValue" class="form-label">Discount Value</label>
+                        <input type="number" class="form-control" id="discountValue" min="0" name="discountValue">
+                        <div id="discountValueError" class="error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="expirationDate" class="form-label">Expiration Date</label>
+                        <input type="date" class="form-control" id="expirationDate" name="expirationDate">
+                        <div id="expirationDateError" class="error"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Coupon</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script>
+    function validateForm() {
+        var code = document.getElementById("code").value.trim();
+        var discountValue = document.getElementById("discountValue").value.trim();
+        var expirationDate = document.getElementById("expirationDate").value.trim();
+
+        var isValid = true;
+
+        // Reset error messages and styles
+        document.getElementById("codeError").innerHTML = "";
+        document.getElementById("code").style.borderColor = "#3CF696";
+        document.getElementById("discountValueError").innerHTML = "";
+        document.getElementById("discountValue").style.borderColor = "#3CF696";
+        document.getElementById("expirationDateError").innerHTML = "";
+        document.getElementById("expirationDate").style.borderColor = "#3CF696";
+
+        // Validate coupon code
+        if (code == "") {
+            document.getElementById("codeError").innerHTML = "*Please enter coupon code";
+            document.getElementById("code").style.borderColor = "red";
+            document.getElementById("codeError").style.color = "red";
+            isValid = false;
+        } else if (!/^(?=.*[A-Z])(?=.*\d).+$/.test(code)) {
+            document.getElementById("codeError").innerHTML = "*Coupon code must contain at least one capital letter and one number";
+            document.getElementById("code").style.borderColor = "red";
+            document.getElementById("codeError").style.color = "red";
+            isValid = false;
+        }
+
+        // Validate discount value
+        if (discountValue == "") {
+            document.getElementById("discountValueError").innerHTML = "*Please enter discount value";
+            document.getElementById("discountValue").style.borderColor = "red";
+            document.getElementById("discountValueError").style.color = "red";
+            isValid = false;
+        } else {
+            var num = Number(discountValue);
+            if (isNaN(num)) {
+                document.getElementById("discountValueError").innerHTML = "*Discount value should be a number";
+                document.getElementById("discountValueError").style.color = "red";
+                isValid = false;
+            }
+        }
+
+        // Check date format
+        if (!moment(expirationDate, "YYYY-MM-DD", true).isValid()) {
+            document.getElementById("expirationDateError").innerHTML = "*Please enter valid date (YYYY-MM-DD)";
+            document.getElementById("expirationDate").style.borderColor = "red";
+            document.getElementById("expirationDateError").style.color = "red";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>

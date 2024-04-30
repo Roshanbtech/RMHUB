@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .main-content {
+            margin-left: 222px;
+            /* This is equal to the width of the sidebar (200px) plus its padding (15px) */
+            padding: 15px;
+            position: relative;
+            z-index: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #e5e6de;
+            color: #3cf696; /* Changed text color to green */
+        }
+
+        td button {
+            display: flex;
+            justify-content: center;
+            background-color: #3cf696; /* Changed button background color to green */
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .block-button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        td.last {
+            display: flex;
+            justify-content: center;
+        }
+
+        #example tbody tr td.active {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #example tbody tr td.inactive {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #example thead th {
+            background-color: #3cf696;
+            color: black;
+            border: none;
+            padding: 10px;
+        }
+
+        #example tbody tr td:nth-child(odd) {
+            background-color: #e5e6de;
+        }
+
+        #example tbody tr:hover {
+            background-color: #c9c9c9;
+        }
+
+        #example tbody tr td:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+    <%-include("nav") %>
+        <%-include("sidebar") %>
+            <div class="main-content">
+                <h3 style="text-align:center; font-weight: bold"> Category Offers</h3>
+                <table id="example" class="table table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Si. No</th>
+                            <th>Product Name</th>
+                            <th>Offer Rate</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% categories.forEach((cat,index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index+1 %>
+                                </td>
+                                <td>
+                                    <%= cat.name %>
+                                </td>
+                                <td>
+                                    <%= cat.offerDiscountRate %>
+                                </td>
+                                <td class="status">
+                                    <span class="offer-status <%= cat.onOffer ? 'active' : 'inactive' %>">
+                                        <%= cat.onOffer ? 'Active' : 'Inactive' %>
+                                    </span>
+                                </td>
+                                <td class="action">
+                                    <button type="button" class="btn btn-primary btn-sm" style="background-color: #3cf696;" data-bs-toggle="modal"
+                                        data-bs-target="#offerModal" data-category-id="<%= cat._id %>">Add
+                                        Offer</button>
+                                    <br>
+                                    <button class="toggle-offer-btn btn btn-sm btn-secondary" style="background-color: #3cf696;"
+                                        data-category-id="<%= cat._id %>" data-current-status="<%= cat.onOffer %>">
+                                        <%= cat.onOffer ? 'Deactivate' : 'Activate' %> Offer
+                                    </button>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#example').DataTable();
+                });
+            </script>
+            <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card">
+                                <form id="offerForm" class="card-body" method="POST">
+                                    <div class="row">
+                                        <fieldset class="col card mx-2">
+                                            <legend id="category_name">Category : </legend>
+                                            <div class="mb-3">
+                                                <label for="offerDiscountRate" class="form-label">Offer Discount
+                                                    (%)</label>
+                                                <input name="offerDiscountRate" type="number" min="0"
+                                                    class="form-control" id="offerDiscountRate">
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary m-2 w-100" style="background-color: #3cf696;">Add/Modify Offer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                const offerModal = document.getElementById('offerModal');
+                const offerForm = document.getElementById('offerForm');
+                offerModal.addEventListener('show.bs.modal', async function (event) {
+                    const button = event.relatedTarget; // Button that triggered the modal
+                    const categoryId = button.getAttribute('data-category-id');
+                    console.log(categoryId, button);
+                    try {
+                        const response = await fetch(`/admin/cat-details/${categoryId}`, {
+                            method: 'GET',
+                        });
+                        const data = await response.json();
+                        console.log(data);
+                        if (data.success) {
+                            document.getElementById('category_name').innerText = data.category.name;
+                            document.getElementById("offerDiscountRate").value = data.category.offerDiscountRate;
+                            offerForm.action = `/admin/cat-offers/${categoryId}`;
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                });
+                offerForm.addEventListener('submit', async function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(offerForm);
+                    const body = Object.fromEntries(formData);
+                    try {
+                        const response = await fetch(offerForm.action, {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(body)
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            location.reload();
+                        }else {
+                            // Show Sweet Alert for invalid discount rate
+                            swal("Discount Error!", data.message, "error");
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const toggleOfferButtons = document.querySelectorAll('.toggle-offer-btn');
+                    toggleOfferButtons.forEach(button => {
+                        button.addEventListener('click', async function () {
+                            const categoryId = this.getAttribute('data-category-id');
+                            const currentStatus = JSON.parse(this.getAttribute('data-current-status'));
+                            try {
+                                const response = await fetch(`/admin/toggle-cat-offer/${categoryId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        newStatus: !currentStatus
+                                    })
+                                });
+                                const data = await response.json();
+                                if (data.success) {
+                                    location.reload();
+                                } 
+                            } catch (error) {
+                                console.error('Error toggling offer:', error);
+                            }
+                        });
+                    });
+                });
+            </script>
+            <!-- Sweet Alert CDN -->
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</body>
+
+</html>

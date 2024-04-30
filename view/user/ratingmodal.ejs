@@ -1,0 +1,101 @@
+
+    <style>
+        /* Modal styles */
+        .modal-content {
+            border-radius: 20px;
+        }
+        
+        .modal-header {
+            background-color: #3CF696;
+            color: #ffffff;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        
+        .modal-title {
+            font-weight: bold;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-footer {
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        
+        /* Input styles */
+        .form-group label {
+            font-weight: bold;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+        }
+        
+        /* Button styles */
+        .btn-primary {
+            background-color: #3CF696;
+            border: none;
+            border-radius: 10px;
+        }
+        
+        .btn-primary:hover {
+            background-color: #32c084;
+        }
+        
+        .btn-secondary {
+            background-color: #ffffff;
+            border: 1px solid #3CF696;
+            border-radius: 10px;
+            color: #3CF696;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+<!-- Rating and Review Modal -->
+<div id="ratingReviewModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ratingReviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ratingReviewModalLabel">Rate and Review Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Rating and Review form -->
+                <form id="ratingReviewForm" action="/rating/<%=productId%>" method="POST">
+                    <div class="form-group">
+                        <label for="rating">Rating:</label>
+                        <select class="form-control" id="rating" name="rating">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="review">Review:</label>
+                        <textarea class="form-control" id="review" name="review" rows="3"></textarea>
+                    </div>
+                    <!-- Add hidden input fields for product ID or any other necessary data -->
+                    <input type="hidden" name="productId" value="productId">
+                    <div style="display: flex; justify-content: center"><button type="submit" class="btn btn-primary" >Submit</button></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
