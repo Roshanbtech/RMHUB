@@ -94,13 +94,16 @@ cartSchema.pre('save', async function (next) {
             console.log(coupon, 'coupon')
             if(coupon) {
                 let discountAmount = 0;
-                if(coupon.discountType === 'fixed') {
-                    discountAmount = coupon.discountValue;
-                } else if(coupon.discountType === 'percentage') {
+                if(coupon.discountType === 'percentage') {
                     discountAmount = this.totalPrice * (coupon.discountValue / 100);
                 }
+                if(coupon.discountType === 'fixed') {
+                    discountAmount = coupon.discountValue;
+                } 
+                
                 this.couponDiscount = discountAmount;
-                this.totalPrice = this.totalPrice - this.couponDiscount;
+                this.totalPrice = this.totalPrice - discountAmount;
+                console.log(this);
             }
         }
         next();

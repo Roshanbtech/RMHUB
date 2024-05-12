@@ -9,10 +9,9 @@ const path = require('path');
 
 const getSalesReport = async (req, res) => {
 
-    let startDate = req.query.startDate
-        ? new Date(req.query.startDate)
-        : new Date();
+    let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
     let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+    
     startDate.setUTCHours(0, 0, 0, 0);
     endDate.setUTCHours(23, 59, 59, 999);
 

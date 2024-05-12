@@ -235,7 +235,7 @@
                             <% coupons.forEach((item)=> { %>
                                 <% if (!coupon.isApplied) { %>
                                     <option value="<%= item.code %>">
-                                        <%= item.code %> - ₹<%= item.discountValue %> OFF
+                                        <%= item.code %> - <%= item.discountType === 'fixed' ? '₹' : 'percent' %> <%= item.discountValue %> OFF
                                     </option>
 
 
@@ -259,13 +259,13 @@
             <h2 style="text-align: center; margin-bottom:30px;">Amount Summary</h2>
             <ul>
                 <li>Total Price: ₹ <span id="totalPrice">
-                        <%= totalPrice %>
-                    </span></li>
+                    <%= coupon.discountValue ? (parseFloat(totalPrice) + parseFloat(coupon.discountValue)).toFixed(2) : totalPrice.toFixed(2) %>
+                </span></li>
                 <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">Discounted
                     Amount: ₹ <span id="discountedPrice"><%- coupon.discountValue %></span>
                 </li>
                 <li id="finalAmount">Net Amount: ₹ <span id="finalPrice">
-                        <%= coupon.discountValue ? totalPrice - coupon.discountValue : totalPrice %>
+                        <%=  totalPrice.toFixed(2) %>
                     </span></li>
             </ul>
             <button type="button" class="btn btn-danger" <% if (!coupon.isApplied) { %>

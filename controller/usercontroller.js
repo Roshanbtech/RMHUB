@@ -24,6 +24,9 @@ const landing = (req, res) => {
 }
 
 const signup = async (req, res) => {
+  if (req.session.isLoggedIn) {
+    return res.redirect('/home')
+  }
   res.render('user/signup.ejs')
 }
 
@@ -252,14 +255,14 @@ const validateOtp = async (req, res) => {
         }
       }
 
-      if(newUser.email === process.env.ADMIN_EMAIL){
+      if (newUser.email === process.env.ADMIN_EMAIL) {
         newUser.isAdmin = true
       }
       // Save the new user to the database
       await newUser.save();
 
       // Clear session data after all operations that require it are completed
-      //req.session.destroy();
+      // req.session.destroy();
 
       // Redirect to login page after successful registration
       res.redirect('/login?message=Sign up Successful. Please log in.');
@@ -275,12 +278,14 @@ const validateOtp = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
-
+  if (req.session.isLoggedIn) {
+    return res.redirect('/home')
+  }
   const msg = req.query.message
   res.render('user/login.ejs', { message: msg });
 }
+
 const loginpost = async (req, res) => {
   try {
     const check = await collection.findOne({ email: req.body.email })
@@ -289,7 +294,9 @@ const loginpost = async (req, res) => {
     console.log(req.body.password)
     req.session.user = req.body.email
     if (validPassword) {
+      req.session.isLoggedIn = true
       res.redirect('/home')
+
     } else {
       res.redirect('/login?message=Invalid Credentials')
     }
@@ -311,6 +318,13 @@ const loginpost = async (req, res) => {
 // }
 const home = async (req, res) => {
   try {
+
+    // Check if user session exists
+    if (!req.session.user) {
+      // If user session does not exist, redirect to login page
+      return res.redirect('/login?message=Please log in to access this page');
+    }
+
     const user = req.session.user;
     let query = { isListed: true };
 
@@ -364,9 +378,6 @@ const home = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-
-
-
 
 const phones = async (req, res) => {
   try {
@@ -609,6 +620,8 @@ const rating = async (req, res) => {
 }
 
 const logout = async (req, res) => {
+  delete req.session.user;
+  delete req.session.isLoggedIn;
   res.render('user/landing.ejs')
 }
 
@@ -626,7 +639,7 @@ const forpasmailpost = async (req, res) => {
     if (!emailExists) {
       return res.render('user/forpasmail.ejs', { message: 'Email does not exist' });
     }
- 
+
 
     req.session.resetEmail = req.body.email;
     console.log(req.session.resetEmail)
@@ -685,7 +698,7 @@ const forpasresetpost = async (req, res) => {
 }
 
 const applyCoupon = async (req, res) => {
-  
+
   try {
     const couponCode = req.body.couponCode;
     console.log(req.body)
@@ -693,15 +706,15 @@ const applyCoupon = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    const coupon = await Coupon.findOne({ code: {$options: 'i', $regex: couponCode.toString().toUpperCase()} });
+    const coupon = await Coupon.findOne({ code: { $options: 'i', $regex: couponCode.toString().toUpperCase() } });
     console.log(coupon)
     if (!coupon) {
-      return res.status(404).json({ success:false, message: 'Coupon not found' });
+      return res.status(404).json({ success: false, message: 'Coupon not found' });
     }
-    if(!coupon.isActive){
-      return res.status(404).json({ success:false, message: 'Coupon is not active' });
+    if (!coupon.isActive) {
+      return res.status(404).json({ success: false, message: 'Coupon is not active' });
     }
-    
+
     let cart = await Cart.findOne({ userId: user._id });
 
     // Calculate the total price of the items in the cart
@@ -717,7 +730,7 @@ const applyCoupon = async (req, res) => {
 
     cart.coupon = coupon._id;
     await cart.save();
-    res.status(200).json({ success:true, message: 'Coupon applied successfully' });
+    res.status(200).json({ success: true, message: 'Coupon applied successfully' });
 
   } catch (error) {
     console.error('Error applying coupon:', error);
@@ -735,12 +748,12 @@ const removeCoupon = async (req, res) => {
     cart.coupon = undefined;
     cart.couponDiscount = 0;
     await cart.save();
-    res.status(200).json({ success:true, message: 'Coupon removed successfully' });
+    res.status(200).json({ success: true, message: 'Coupon removed successfully' });
   } catch (error) {
     console.error('Error removing coupon:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-  
+
 }
 
 module.exports = { landing, signup, signuppost, mailsender, applyCoupon, removeCoupon, phones, wearables, rating, tablets, home, login, loginpost, validateOtp, resendOtp, proddes, logout, forpasmail, forpasmailpost, forpasotp, forpasotppost, forpasreset, forpasresetpost }

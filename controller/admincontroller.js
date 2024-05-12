@@ -97,7 +97,7 @@ const blockUser = async (req, res) => {
 
         // Redirect back to the users list page
         res.redirect('/admin/users');
-    } catch (err) {
+    } catch (err) {///////
         console.error(err);
         res.redirect('/error');
     }
@@ -142,11 +142,11 @@ const addproductspost = async (req, res) => {
     
     try {
 
-        const existingProducts = await collection3.findOne({ model});
+        const existingProducts = await collection3.findOne({ productName:{$regex: productName, $options: 'i'} });
         console.log(existingProducts, 'existingProducts')
         if (existingProducts) {
             // const successMessage = req.query.successMessage;
-            const categories = await collection1.find({ isListed: true });
+            // const categories = await collection1.find({ isListed: true });
             return res.redirect('/admin/addproducts?successMessage=Product model already exists.');
             // res.render('admin/addproducts.ejs', { error: 'Product model already exists.', categories, successMessage });
         }

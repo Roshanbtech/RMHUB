@@ -25,7 +25,7 @@ const payment = async (req, res) => {
     try {
         // Validate request data
         if (!req.body || !req.body.amount) {
-            return res.status(400).send('Amount is required');git 
+            return res.status(400).send('Amount is required'); git
         }
 
         const { amount, address, couponCode } = req.body;
@@ -47,8 +47,8 @@ const payment = async (req, res) => {
 
             },
             redirect_urls: {
-                return_url: 'http://localhost:3004/payment/paymentstatus',
-                cancel_url: 'http://localhost:3004/cart/checkout',
+                return_url: 'http://localhost:3005/payment/paymentstatus',
+                cancel_url: 'http://localhost:3005/cart/checkout',
             },
             transactions: [{
                 amount: {
@@ -167,7 +167,7 @@ const paymentstatus = async (req, res) => {
                         paymentMethod: 'PayPal', // Update with actual payment method
                     });
 
-                    if(cart.coupon){
+                    if (cart.coupon) {
                         const coupon = await Coupon.findOne({ _id: cart.coupon });
                         newOrder.appliedCoupon = coupon._id;
                         newOrder.discountValue = cart.couponDiscount;
@@ -262,8 +262,8 @@ const addToWallet = async (req, res) => {
 
             },
             redirect_urls: {
-                return_url: 'http://localhost:3004/payment/verifyPayment',
-                cancel_url: 'http://localhost:3004/wallet/paymentcancel',
+                return_url: 'http://localhost:3005/payment/verifyPayment',
+                cancel_url: 'http://localhost:3005/wallet/paymentcancel',
             },
             transactions: [{
                 amount: {
@@ -395,8 +395,8 @@ const walletPayment = async (req, res) => {
 
             },
             redirect_urls: {
-                return_url: 'http://localhost:3004/payment/verifyWalletPayment',
-                cancel_url: 'http://localhost:3004/payment/paymentcancel',
+                return_url: 'http://localhost:3005/payment/verifyWalletPayment',
+                cancel_url: 'http://localhost:3005/payment/paymentcancel',
             },
             transactions: [{
                 amount: {
@@ -496,8 +496,6 @@ const verifyWalletPayment = async (req, res) => {
                     } else {
                         totalPrice: totalPrice;
                     }
-
-
 
                     //Create the order
                     const orderItems = cart.cartItems.map((item) => ({

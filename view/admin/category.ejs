@@ -4,6 +4,7 @@
 <head>
     <title>RMHUB</title>
     <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +22,7 @@
             top: px;
             /* Add this to move it down from the navbar */
         }
+        
 
         .user-search {
             gap: 10px;
@@ -165,6 +167,7 @@
             animation-direction: alternate;
             animation-timing-function: ease-in-out;
         }
+        
     </style>
     <!-- DataTable HEADER -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
@@ -196,7 +199,7 @@
                             <th>Category Name</th>
                             <th>Status</th>
                             <th>Actions</th>
-                            <!-- <th>Others</th> -->
+                            <th>Others</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -221,10 +224,10 @@
                                         </button>
                                     </form>
                                 </td>
-                                <!-- <td class="others">
+                                <td class="others">
                                     <button style="background-color: red; border-radius: 5px;"
                                         onclick="confirmDelete('<%= category.id %>')">Delete</button>
-                                </td> -->
+                                </td>
                             </tr>
                             <% }) %>
                     </tbody>

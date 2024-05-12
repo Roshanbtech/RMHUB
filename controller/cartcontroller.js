@@ -219,19 +219,23 @@ const checkout = async (req, res) => {
         }
 
 
-        const totalPrice = cart.cartItems.reduce((total, item) => total + (item.quantity * item.price), 0);
+        let totalPrice = cart.cartItems.reduce((total, item) => total + (item.quantity * item.price), 0);
+
 
         let insufficient = false;
-        if(user.wallet.balance < totalPrice){
-          insufficient = true;
-        }
+        
 
         let coupon = { isApplied : false, couponCode : '' };
         
         if(cart.coupon){
+            totalPrice = cart.totalPrice;
             let couponCode = await Coupon.findOne({ _id: cart.coupon });
-            coupon = { isApplied : true, couponCode : couponCode.code, discountValue : couponCode.discountValue, type: couponCode.discountType };
+            coupon = { isApplied : true, couponCode : couponCode.code, discountValue : cart.couponDiscount.toFixed(2), type: couponCode.discountType };
         }
+
+        if(user.wallet.balance < totalPrice){
+            insufficient = true;
+          }
 
         const activeCoupons = await Coupon.find({ isActive: true, expirationDate: { $gte: new Date() } });
 
