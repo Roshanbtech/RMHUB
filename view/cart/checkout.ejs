@@ -7,6 +7,8 @@
     <title>RMHUB</title>
     <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     <style>
         body {
@@ -134,6 +136,21 @@
             animation-direction: alternate;
             animation-timing-function: ease-in-out;
         }
+        .back-btn {
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
+        }
+
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
     </style>
 </head>
 
@@ -141,6 +158,9 @@
     <div class="nav">
         <img src="/images/NavImg.jpg" alt="Logo">
     </div>
+    <button type="button" class="back-btn" onclick="location.href ='/cart/getcart'">
+        <i class="fas fa-arrow-left"></i> Back To Cart
+    </button>
     <div class="container" style="margin-top: 50px;">
         <h2 style="display: flex; justify-content:center"><img src="/images/checkout-svgrepo-com.svg" alt="Logo"
                 class="logo-small"
@@ -235,7 +255,8 @@
                             <% coupons.forEach((item)=> { %>
                                 <% if (!coupon.isApplied) { %>
                                     <option value="<%= item.code %>">
-                                        <%= item.code %> - <%= item.discountType === 'fixed' ? '₹' : 'percent' %> <%= item.discountValue %> OFF
+                                        <%= item.code %> - <%= item.discountType==='fixed' ? '₹' : 'percent' %>
+                                                <%= item.discountValue %> OFF
                                     </option>
 
 
@@ -259,13 +280,14 @@
             <h2 style="text-align: center; margin-bottom:30px;">Amount Summary</h2>
             <ul>
                 <li>Total Price: ₹ <span id="totalPrice">
-                    <%= coupon.discountValue ? (parseFloat(totalPrice) + parseFloat(coupon.discountValue)).toFixed(2) : totalPrice.toFixed(2) %>
-                </span></li>
+                        <%= coupon.discountValue ? (parseFloat(totalPrice) +
+                            parseFloat(coupon.discountValue)).toFixed(2) : totalPrice.toFixed(2) %>
+                    </span></li>
                 <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">Discounted
-                    Amount: ₹ <span id="discountedPrice"><%- coupon.discountValue %></span>
+                    Amount: ₹ <span id="discountedPrice"><%- Number(coupon.discountValue).toLocaleString('en-IN') %></span>
                 </li>
                 <li id="finalAmount">Net Amount: ₹ <span id="finalPrice">
-                        <%=  totalPrice.toFixed(2) %>
+                        <%= totalPrice.toFixed(2) %>
                     </span></li>
             </ul>
             <button type="button" class="btn btn-danger" <% if (!coupon.isApplied) { %>
@@ -296,7 +318,7 @@
                     disabled
                     <% } %> onclick="selectPaymentMethod('Wallet')">
                         Wallet (Balance: ₹<span id="walletBalance" style="font-weight: bold;">
-                            <%= user.wallet.balance %>
+                            <%= Number(user.wallet.balance).toLocaleString('en-IN') %>
                         </span> <i class="fa fa-wallet" style="color: #3cf696;"></i>
                         )
 
@@ -358,10 +380,25 @@
             document.getElementById('selectedPaymentMethod').value = method;
 
             // Call the appropriate function based on the selected payment method
-           
+
         }
 
         function confirmOrder() {
+            // Get the selected address
+            const selectedAddress = document.getElementById('selectedAddress').value;
+
+            // Check if the address is empty or not selected
+            if (!selectedAddress) {
+                // Show SweetAlert indicating that the address needs to be selected
+                Swal.fire({
+                    title: "Address Not Selected",
+                    text: "Please select an address before proceeding.",
+                    icon: "error",
+                    confirmButtonColor: "#3cf696",
+                });
+                return; // Exit the function if address is not selected
+            }
+
             // Get the selected payment method
             const selectedPaymentMethod = document.getElementById('selectedPaymentMethod').value;
 
@@ -377,9 +414,9 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedPaymentMethod === 'paypal') {
-                       return initiatePayPalPayment();
+                        return initiatePayPalPayment();
                     }
-        
+
                     // Submit the form
                     document.getElementById('checkoutForm').submit();
                 }
@@ -402,7 +439,8 @@
                     body: JSON.stringify(body),
                 });
                 if (!response.ok) {
-                    throw new Error('Failed to apply coupon');
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to apply coupon')
                 }
                 let data = await response.json();
                 if (data.success) {
@@ -533,6 +571,8 @@
             const selectedAddress = document.querySelector(`option[value="${selectedAddressId}"]`).text;
             console.log(`Shipping address: ${selectedAddress}`);
 
+
+
             // Send a POST request to the backend endpoint to initiate PayPal payment
             fetch('/payment/payment', {
                 method: 'POST',
@@ -558,9 +598,37 @@
 
         }
 
-
-
     </script>
+    <script>
+        // Function to check the total amount and enable/disable COD accordingly
+        
+    
+        // Function to handle payment method selection
+        function selectPaymentMethod(method) {
+            // Get the selected payment method into the hidden input field
+            document.getElementById('selectedPaymentMethod').value = method;
+    
+            // Check if COD is selected and the amount is less than or equal to 1000
+            const finalPrice = parseFloat(document.getElementById('finalPrice').innerText);
+            if (method === 'cod' && finalPrice >= 1000) {
+                Swal.fire({
+                    toast: true,
+                    icon: 'error',
+                    position: 'top-end',
+                    title: "COD Not Available",
+                    text: "Cash on Delivery is only available for orders above ₹1000.",
+                    confirmButtonColor: "#3cf696",
+                });
+                // Unselect the COD option
+                document.querySelector('input[name="paymentMethod"][value="cod"]').checked = false;
+                return;
+            }
+    
+            // Proceed with the selected payment method
+            document.getElementById('selectedPaymentMethod').value = method;
+        }
+    </script>
+    
 
 
 

@@ -13,10 +13,10 @@
       style="width:30px;height:30px"><span>Category</span></button>
   <button onclick="location.href='/admin/orders'"><img src="/images/orders-svgrepo-com.svg" alt="Logo"
       class="logo-small" style="width:30px;height:30px"><span>Orders</span></button>
-  <button onclick="location.href='/admin/sales-report'"><img src="/images/product.svg" alt="Logo" class="logo-small"
+  <button onclick="location.href='/admin/sales-report'"><img src="/images/revenue.svg" alt="Logo" class="logo-small"
       style="width:30px;height:30px"><span>Sales Report</span></button>
-  <button onclick="location.href='/admin/banners'"><img src="/images/product.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Banners</span></button>
+  <!-- <button onclick="location.href='/admin/banners'"><img src="/images/product.svg" alt="Logo" class="logo-small"
+      style="width:30px;height:30px"><span>Banners</span></button> -->
   <button onclick="location.href='/coupon/coupon'"><img src="/images/c2.svg" alt="Logo" class="logo-small"
       style="width:30px;height:30px"><span>Coupons</span></button>
 
@@ -138,5 +138,10 @@
     font-size: large;
     font-weight: bold;
 
+  }
+  @media (max-width: 320px) {
+    .sidebar {
+        width: 100%;
+    }
   }
 </style>

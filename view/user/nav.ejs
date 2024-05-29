@@ -4,7 +4,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
   <style>
     .navbar {
-      background-color: #3CF696;
+        background-color: #3CF696;
     }
 
     /* Dropdown container */
@@ -47,7 +47,7 @@
     }
 
     .navbar-nav .nav-item a span {
-      display: inline-block;
+      display: inline;
       transition: transform 0.3s ease;
     }
 
@@ -74,64 +74,187 @@
         transform: translateY(-2px);
       }
     }
+
+    .navbar-toggler-icon {
+      color: #fff;
+      background-color: black;
+      border-radius: 5px;
+      padding: 5px;
+  }
+
+  /* Custom CSS for the modal */
+  .modal-content {
+      background-color: #f8f9fa;
+      /* Background color */
+      border-radius: 20px;
+      /* Rounded corners */
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+      /* Box shadow */
+  }
+
+  .modal-header {
+      border-bottom: none;
+      /* Remove bottom border */
+  }
+
+  .modal-title {
+      font-weight: bold;
+      /* Make title bold */
+  }
+
+  .modal-body {
+      padding: 20px;
+      /* Add padding */
+  }
+
+  .navbar-nav .nav-link {
+      color: #333;
+      /* Text color */
+      font-weight: bold;
+      /* Make links bold */
+  }
+
+
+
+  .list-group-item {
+      border: 1px solid #3cf696;
+      background-color: black;
+  }
+
+  a{
+      color: #3cf696;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+  }
+
+  .list-group-flush>.list-group-item {
+      border-width: 3px 2px 3px 2px;
+      border-color: #3cf696;
+      border-style: ridge;
+  }
+
   </style>
 </head>
 
 <nav class="navbar navbar-expand-lg fixed-top navbar">
   <div class="container" style="height:60px">
-    <a class="navbar-brand custom-logo" href="/home"><img class="navbar-logo" src="/images/NavImg.jpg"
-        style="height:70px;" alt="rmhub"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link ml-3" href="/home"> <span>H</span><span>o</span><span>m</span><span>e</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link ml-3"
-            href="/phones"><span>P</span><span>h</span><span>o</span><span>n</span><span>e</span><span>s</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link ml-3"
-            href="/wearables"><span>W</span><span>a</span><span>t</span><span>c</span><span>h</span><span>e</span><span>s</span></a></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link ml-3"
-            href="/tablets"><span>T</span><span>a</span><span>b</span><span>l</span><span>e</span><span>t</span><span>s</span></a></a>
-        </li>
-      </ul>
-      <form action="/home" method="GET" class="form-inline my-2 my-lg-0">
-        <div class="input-group">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query"
-            style="border-radius: 15px;">
-          <div class="input-group-append">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
-              style="background-color:#E5E6DE; border-radius:15px"><i class="fas fa-search"
-                style="color:black;"></i></button>
+      <a class="navbar-brand custom-logo" href="/home">
+          <img class="navbar-logo" src="/images/NavImg.jpg" style="height:70px;" alt="rmhub">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#navbarModal">
+          <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                  <a class="nav-link ml-3" href="/home">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link ml-3" href="/phones">Phones</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link ml-3" href="/wearables">Watches</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link ml-3" href="/tablets">Tablets</a>
+              </li>
+          </ul>
+          <!-- Search form with dropdown and price field -->
+          <form action="/home" method="GET" class="form-inline my-2 my-lg-0"
+              style="border:2px solid #d8f0dd; border-radius: 5px">
+              <div class="input-group">
+                  <input class="form-control mr-sm-0" type="search" placeholder="Search" aria-label="Search"
+                      name="query" style="border-color:#3cf696">
+                  <!-- <input class="form-control ml-0" type="number" placeholder="Price" min="1" aria-label="price"
+                  name="price" style="border-color:#3cf696"> -->
+
+                  <!-- Dropdown for sorting -->
+                  <!-- <select class="custom-select" name="sortBy"
+                  style="width:20px;background-color:#d8f0dd;border-color:#3cf696">
+                  <option value="">Sort By</option>
+                  <option value="nameAsc">Name (A-Z)</option>
+                  <option value="nameDesc">Name (Z-A)</option>
+                  <option value="priceAsc">Price (Low to High)</option>
+                  <option value="priceDesc">Price (High to Low)</option>
+              </select> -->
+                  <!-- Price field -->
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                          style="background-color:#3cf696;">
+                          <i class="fas fa-search" style="color:#fff;"></i>
+                      </button>
+                  </div>
+              </div>
+          </form>
+
+          <div class="navbar-nav ml-auto">
+              <a class="nav-link" href="/wishlist/getwishlist" title="Wishlist">
+                  <i class="fas fa-heart navbar-icon" style="color:black;"></i>
+              </a>
+              <a class="nav-link" href="/cart/getcart" title="Cart">
+                  <i class="fas fa-shopping-cart navbar-icon" style="color:black;"></i>
+              </a>
+              <div class="dropdown">
+                  <button class="nav-link dropbtn" style="background: none; border: none; cursor: pointer;">
+                      <i class="fas fa-user navbar-icon" style="color: black;"></i>
+                  </button>
+                  <div class="dropdown-content">
+                      <a href="/profile/getprofile">Profile</a>
+                      <a href="/logout">Logout</a>
+                  </div>
+              </div>
           </div>
-        </div>
-      </form>
-      <div class="navbar-nav ml-auto">
-        <a class="nav-link" href="/wishlist/getwishlist" title="Wishlist"><i class="fas fa-heart navbar-icon"
-            style="color:black;"></i></a>
-        <a class="nav-link" href="/cart/getcart" title="Cart"><i class="fas fa-shopping-cart navbar-icon"
-            style="color:black;"></i></a>
-        <div class="dropdown">
-          <button class="nav-link dropbtn" style="background: none; border: none; cursor: pointer;">
-            <i class="fas fa-user navbar-icon" style="color: black;"></i>
-          </button>
-          <div class="dropdown-content">
-            <a href="/profile/getprofile">Profile</a>
-            <a href="/logout">Logout</a>
-          </div>
-        </div>
       </div>
-    </div>
   </div>
 </nav>
+
+<div class="modal fade" id="navbarModal" tabindex="-1" role="dialog" aria-labelledby="navbarModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="background-color: #d8f0dd">
+        <div class="modal-header" style="background-color: #3CF696; color: #fff">
+            <h5 class="modal-title" id="navbarModalLabel">Navigation</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" >
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" >
+                    <a class="nav-link" href="/home">Home</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/phones">Phones</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/wearables">Watches</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/tablets">Tablets</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/wishlist/getwishlist">Wishlist</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/cart/getcart">Cart</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/profile/getprofile">Profile</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script>
   document.querySelectorAll('.navbar-nav .nav-item a').forEach(item => {
     let text = item.textContent;

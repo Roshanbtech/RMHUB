@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.2/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     <style>
         /* Paste the styles from addproducts.ejs here */
@@ -139,13 +141,32 @@
             cursor: pointer;
             z-index: 1;
         }
+        .back-btn {
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
+        }
+
+        .back-btn i {
+            margin-right: 5px;
+        }
+
     </style>
 </head>
 
 <body>
-    <div class="navbar">
+    <!-- <div class="navbar">
         <img src="/images/NavImg.jpg" alt="Logo">
-    </div>
+    </div> -->
+    <!-- <button type="button" class="back-btn" onclick="location.href ='/admin/products'">
+        <i class="fas fa-arrow-left"></i> Back To Products
+    </button> -->
+    <%- include("sidebar") %>
     <div class="container">
         <div class="form-container">
             <h2 class="product-title">Edit Product</h2>

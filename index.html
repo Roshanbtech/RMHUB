@@ -1,268 +1,249 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Add your new CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .profile-header h1 {
-            color: #3cf696;
-            font-size: 24px;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            border: 5px solid #3cf696;
-        }
-
-        .profile-details {
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        .profile-details label {
-            font-weight: bold;
-            color: #3cf696;
-            margin-right: 10px;
-        }
-
-        .profile-details span {
-            color: #777;
-        }
-
-        .action-buttons {
+        .sidebar {
             display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
+            flex-direction: column;
         }
 
-        .action-buttons button {
-            background-color: #3cf696;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        .sidebar h4,
+        .sidebar button {
+            display: flex;
+            align-items: center;
         }
 
-        .action-buttons button:hover {
-            background-color: #36b481;
-        }
-
-        .address-card {
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .address-card:hover {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .address-details {
-            margin-bottom: 10px;
-        }
-
-        .address-details label {
-            font-weight: bold;
-            color: #3cf696;
+        .sidebar img.logo-small {
             margin-right: 10px;
         }
 
-        .address-details span {
-            color: #777;
+        .sidebar button {
+            background-color: transparent;
+            border: none;
+            text-align: left;
+            width: 100%;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
         }
 
-        .social-icons {
-            text-align: center;
-            margin-top: 20px;
+        .sidebar button:hover {
+            background-color: #f1f1f1;
         }
 
-        .social-icons a {
-            color: #3cf696;
-            font-size: 24px;
-            margin: 0 10px;
-            transition: color 0.3s ease;
+        .sidebar hr {
+            margin: 20px 0;
         }
 
-        .social-icons a:hover {
-            color: #36b481;
+        .main {
+            flex-grow: 1;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .dashboard-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .dashboard-cards .card {
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 767px) {
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 200px;
+                background-color: #f8f9fa;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                flex-direction: column;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+
+            .sidebar.active {
+                display: flex;
+            }
+
+            .hamburger-menu {
+                display: block;
+                cursor: pointer;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .hamburger-menu {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="profile-header">
-            <h1>Hey <%= user.firstName %>!</h1>
-            <img src="/images/users-avatar-svgrepo-com.svg" alt="User Photo" class="profile-image">
-        </div>
-        <div class="action-buttons">
-            <button onclick="location.href='/profile/addaddress'">Add Address</button>
-            <button onclick="location.href='/profile/editprofile/<%= user._id %>'">Edit Profile</button>
-            <button onclick="location.href='/profile/changepassword/<%= user._id %>'">Change Password</button>
-            <button onclick="location.href='/cart/orderhistory'">My Orders</button>
-            <button onclick="location.href='/profile/wallet'">My Wallet</button>
-        </div>
-        <% if (user.referalCode !=="Not created" ) { %>
-        <div class="profile-details">
-            <label for="referalCode">Referral Code:</label>
-            <span id="referalCode"><strong><%= user.referalCode %></strong></span>
-            <button onclick="copyReferralCode()">Copy</button>
-        </div>
-        <% } else { %>
-        <button onclick="location.href='/profile/genreferalcode'">Generate Referral Code</button>
-        <% } %>
-
-        <div class="profile-details">
-            <label for="username">Username:</label>
-            <span id="username"><%= user.firstName + " " + user.lastName %></span>
-        </div>
-        <div class="profile-details">
-            <label for="email">Email:</label>
-            <span id="email"><%= user.email %></span>
-        </div>
-        <% if (user.address.length > 0) { %>
-        <% user.address.forEach(function(address) { %>
-        <div class="address-card">
-            <button onclick="location.href='/profile/editaddress/<%= address._id %>'">Edit</button>
-            <form action="/profile/removeaddress/<%= address._id %>" method="GET" class="remove-address-form">
-                <button type="button" class="close-button" onclick="confirmDelete('<%= address._id %>', this)">Remove</button>
-            </form>
-            <div class="address-details">
-                <label for="address">Address:</label>
-                <span id="address"><%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city %>, <%= address.state %>, <%= address.pincode %></span>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="sidebar">
+                    <h4>
+                        <img src="/images/users-avatar-svgrepo-com.svg" alt="Logo" class="logo-small"
+                            style="width:40px;height:40px;border:1px solid black;border-radius:50px;background-color:black">
+                        <span> Hello Admin!..</span>
+                    </h4>
+                    <hr>
+                    <button onclick="location.href='/admin/dashboard'">
+                        <img src="/images/dashboard-svgrepo-com.svg" alt="Logo" class="logo-small"
+                            style="width:30px;height:30px">
+                        <span>Dashboard</span>
+                    </button>
+                    <button onclick="location.href='/admin/users'">
+                        <img src="/images/Users.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
+                        <span>Users</span>
+                    </button>
+                    <button onclick="location.href='/admin/products'">
+                        <img src="/images/product.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
+                        <span>Products</span>
+                    </button>
+                    <button onclick="location.href='/admin/category'">
+                        <img src="/images/Category.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
+                        <span>Category</span>
+                    </button>
+                    <button onclick="location.href='/admin/orders'">
+                        <img src="/images/orders-svgrepo-com.svg" alt="Logo" class="logo-small"
+                            style="width:30px;height:30px">
+                        <span>Orders</span>
+                    </button>
+                    <button onclick="location.href='/admin/sales-report'">
+                        <img src="/images/revenue.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
+                        <span>Sales Report</span>
+                    </button>
+                    <button onclick="location.href='/coupon/coupon'">
+                        <img src="/images/c2.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
+                        <span>Coupons</span>
+                    </button>
+                    <button onclick="location.href='/admin/logout'">
+                        <img src="/images/logout-svgrepo-com.svg" alt="Logo" class="logo-small"
+                            style="width:30px;height:30px;">
+                        <span>Logout</span>
+                    </button>
+                </div>
             </div>
-            <div class="address-details">
-                <label for="city">City:</label>
-                <span id="city"><%= address.city %></span>
-            </div>
-            <div class="address-details">
-                <label for="pincode">Pincode:</label>
-                <span id="pincode"><%= address.pincode %></span>
-            </div>
-            <div class="address-details">
-                <label for="state">State:</label>
-                <span id="state"><%= address.state %></span>
-            </div>
-            <div class="address-details">
-                <label for="addressType">AddressType:</label>
-                <span id="addressType"><%= address.addressType %></span>
-            </div>
-        </div>
-        <% }); %>
-        <% } else { %>
-        <div class="profile-details">
-            <span id="address">No address found</span>
-        </div>
-        <% } %>
+            <main class="main my-5 mt-2 col">
+                <div class="container">
+                    <div class="dashboard-header">
+                        <div class="hamburger-menu" onclick="toggleSidebar()">
+                            <img src="/images/menu.svg" alt="Menu" style="width:30px;height:30px;">
+                        </div>
+                        <h1><%- locals.title %></h1>
+                        <div class="user-info">
+                            <img src="/images/users-avatar-svgrepo-com.svg"
+                                style="background-color: #3cf696;border:1px solid black" alt="User">
+                            <span>Admin</span>
+                        </div>
+                    </div>
 
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-        </div>
-    </div>
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="/images/Users.svg" alt="Logo" class="logo-small"
+                                    style="width:30px;height:30px">
+                                <h5 class="card-title">Total Users </h5>
+                                <h6 class="card-text" id="usersCount"><%- usersCount %></h6>
+                            </div>
+                        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        // Function to handle delete confirmation
-        function confirmDelete(addressId, closeButton) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'You are about to delete this address!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3cf696',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const form = closeButton.closest('.remove-address-form');
-                    form.submit();
-                }
-            });
-        }
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="/images/product.svg" alt="Logo" class="logo-small"
+                                    style="width:30px;height:30px">
+                                <h5 class="card-title">Total Products</h5>
+                                <h6 class="card-text" id="productsCount"><%- productsCount %></h6>
+                            </div>
+                        </div>
 
-        function copyReferralCode() {
-            var referralCode = document.getElementById("referalCode");
-            var textarea = document.createElement("textarea");
-            textarea.value = referralCode.innerText;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
-            Swal.fire({
-                icon: 'success',
-                title: 'Referral code copied to clipboard!',
-                showConfirmButton: false,
-                timer: 1500,
-                position: 'top-end',
-                toast: true
-            })
-        }
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="/images/orders-svgrepo-com.svg" alt="Logo" class="logo-small"
+                                    style="width:30px;height:30px">
+                                <h5 class="card-title">Total Orders</h5>
+                                <h6 class="card-text" id="ordersCount"><%- ordersCount %></h6>
+                            </div>
+                        </div>
 
-    </script>
-    <script>
-        // Function to parse URL query parameters
-        const getParameterByName = (name, url = window.location.href) => {
-            name = name.replace(/[[\]]/g, '\\$&');
-            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-            const results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        };
+                        <div class="card">
+                            <div class="card-body">
+                                <img src="/images/revenue.svg" alt="Logo" class="logo-small"
+                                    style="width:30px;height:30px">
+                                <h5 class="card-title">Total Revenue</h5>
+                                <h6 class="card-text" id="totalRevenue">₹ <%-
+                                        Number(totalRevenue).toLocaleString('en-IN') %>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
 
-        // Check if 'success' query parameter exists and display the message
-        const successMessage = getParameterByName('success');
-        if (successMessage) {
-            // Display success message using SweetAlert
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: successMessage,
-                position: 'top-end', // Position the alert to top right corner
-                showConfirmButton: false,
-                timer: 1500,
-                toast: true, // Set to true for toast style
-                timerProgressBar: true // Enable timer progress bar
-            });
-        }
-    </script>
-</body>
+                    <div class="container-fluid" style="margin-top: 40px;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h3 class="text-center">Top Categories</h3>
+                                <table class="table table-striped" id="example">
+                                    <thead>
+                                        <tr style="background-color: #3cf696">
+                                            <th>Category Name</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% bestSellingCategories.forEach(category=> { %>
+                                            <tr
+                                                style="background-color: #e5e6de;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                                                <td>
+                                                    <%= category.categoryName %>
+                                                </td>
+                                                <td>
+                                                    <%= category.count %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
 
-</html>
+                            <div class="col-md-4">
+                                <h3 class="text-center">Top Brands</h3>
+                                <table class="table table-striped" id="example">
+                                    <thead>
+                                        <tr style="background-color: #3cf696">
+                                            <th>Brand Name</th>
+                                            <th>Count</th>
+                                        </tr>
+                                    </thead>
+                                    <

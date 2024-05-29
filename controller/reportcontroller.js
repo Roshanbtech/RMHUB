@@ -11,7 +11,7 @@ const getSalesReport = async (req, res) => {
 
     let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
     let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
-    
+
     startDate.setUTCHours(0, 0, 0, 0);
     endDate.setUTCHours(23, 59, 59, 999);
 
@@ -166,6 +166,7 @@ const exportToExcel = async (req, res) => {
                     orderedItems: {
                         $push: {
                             product_name: { $arrayElemAt: ["$productDetails.productName", 0] },
+                            model: { $arrayElemAt: ["$productDetails.model", 0] },
                             price: "$orderItems.price",
                             quantity: "$orderItems.quantity",
                             itemTotal: { $multiply: ["$orderItems.price", "$orderItems.quantity"] },
@@ -183,21 +184,63 @@ const exportToExcel = async (req, res) => {
         worksheet.columns = [
             { header: "Order ID", key: "_id" },
             { header: "Customer", key: "customer" },
+            { header: "Product Name", key: "productName" },
+            { header: "Model", key: "model" },
+            { header: "Price", key: "price" },
+            { header: "Quantity", key: "quantity" },
+            { header: "Total Amount", key: "totalAmount" },
             { header: "Shipping Address", key: "shippingAddress" },
             { header: "Payment Method", key: "paymentMethod" },
             { header: "Status", key: "status" },
-            { header: "Total Amount", key: "totalAmount" },
             { header: "Date", key: "createdAt" },
-            { header: "Ordered Items", key: "orderedItems" },
         ];
 
         orders.forEach((order) => {
-            worksheet.addRow(order);
+            // Format Customer
+            order.customer = Array.isArray(order.customer) ? order.customer[0] : '';
+
+            // Loop through each ordered item
+            order.orderedItems.forEach((item) => {
+                const rowData = {
+                    _id: order._id.toString().slice(-7).toUpperCase(),
+                    customer: order.customer,
+                    productName: item.product_name,
+                    model: item.model,
+                    price: item.price,
+                    quantity: item.quantity,
+                    totalAmount: order.totalAmount,
+                    shippingAddress: order.shippingAddress,
+                    paymentMethod: order.paymentMethod,
+                    status: order.status,
+                    createdAt: order.createdAt,
+                };
+                worksheet.addRow(rowData);
+            });
         });
 
-        worksheet.getRow(1).eachCell((cell) => {
-            cell.font = { bold: true };
-        });
+        // Apply styles to the table rows (excluding header row)
+worksheet.eachRow({ includeEmpty: false, skipHeader: true }, (row, rowNumber) => {
+    row.eachCell((cell) => {
+        cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFE5E6DE' }, // Light gray color
+        };
+    });
+});
+
+// Apply styles to the header row after setting other row styles
+worksheet.getRow(1).eachCell((cell) => {
+    cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF3CF696' }, // Light green color
+    };
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } }; // White font color
+});
+
+
+
 
         res.setHeader(
             "content-Type",
@@ -550,6 +593,20 @@ const exportToPdf = async (req, res) => {
                     th {
                         background-color: #f2f2f2;
                     }
+                    tr:nth-child(even) {
+                        background-color: #f9f9f9;
+                    }
+                    .no-border {
+                        border: none !important;
+                    }
+                    thead {
+                        display: table-header-group;
+                    }
+                    @media print {
+                        thead { 
+                            display: table-header-group; 
+                        }
+                    }
                 </style>
             </head>
             <body>
@@ -558,6 +615,7 @@ const exportToPdf = async (req, res) => {
                 </div>
                 <table id="salesTable" class="table table-hover" cellspacing="5" style="background-color: #d8f0dd; margin-top: 60px;">
                     <tr>
+                        <th style="background-color: #3cf696;">S.No</th>
                         <th style="background-color: #3cf696;">Order ID</th>
                         <th style="background-color: #3cf696;">Order Date</th>
                         <th style="background-color: #3cf696;">Customer</th>
@@ -569,13 +627,16 @@ const exportToPdf = async (req, res) => {
                         <th style="background-color: #3cf696;">Total Amount</th>
                     </tr>`;
 
+        // Loop through each order
+        let i = 1;
         orders.forEach((order, index) => {
             // Loop through each product in the order
             order.products.forEach((product, index) => {
                 if (index === 0) { // Display order details only for the first product
                     html += `
                         <tr>
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderId}</td>
+                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${i++}</td>
+                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderId.toString().slice(-7).toUpperCase()}</td>
                             <td  style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderDate.toDateString()}</td>
                             <td  style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.user}</td>`;
                 }

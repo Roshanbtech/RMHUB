@@ -5,6 +5,8 @@ const Order = require('../model/cart/ordermodel');
 const address = require('../model/profile/addressmodel');
 const Coupon = require('../model/admin/couponmodel');
 const mongoose = require('mongoose')
+const { ObjectId } = require('mongodb');
+
 
 
 const addtocart = async (req, res) => {
@@ -223,19 +225,19 @@ const checkout = async (req, res) => {
 
 
         let insufficient = false;
-        
 
-        let coupon = { isApplied : false, couponCode : '' };
-        
-        if(cart.coupon){
+
+        let coupon = { isApplied: false, couponCode: '' };
+
+        if (cart.coupon) {
             totalPrice = cart.totalPrice;
             let couponCode = await Coupon.findOne({ _id: cart.coupon });
-            coupon = { isApplied : true, couponCode : couponCode.code, discountValue : cart.couponDiscount.toFixed(2), type: couponCode.discountType };
+            coupon = { isApplied: true, couponCode: couponCode.code, discountValue: cart.couponDiscount.toFixed(2), type: couponCode.discountType };
         }
 
-        if(user.wallet.balance < totalPrice){
+        if (user.wallet.balance < totalPrice) {
             insufficient = true;
-          }
+        }
 
         const activeCoupons = await Coupon.find({ isActive: true, expirationDate: { $gte: new Date() } });
 
@@ -272,8 +274,6 @@ const checkoutpost = async (req, res) => {
         // const selectedCoupon = await Coupon.findOne({ code: couponCode });
         // console.log(selectedCoupon)
 
-
-
         // let discountedPrice = totalPrice;
         // console.log(discountedPrice)
 
@@ -286,6 +286,7 @@ const checkoutpost = async (req, res) => {
         // Apply discount if discountValue is present
         // const discountedPrice = discountValue ? totalPrice - discountValue : totalPrice;
         // console.log(discountedPrice)
+
         let orderItems = cart.cartItems.map((item) => ({
             productId: item.productId._id,
             quantity: item.quantity,
@@ -297,10 +298,11 @@ const checkoutpost = async (req, res) => {
             orderItems,
             shippingAddress: Address,
             totalPrice: cart.totalPrice,
-            paymentMethod
+            paymentMethod,
+            orderStatus: 'confirmed'
         });
 
-        if(paymentMethod === "Wallet"){
+        if (paymentMethod === "Wallet") {
 
             user.wallet.balance -= newOrder.totalPrice;
             user.wallet.transactions.push({
@@ -311,10 +313,10 @@ const checkoutpost = async (req, res) => {
             });
             await user.save();
         }
-        if(cart.coupon){
+        if (cart.coupon) {
             const coupon = await Coupon.findOne({ _id: cart.coupon });
             newOrder.appliedCoupon = coupon._id;
-            newOrder.discountValue = cart.couponDiscount;
+            newOrder.couponDiscount = cart.couponDiscount;
             // newOrder.totalPrice -= cart.couponDiscount;
             newOrder.orderItems.forEach((item) => {
                 item.couponId = coupon._id;
@@ -407,6 +409,23 @@ const orderhistory = async (req, res) => {
     }
 }
 
+const orderDetails = async (req, res) => {
+    try {
+        const userEmail = req.session.user;
+        const user = await User.findOne({ email: userEmail });
+        if (!user) {
+            return res.redirect('/login');
+        }
+        const orderId = req.params.id;
+        const order = await Order.findOne({ _id: orderId }).populate('orderItems.productId');
+        res.render('order/orderDetails', { order })
+    } catch (error) {
+        console.error('Error fetching order details:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
 const cancelorder = async (req, res) => {
     try {
         const orderId = req.params.id;
@@ -439,7 +458,7 @@ const cancelorder = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        if(order.paymentMethod === 'PayPal' || order.paymentMethod === 'Wallet') {
+        if (order.paymentMethod === 'PayPal' || order.paymentMethod === 'Wallet') {
             user.wallet.balance += totalAmountSpent;
             user.wallet.transactions.push({
                 amount: totalAmountSpent,
@@ -447,18 +466,13 @@ const cancelorder = async (req, res) => {
                 date: new Date()
             });
         }
-        // user.wallet.balance += totalAmountSpent;
-        // user.wallet.transactions.push({
-        //     amount: totalAmountSpent,
-        //     description: 'Refund for cancelled order',
-        //     date: new Date()
-        // });
 
         await user.save();
 
 
 
         order.orderStatus = 'cancelled';
+        order.paymentStatus = 'refunded';
         await order.save();
 
 
@@ -503,5 +517,116 @@ const submitReturnRequest = async (req, res) => {
 
 
 
+const getInvoice = async (req, res) => {
+    try {
+        const invoiceId = `RM${Math.floor(1000 + Math.random() * 9000)}`;
+        const { id } = req.params;
 
-module.exports = { getcart, addtocart, removeitem, checkout, checkoutpost, updateitem, orderhistory, cancelorder, submitReturnRequest };
+        let order = await Order.aggregate([
+            {
+                $match: { _id: new ObjectId(id), orderStatus: 'delivered' },
+            },
+            {
+                $unwind: '$orderItems',
+            },
+            {
+                $lookup: {
+                    from: 'productmodels',
+                    localField: 'orderItems.productId',
+                    foreignField: '_id',
+                    as: 'product',
+                },
+            },
+            {
+                $unwind: '$product',
+            },
+            {
+                $set: {
+                    'orderItems.product_name': '$product.model',
+                    'orderItems.description': '$product.description',
+                    'orderItems.itemTotal': { $multiply: ['$orderItems.price', '$orderItems.quantity'] },
+                }
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    orderItems: { $push: '$orderItems' },
+                    orderStatus: { $first: '$orderStatus' },
+                    shippingAddress: { $first: '$shippingAddress' },
+                    userId: { $first: '$userId' },
+                    totalPrice: { $first: '$totalPrice' },
+                    appliedCoupon: { $first: '$appliedCoupon' },
+                    couponDiscount: { $first: '$couponDiscount' },
+                    gstPercentage: { $first: '$gstPercentage' },
+                    gstAmount: { $first: '$gstAmount' },
+                }
+            },
+            {
+                $lookup: {
+                    from: 'coupons',
+                    localField: 'appliedCoupon',
+                    foreignField: '_id',
+                    as: 'couponDetails',
+                },
+            },
+            {
+                $unwind: {
+                    path: '$couponDetails',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $set: {
+                    discountValue: { $ifNull: ['$couponDetails.discountValue', 0] },
+                    discountType: { $ifNull: ['$couponDetails.discountType', ''] },
+                }
+            }
+        ]);
+
+        order = order[0];
+
+        if (order.discountType === 'percentage') {
+            order.discountValue = order.couponDiscount;
+        }
+
+        console.log(order, 'order');
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        if (!order.gstPercentage || !order.gstAmount) {
+            const gstPercentage = Math.floor(Math.random() * 20) + 1;
+            const gstAmount = (gstPercentage / 100) * order.totalPrice;
+
+            await Order.updateOne(
+                { _id: order._id },
+                { $set: { gstPercentage, gstAmount } }
+            );
+
+            order.gstPercentage = gstPercentage;
+            order.gstAmount = gstAmount;
+        }
+
+
+        // Fetch user details if needed
+        const user = await User.findById(order.userId);
+        console.log(user);
+
+        res.render('cart/invoice', {
+            title: 'Invoice',
+            invoiceId,
+            order,
+            user
+        });
+    } catch (error) {
+        console.error("Error fetching invoice:", error);
+        res.status(500).send("Error fetching invoice");
+    }
+};
+
+
+
+
+
+module.exports = { getcart, addtocart, removeitem, checkout, checkoutpost, updateitem, orderhistory, orderDetails, cancelorder, submitReturnRequest, getInvoice };

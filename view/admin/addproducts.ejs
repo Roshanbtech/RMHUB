@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.2/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     <style>
         body {
@@ -137,23 +139,30 @@
         }
 
         /* Cropper modal styles */
-#cropperModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-}
+        #cropperModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
 
-.cropper-container {
-    max-width: 90%; /* Increase the width */
-    max-height: 90%; /* Increase the height */
-}
+        .cropper-container {
+            max-width: 90%;
+            max-height: 90%;
+            /* Add these properties to make the Cropper container resizable */
+            width: auto;
+            height: auto;
+            border: 2px solid #3cf696;
+            resize: both;
+            overflow: hidden;
+        }
+        
 
 
         .cropper-preview {
@@ -161,17 +170,41 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 300px; /* Adjust as needed */
+            height: 300px;
+            /* Adjust as needed */
             background-color: #ffffff;
             overflow: hidden;
         }
+
+        .back-btn {
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
+        }
+
+        .back-btn i {
+            margin-right: 5px;
+        }
+
+        
     </style>
 </head>
 
 <body>
-    <div class="navbar">
+    <!-- <div class="navbar">
         <img src="/images/NavImg.jpg" alt="RMHUB">
-    </div>
+    </div> -->
+
+    <!-- <button type="button" class="back-btn" onclick="location.href ='/admin/products'">
+        <i class="fas fa-arrow-left"></i> Back To Products
+    </button> -->
+
+    <%- include("sidebar") %>
 
     <div class="container">
         <div class="form-container">
@@ -214,10 +247,10 @@
                     <select class="form-control" name="category" id="category" style="background-color:#d8f0dd">
                         <option value="" disabled selected>Select Category:</option>
                         <% categories.forEach(category=> { %>
-                        <option value="<%= category._id %>">
-                            <%= category.name %>
-                        </option>
-                        <% }) %>
+                            <option value="<%= category._id %>">
+                                <%= category.name %>
+                            </option>
+                            <% }) %>
                     </select>
                     <div class="error" id="categoryError"></div>
                 </div>
@@ -225,17 +258,17 @@
             </form>
         </div>
     </div>
-    
-    <!-- Cropper Modal -->
-    <!-- Cropper Modal -->
-<div id="cropperModal">
-    <div class="cropper-container">
-        <div class="cropper-preview"></div>
-        <button id="cropButton">Crop</button>
-    </div>
-</div>
 
-    
+    <!-- Cropper Modal -->
+    <!-- Cropper Modal -->
+    <div id="cropperModal">
+        <div class="cropper-container">
+            <div class="cropper-preview"></div>
+            <button id="cropButton">Crop</button>
+        </div>
+    </div>
+
+
     <!-- JS, Popper.js, jQuery, Cropper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -244,112 +277,112 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.2/sweetalert2.min.js"></script>
 
     <script>
-// JavaScript code for Cropper setup and handling goes here
-document.getElementById('image').addEventListener('change', function () {
-    const files = this.files;
-    if (files && files.length > 0) {
-        const preview = document.getElementById('preview');
-        // Clear previous previews
-        preview.innerHTML = '';
-        // Create a mapping between preview image elements and their corresponding files
-        const filePreviewMap = new Map();
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            // Validate file type
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.classList.add('preview-image');
+        // JavaScript code for Cropper setup and handling goes here
+        document.getElementById('image').addEventListener('change', function () {
+            const files = this.files;
+            if (files && files.length > 0) {
+                const preview = document.getElementById('preview');
+                // Clear previous previews
+                preview.innerHTML = '';
+                // Create a mapping between preview image elements and their corresponding files
+                const filePreviewMap = new Map();
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    // Validate file type
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = new Image();
+                            img.src = e.target.result;
+                            img.classList.add('preview-image');
 
-                    // Create a preview image wrapper
-                    const imageWrapper = document.createElement('div');
-                    imageWrapper.classList.add('preview-image-wrapper');
+                            // Create a preview image wrapper
+                            const imageWrapper = document.createElement('div');
+                            imageWrapper.classList.add('preview-image-wrapper');
 
-                    // Create close button
-                    const closeButton = document.createElement('button');
-                    closeButton.innerHTML = 'X';
-                    closeButton.classList.add('close-button');
-                    closeButton.onclick = function () {
-                        // Remove the corresponding preview image
-                        imageWrapper.remove();
-                        /// Get the input element
-                        const inputElement = document.getElementById('image');
+                            // Create close button
+                            const closeButton = document.createElement('button');
+                            closeButton.innerHTML = 'X';
+                            closeButton.classList.add('close-button');
+                            closeButton.onclick = function () {
+                                // Remove the corresponding preview image
+                                imageWrapper.remove();
+                                /// Get the input element
+                                const inputElement = document.getElementById('image');
 
-                        // Remove the corresponding file from the input files array
-                        const fileToRemove = filePreviewMap.get(img);
-                        if (fileToRemove) {
-                            const newFiles = Array.from(inputElement.files).filter(file => file !== fileToRemove);
-                            // Create a new FileList object
-                            const newFileList = new DataTransfer();
-                            newFiles.forEach(file => newFileList.items.add(file));
-                            // Set the new FileList object to the input element
-                            inputElement.files = newFileList.files;
+                                // Remove the corresponding file from the input files array
+                                const fileToRemove = filePreviewMap.get(img);
+                                if (fileToRemove) {
+                                    const newFiles = Array.from(inputElement.files).filter(file => file !== fileToRemove);
+                                    // Create a new FileList object
+                                    const newFileList = new DataTransfer();
+                                    newFiles.forEach(file => newFileList.items.add(file));
+                                    // Set the new FileList object to the input element
+                                    inputElement.files = newFileList.files;
+                                    // Update file count
+                                    updateFileCount();
+                                }
+                            };
+
+                            // Append image and close button to wrapper
+                            imageWrapper.appendChild(img);
+                            imageWrapper.appendChild(closeButton);
+
+                            // Append wrapper to preview container
+                            preview.appendChild(imageWrapper);
+
+                            // Add the file to the map
+                            filePreviewMap.set(img, file);
+
+                            // Initialize Cropper after image is loaded
+                            img.onload = function () {
+                                const cropper = new Cropper(img, {
+                                    aspectRatio: NaN,
+                                    viewMode: 2,
+                                    autoCropArea: 1,
+                                    crop: function (e) {
+                                        // Output the result data for cropping image.
+                                        console.log(e.detail.x);
+                                        console.log(e.detail.y);
+                                        console.log(e.detail.width);
+                                        console.log(e.detail.height);
+                                        console.log(e.detail.rotate);
+                                        console.log(e.detail.scaleX);
+                                        console.log(e.detail.scaleY);
+                                    }
+                                });
+                            };
+
                             // Update file count
                             updateFileCount();
-                        }
-                    };
-
-                    // Append image and close button to wrapper
-                    imageWrapper.appendChild(img);
-                    imageWrapper.appendChild(closeButton);
-
-                    // Append wrapper to preview container
-                    preview.appendChild(imageWrapper);
-
-                    // Add the file to the map
-                    filePreviewMap.set(img, file);
-
-                    // Initialize Cropper after image is loaded
-                    img.onload = function () {
-                        const cropper = new Cropper(img, {
-                            aspectRatio: 16 / 9,
-                            viewMode: 1,
-                            autoCropArea: 1,
-                            crop: function (e) {
-                                // Output the result data for cropping image.
-                                console.log(e.detail.x);
-                                console.log(e.detail.y);
-                                console.log(e.detail.width);
-                                console.log(e.detail.height);
-                                console.log(e.detail.rotate);
-                                console.log(e.detail.scaleX);
-                                console.log(e.detail.scaleY);
-                            }
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        // Reject non-image files
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please select only image files.',
+                            toast: true,
+                            position: 'top-end',
+                            confirmBButtonColor: '#3cf696',
+                            confirmButtonText: 'OK',
+                            showConfirmButton: true,
                         });
-                    };
-
-                    // Update file count
-                    updateFileCount();
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // Reject non-image files
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Please select only image files.',
-                    toast: true,
-                    position: 'top-end',
-                    confirmBButtonColor: '#3cf696',
-                    confirmButtonText: 'OK',
-                    showConfirmButton: true,
-                });
-                event.target.value = ''; // Clear selected files
+                        event.target.value = ''; // Clear selected files
+                    }
+                }
             }
-        }
-    }
-});
-    
+        });
+
         function updateFileCount() {
             const count = document.getElementById('preview').childElementCount;
             console.log("File count:", count);
             // Update the file count display or perform any other necessary actions
         }
-    
+
     </script>
-    
+
     <script>
         // JavaScript code for form validation goes here
         function validateForm() {
@@ -360,9 +393,9 @@ document.getElementById('image').addEventListener('change', function () {
             var availableStock = parseFloat(document.getElementById('availableStock').value);
             var category = document.getElementById('category').value.trim();
             var image = document.getElementById('image').files;
-    
+
             var isValid = true;
-    
+
             // Validate product name
             if (productName === '') {
                 document.getElementById('productNameError').innerHTML = '*Product Name is required';
@@ -379,7 +412,7 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('productNameError').innerHTML = '';
                 document.getElementById('productName').style.borderColor = '#3cf696';
             }
-    
+
             // Validate price
             if (isNaN(price) || price <= 0) {
                 document.getElementById('priceError').innerHTML = '*Price must be a positive number';
@@ -390,7 +423,7 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('priceError').innerHTML = '';
                 document.getElementById('price').style.borderColor = '#3cf696';
             }
-    
+
             // Validate model
             if (model === '') {
                 document.getElementById('modelError').innerHTML = '*Model is required';
@@ -406,7 +439,7 @@ document.getElementById('image').addEventListener('change', function () {
             else {
                 document.getElementById('modelError').innerHTML = '';
             }
-    
+
             // Validate description
             if (description === '' || description.trim() === ' ') {
                 document.getElementById('descriptionError').innerHTML = '*Description is required';
@@ -417,7 +450,7 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('descriptionError').innerHTML = '';
                 document.getElementById('description').style.borderColor = '#3cf696';
             }
-    
+
             // Validate available stock
             if (isNaN(availableStock) || availableStock <= 0) {
                 document.getElementById('availableStockError').innerHTML = '*Available Stock must be a positive number';
@@ -428,7 +461,7 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('availableStockError').innerHTML = '';
                 document.getElementById('availableStock').style.borderColor = '#3cf696';
             }
-    
+
             // Validate category
             if (category === '') {
                 document.getElementById('categoryError').innerHTML = '*Category is required';
@@ -439,7 +472,7 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('categoryError').innerHTML = '';
                 document.getElementById('category').style.borderColor = '#3cf696';
             }
-    
+
             // Validate image
             if (!image || image.length === 0) {
                 document.getElementById('imageError').innerHTML = '*Image is required';
@@ -450,7 +483,7 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('imageError').innerHTML = '';
                 document.getElementById('image').style.borderColor = '#3cf696';
             }
-    
+
             //Valid color
             var color = document.getElementById('color').value.trim();
             if (color === '') {
@@ -462,14 +495,14 @@ document.getElementById('image').addEventListener('change', function () {
                 document.getElementById('colorError').innerHTML = '';
                 document.getElementById('color').style.borderColor = '#3cf696';
             }
-    
+
             return isValid;
         }
 
 
     </script>
-    
-    
+
+
 
 </body>
 

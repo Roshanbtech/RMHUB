@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const cartcontroller = require('../controller/cartcontroller');
 const collection = require('../model/user/usermodel')
-const { checkSessionAndBlocked } = require('../middleware/authmiddleware');
-
+const { checkSessionAndBlocked } = require('../middleware/ensureActiveUser');
+const isNotAdmin = require('../middleware/authorizeUser');
 
 router.get('/getcart', checkSessionAndBlocked, cartcontroller.getcart);
 router.post('/addtocart', checkSessionAndBlocked, cartcontroller.addtocart);
@@ -12,8 +12,10 @@ router.post('/updateitem/:itemId', checkSessionAndBlocked, cartcontroller.update
 router.get('/checkout', checkSessionAndBlocked, cartcontroller.checkout);
 router.post('/checkout', checkSessionAndBlocked, cartcontroller.checkoutpost);
 router.get('/orderhistory', checkSessionAndBlocked, cartcontroller.orderhistory);
-router.get('/cancelorder/:id', checkSessionAndBlocked, cartcontroller.cancelorder); // Corrected function name
-router.post('/return/:id', checkSessionAndBlocked, cartcontroller.submitReturnRequest);
+router.get('/orderdetails/:id', checkSessionAndBlocked, isNotAdmin({compareId:false}), cartcontroller.orderDetails);
+router.get('/cancelorder/:id', checkSessionAndBlocked, isNotAdmin({compareId:false}), cartcontroller.cancelorder); // Corrected function name
+router.post('/return/:id', checkSessionAndBlocked, isNotAdmin({compareId:false}), cartcontroller.submitReturnRequest);
+router.get("/invoice/:id", checkSessionAndBlocked, isNotAdmin({compareId:false}), cartcontroller.getInvoice);
 
 
 module.exports = router;

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -246,7 +247,27 @@
             });
         });
     </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        // Function to get the query parameter value by name
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+    
+        // Check for 'error' parameter in the URL
+        const error = getQueryParameter('error');
+    
+        // If 'error' parameter exists, display it using Swal
+        if (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
+            });
+        }
+    </script>
+    
 
 </body>
 

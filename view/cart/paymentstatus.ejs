@@ -1,0 +1,12 @@
+<!-- views/paymentStatus.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Status</title>
+</head>
+<body>
+    <h1>Payment Status: <%= paymentStatus %></h1>
+    <h2>Payment Details:</h2>
+    <pre><%= JSON.stringify(paymentDetails, null, 2) %></pre>
+</body>
+</html>

@@ -122,7 +122,7 @@
                             <%= index + 1 %>
                         </td>
                         <td>
-                            <%= order._id %>
+                            <%= order._id.toString().slice(-7).toUpperCase() %>
                         </td>
                         <td>
                             <%= order.createdAt.toDateString() %>

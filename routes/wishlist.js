@@ -3,8 +3,7 @@ const router = express.Router();
 const wishlistcontroller = require('../controller/wishlistcontroller');
 const wishlist = require('../model/user/wishlistmodel');
 const user = require('../model/user/usermodel');
-const { checkSessionAndBlocked } = require('../middleware/authmiddleware');
-
+const { checkSessionAndBlocked } = require('../middleware/ensureActiveUser');
 
 router.get('/getwishlist', checkSessionAndBlocked, wishlistcontroller.getwishlist)
 router.post('/addwishlist/:id', checkSessionAndBlocked, wishlistcontroller.addwishlist);

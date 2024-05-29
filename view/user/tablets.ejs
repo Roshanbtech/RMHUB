@@ -219,7 +219,7 @@
             <div class="container">
                 <div class="row g-4 mb-4 ">
                     <% data3.forEach(element=> { %>
-                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 ">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-4">
                             <div class="card" style="border-radius:30px">
                                 <div class="heart-container">
                                     <svg id="wishlist-icon-<%= element.id %>" viewBox="0 0 24 22" fill="none"
@@ -267,10 +267,10 @@
                                             </div>
                                             <p style="font-size:larger; font-weight:bold">
                                                 <% if (element.onOffer) { %>
-                                                    ₹<%= element.offerPrice %>
+                                                    ₹<%= Number(element.offerPrice).toLocaleString('en-IN') %>
                                                         <!-- Display the discounted price if an offer is applied -->
                                                         <% } else { %>
-                                                            ₹<%= element.price %>
+                                                            ₹<%= Number(element.price).toLocaleString('en-IN') %>
                                                                 <!-- Display the original price if no offer is applied -->
                                                                 <% } %>
                                             </p>

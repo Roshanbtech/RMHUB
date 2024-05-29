@@ -130,6 +130,12 @@
             }
         }
 
+        @media (max-width: 320px) {
+            .sidebar {
+                width: 100%;
+            }
+        }
+        
         .logo-small {
 
             animation: zoomInAndOut 1s infinite;
@@ -140,10 +146,11 @@
     <!-- DataTable HEADER -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 </head>
 
 <body>
-    <%- include("nav") %>
         <%- include("sidebar") %>
 
 
@@ -213,9 +220,33 @@
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
             <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
             <script>
                 new DataTable('#example');
             </script>
+            <script>
+                $(document).ready(function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const successMessage = urlParams.get('successMessage');
+            
+                    if (successMessage) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: successMessage,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+                    }
+                });
+            </script>
+            
 </body>
 
 </html>

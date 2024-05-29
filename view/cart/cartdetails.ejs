@@ -211,10 +211,10 @@
                                                 <!-- <td data-th="Price">₹<%= item.price %></td> -->
                                                 <td data-th="Price">
                                                     <% if (item.onOffer) { %>
-                                                        ₹<%= item.offerPrice %>
+                                                        ₹<%= Number(item.offerPrice).toLocaleString('en-IN') %>
                                                             <!-- Display the discounted price if an offer is applied -->
                                                             <% } else { %>
-                                                                ₹<%= item.price %>
+                                                                ₹<%= Number(item.price).toLocaleString('en-IN') %>
                                                                     <!-- Display the original price if no offer is applied -->
                                                                     <% } %>
                                                 </td>
@@ -258,8 +258,10 @@
 
                             <td colspan="2" class="hidden-xs"></td>
                             <td id="totalPrice" class="hidden-xs text-center" style="text-align:center"><strong>Total:₹
-                                    <%= totalPrice %></strong></td>
-                            <td><a href="/cart/checkout" class="btn btn-success btn-block">Checkout</a></td>
+                                    <%= Number(totalPrice).toLocaleString('en-IN') %></strong></td>
+                            <!-- <td><a href="/cart/checkout" class="btn btn-success btn-block">Checkout</a></td> -->
+                            <td><button class="btn btn-success btn-block" onclick="handleCheckout()">Checkout</button></td>
+
                         </tr>
                     </tfoot>
                 </table>
@@ -267,11 +269,10 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         $(document).ready(function () {
             $('#cartTable').DataTable(); // Initialize DataTable
@@ -321,6 +322,14 @@
     <script>
         // Function to update item quantity using AJAX
         function updateQuantity(itemId, newQuantity) {
+            //convert the newQuantity to an integer
+            newQuantity = parseInt(newQuantity);
+
+            // Check if the newQuantity is a valid number and not NaN and not less than 1
+            if (isNaN(newQuantity) || newQuantity < 1) {
+                Swal.fire("Error", "Invalid quantity", "error");
+                return;
+            }
             // Make a fetch request to update the quantity in the backend
             fetch(`/cart/updateitem/${itemId}`, {
                 method: 'POST',
@@ -354,6 +363,28 @@
                 });
         }
     </script>
+
+    <script>
+        // Function to handle checkout process
+        function handleCheckout() {
+            // Check if the cart is empty
+            if (<%= userCart && userCart.cartItems.length === 0 %>) {
+                // Display a SweetAlert popup notifying the user that the cart is empty
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cart is empty',
+                    text: 'Please add items to your cart before proceeding to checkout',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3cf696',
+                    allowOutsideClick: false
+                });
+            } else {
+                // If the cart is not empty, redirect to the checkout page
+                window.location.href = '/cart/checkout';
+            }
+        }
+    </script>
+    
 
 
 </body>

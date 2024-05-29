@@ -117,6 +117,18 @@
             /* Even row background color */
         }
 
+        #example tbody tr td.status.available {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #example tbody tr td.status.unavailable {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+        
         .action {
             display: flex;
             flex-direction: column;
@@ -175,13 +187,15 @@
 </head>
 
 <body>
-    <%- include("nav") %>
+    <!-- <%- include("nav") %> -->
         <%- include("sidebar") %>
 
 
             <div class="main-content">
                 <div class="button-wrapper">
-                    <button class="add-category-button"><a href="/admin/addcategory">Add Category</a></button>
+                    <button class="add-category-button" onclick="location.href='/admin/addcategory'"><a>Add
+                        Category</a></button>
+                    <!-- <button class="add-category-button"><a href="/admin/addcategory">Add Category</a></button> -->
                     <button style="background-color: #3cf696;  border-radius: 5px;float:left"
                         onclick="location.href='/admin/cat-offers'">Category Offers</button>
 
@@ -235,19 +249,30 @@
             </div>
 
 
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
                 integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
             <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+            <!-- <script>
+                new DataTable('#example');
+            </script> -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
             <script>
                 $(document).ready(function () {
-                    $('#example').DataTable();
+                    $('#example').DataTable({
+                        responsive: true // Enable responsive option
+                    });
                 });
+                
             </script>
 
             <script>

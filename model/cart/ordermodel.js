@@ -52,6 +52,11 @@ const orderSchema = new mongoose.Schema({
         enum: ['cod', 'Wallet', 'internetBanking', 'PayPal'] // Add supported payment methods
     },
 
+    paymentStatus: {
+        type: String,
+        enum: ['failed', 'success', 'pending', 'cancelled','refunded'],
+    },
+
     totalPrice: {
         type: Number,
         required: true
@@ -60,6 +65,10 @@ const orderSchema = new mongoose.Schema({
     appliedCoupon: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Coupon' // Reference to the Coupon model
+    },
+    couponDiscount:{
+        type: Number,
+        default: 0
     },
     returnRequest: {
         reason: String,

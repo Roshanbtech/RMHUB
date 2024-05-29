@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 const usercontroller = require('../controller/usercontroller')
 const collection = require('../model/user/usermodel')
-const { checkSessionAndBlocked } = require('../middleware/authmiddleware');
+const { checkSessionAndBlocked } = require('../middleware/ensureActiveUser');
 
 
 router.get('/', usercontroller.landing)
@@ -22,8 +22,6 @@ router.post('/forpasreset', usercontroller.forpasresetpost)
 router.get('/phones', checkSessionAndBlocked, usercontroller.phones)
 router.get('/wearables', checkSessionAndBlocked, usercontroller.wearables)
 router.get('/tablets', checkSessionAndBlocked, usercontroller.tablets)
-// router.get('/aftlan',checkSessionAndBlocked,usercontroller.aftlan)
-// router.get('/search',checkSessionAndBlocked,usercontroller.home)
 router.get('/proddes/:id', checkSessionAndBlocked, usercontroller.proddes)
 router.post('/rating/:id', checkSessionAndBlocked, usercontroller.rating)
 router.get('/home', checkSessionAndBlocked, usercontroller.home)

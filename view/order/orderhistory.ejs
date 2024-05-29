@@ -349,7 +349,7 @@
             <div class="order-container">
                 <div class="order-details">
                     <div class="order-info">
-                        <div>Order No. : <%= index+1 %>
+                        <div>Order ID : #<%= order._id.toString().slice(-7).toUpperCase() %>
                         </div>
                         <div>
                             Order Date: <%= new Date(order.orderDate).toLocaleDateString('en-IN', {
@@ -358,11 +358,8 @@
                                     day: 'numeric' , month: 'long' , year: 'numeric' }) %>
                                     <%= new Date(order.orderDate).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'
                                         , hour12: true }) %>
-                                        <div>Order Total: ₹<%= order.totalPrice %>
-                                        </div>
-                                                      
-
-
+                                        <div>Order Total: ₹<%= Number(order.totalPrice).toLocaleString('en-IN') %>
+                                        </div>                            
                         </div>
                     </div>
                     <div class="product-details">
@@ -370,9 +367,10 @@
                         <% if (order.orderItems && order.orderItems.length> 0) { %>
                             <% order.orderItems.forEach(item=> { %>
                                 <div class="product">
-                                    <div style="margin: 10px 10px 0 0; float:right; width:fit-content; border: 2px solid black">
+                                    <div style="margin: 10px 10px 0 0; float:right; width:fit-content; border: 2px solid #3cf696">
                                         <% if (order.appliedCoupon) { %>
-                                          <span style="background-color: black; color:#fff">Coupon Applied</span>
+                                          <span style="background-color:#3cf696; color:#000">Coupon Applied</span>
+
                                         <% } %>
                                      </div> 
                                     <img src="/<%= item.productId.image[0]%>" style="max-width:100px; max-height:100px"
@@ -382,12 +380,15 @@
                                         </div>
                                         <div>Quantity: <%= item.quantity %>
                                         </div>
-                                        <div>Actual Price: ₹<%= item.price * item.quantity %>
+                                        <div>Actual Price: ₹<%= Number(item.price * item.quantity).toLocaleString('en-IN') %>
                                         </div>
-                                        <div>Payment Method: <%= order.paymentMethod %>
+                                        <!-- <div>Payment Method: <%= order.paymentMethod %>
                                         </div>
                                         <div>Order Status: <%= order.orderStatus %>
                                         </div>
+                                        <% if (order.paymentMethod === 'PayPal') { %>
+                                            <div>Payment Status: <%= order.paymentStatus %></div>
+                                        <% } %> -->
                                     </div>
                                 </div>
                                 <% }); %>
@@ -395,49 +396,34 @@
                                         <div>No items in this order</div>
                                         <% } %>
                     </div>
+                    <a href="/cart/orderdetails/<%= order._id %>" style="text-decoration:none">View Details</a>
                 </div>
                 <div class="order-actions">
                     <!-- Add buttons for order actions -->
-                    <% if (order.orderStatus !=='cancelled' && order.orderStatus !=='delivered' && order.orderStatus
+                    <!-- <% if (order.orderStatus !=='cancelled' && order.orderStatus !=='delivered' && order.orderStatus
                         !=='returned' ) { %>
                         <button class="cancel-btn" onclick="location.href='/cart/cancelorder/<%= order._id %>'">Cancel
                             Order</button>
-                        <% } %>
+                        <% } %> -->
 
-                            <% if (order.orderStatus==='delivered' && order.orderStatus !=='returned' ) { %>
+                            <!-- <% if (order.orderStatus==='delivered' && order.orderStatus !=='returned' ) { %>
                                 <button class="return-btn" style=" background-color: #3CF696;"
                                     onclick="openReturnModal('<%= order._id %>')">Return Order</button>
-                                <% } %>
+                                <button class="invoice-btn" style="background-color: #3CF696;" 
+                                    onclick="location.href='/cart/invoice/<%= order._id %>'">Invoice</button>
+                                <% } %> -->
+
+                          
+                            
 
 
-
-                                    <!-- Add other buttons as needed -->
                 </div>
             </div>
+
             <% }); %>
 
 
-
-                <!-- Return Modal -->
-                <div id="returnModal" class="modal">
-                    <!-- Modal content -->
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <h2 style="color: #3CF696; margin-bottom: 20px;">Return Order</h2>
-                        <form id="returnForm" method="POST" onsubmit="return validateForm()">
-                            <div style="margin-bottom: 10px;">
-                                <label for="reason" style="color: #3CF696;">Reason for Return:</label><br>
-                                <textarea id="reason" name="reason" rows="4"
-                                    style="border-radius: 5px; border: 1px solid #3CF696; width: 100%;"></textarea>
-                                <div id="reasonError" class="error"></div>
-                            </div>
-                            <button type="submit"
-                                style="background-color: #3CF696; color: white; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Submit
-                                Return Request</button>
-                        </form>
-                    </div>
-                </div>
-    </div>
+              
 
     <!-- Modal for cancelled order details -->
     <div class="modal fade" id="cancelledOrderModal" tabindex="-1" role="dialog"
@@ -471,11 +457,12 @@
                                         <td>
                                             <div>
                                                 <strong>ID:</strong>
-                                                <%= order._id %>
+                                                <%= order._id.toString().slice(-7).toUpperCase() %>
                                             </div>
                                             <div>
                                                 <strong>Amount:</strong> ₹<%= order.totalPrice %>
                                             </div>
+                                            
                                         </td>
                                         <td>
                                             <% order.orderItems.forEach(item=> { %>
@@ -519,7 +506,7 @@
 
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.all.min.js"></script>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -544,41 +531,29 @@
         });
 
     </script>
-    <script>
-        // Define the modal variable outside of the function
-        var modal = document.getElementById("returnModal");
+ 
 
-        function openReturnModal(orderId) {
-            modal.style.display = "block";
-            var form = document.getElementById("returnForm");
-            form.action = "/cart/return/" + orderId; // Set the action URL dynamically
+    <script>
+        // Function to get the query parameter value by name
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
         }
 
-        // Get the close button
-        var closeBtn = modal.querySelector('.close');
+        // Check for 'error' parameter in the URL
+        const success = getQueryParameter('successMessage');
 
-        // Close the modal when the close button is clicked
-        closeBtn.addEventListener('click', function () {
-            modal.style.display = 'none';
-        });
-
-        //validate reason field
-        function validateForm() {
-
-            var reason = document.getElementById("reason").value;
-            var reasonError = document.getElementById("reasonError");
-
-            if (reason.trim() === "") {
-                reasonError.innerHTML = "*Please enter a valid reason for returning your order";
-                reasonError.style.color = "red";
-                reasonError.style.borderColor = "red";
-                return false;
-            } else {
-                reasonError.innerHTML = "";
-                reasonError.style.borderColor = "#3CF696";
-
-                return true;
-            }
+        // If 'error' parameter exists, display it using Swal
+        if (success) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                background: '#fff',
+                text: success.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
+                showConfirmButton: false,
+                
+            });
         }
     </script>
 

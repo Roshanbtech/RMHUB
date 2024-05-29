@@ -15,8 +15,7 @@
     <link href="/css/style.css" rel="stylesheet">
     <style>
         .navbar {
-            background-color: #3CF696;
-        }
+            background-color: #3cf696;}
 
         /* Dropdown container */
         .dropdown {
@@ -317,6 +316,8 @@
             border-color: #3cf696;
             border-style: ridge;
         }
+
+        
     </style>
 </head>
 
@@ -503,7 +504,7 @@
                                 <p class="card-text">
                                     <%= data4[j].category?.name %>
                                 </p>
-                                <p class="card-text">₹<%= data4[j].price %>
+                                <p class="card-text">₹<%= Number(data4[j].price).toLocaleString('en-IN') %>
                                 </p>
                                 <a href="/proddes/<%= data4[j].id %>" class="snake-btn">Shop Now</a>
                             </div>

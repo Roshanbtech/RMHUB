@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/RHUB').then(() => {
+mongoose.connect(process.env.MONGODB_URI).then(() => {
     console.log('mongodb had connected');
 }).catch(() => {
     console.log('mongodb has not connected');
@@ -101,8 +101,8 @@ cartSchema.pre('save', async function (next) {
                     discountAmount = coupon.discountValue;
                 } 
                 
-                this.couponDiscount = discountAmount;
-                this.totalPrice = this.totalPrice - discountAmount;
+                this.couponDiscount = Math.round(discountAmount);
+                this.totalPrice = this.totalPrice - Math.round(discountAmount);
                 console.log(this);
             }
         }

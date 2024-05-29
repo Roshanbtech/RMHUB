@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            width: fit-content
         }
 
         .main-content {
@@ -174,7 +173,7 @@
 </head>
 
 <body>
-    <%- include("nav") %>
+    <!-- <%- include("nav") %> -->
         <%- include("sidebar") %>
 
 
@@ -338,6 +337,26 @@
                         }
 
 
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                    <script>
+                        // Function to get the query parameter value by name
+                        function getQueryParameter(name) {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            return urlParams.get(name);
+                        }
+
+                        // Check for 'error' parameter in the URL
+                        const error = getQueryParameter('error');
+
+                        // If 'error' parameter exists, display it using Swal
+                        if (error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
+                            });
+                        }
                     </script>
 </body>
 

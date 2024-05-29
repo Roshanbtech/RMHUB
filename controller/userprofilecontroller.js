@@ -1,5 +1,6 @@
 const User = require('../model/user/usermodel');
 const Address = require('../model/profile/addressmodel');
+const Order = require('../model/cart/ordermodel');
 const bcrypt = require('bcrypt');
 
 const getprofile = async (req, res) => {
@@ -316,7 +317,13 @@ const wallet = async (req, res) => {
     if (!user) {
       return res.status(404).send('User not found');
     }
-    res.render('profile/wallet.ejs', { user });
+
+    const latestTransactions = user.wallet.transactions.sort((a, b) => b.date - a.date).slice(0, 10);
+
+    // Extract order information from transactions
+    const orderIds = latestTransactions.map(transaction => transaction.orderId);
+    const orders = await Order.find({ _id: { $in: orderIds } });
+        res.render('profile/wallet.ejs', { user, latestTransactions, orders });
   } catch (error) {
     console.error('Error fetching user data:', error);
     res.status(500).send('Internal Server Error');

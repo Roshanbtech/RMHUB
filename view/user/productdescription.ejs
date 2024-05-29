@@ -239,10 +239,10 @@
                         <!-- <p class="last-price">Real Price: <span style="background-color:#3cf696"><strong>₹<%= product.price %></strong></span></p> -->
                         <p class="last-price">Price: <span style="background-color:#3cf696"><strong>
                                     <% if (product.onOffer) { %>
-                                        ₹<%= product.offerPrice %>
+                                        ₹<%= Number(product.offerPrice).toLocaleString('en-IN') %>
                                             <!-- Display the discounted price if an offer is applied -->
                                             <% } else { %>
-                                                ₹<%= product.price %>
+                                                ₹<%= Number(product.price).toLocaleString('en-IN') %>
                                                     <!-- Display the original price if no offer is applied -->
                                                     <% } %>
                                 </strong></span></p>
@@ -269,9 +269,9 @@
                         </ul>
                     </div>
                     <div class="purchase-info">
-                        <form action="/cart/addtocart" method="post">
+                        <form action="/cart/addtocart" method="post" onsubmit = "return validateQuantity()" >
                             <input type="hidden" name="productId" value="<%= product._id %>">
-                            <input type="number" name="quantity" id="quantity" min="1" value="1">
+                            <input type="number" name="quantity" id="quantity" value="1">
                             <button type="submit" class="btn">Add to Cart <i class="fas fa-shopping-cart"></i></button>
                         </form>
                         <button type="button" class="btn" id="rateButton" style="background-color:#3cf696">Rate this
@@ -315,6 +315,39 @@
                         $('#ratingReviewModal').modal('show');
                     });
                 </script>
+
+                <script>
+                    // Function to validate the quantity input
+                    function validateQuantity() {
+                        var quantity = parseInt(document.getElementById('quantity').value);
+                        var availableStock = parseInt('<%= product.availableStock %>');
+                
+                        // Check if quantity is not a number or is less than or equal to 0
+                        if (isNaN(quantity) || quantity <= 0) {
+                            // Display SweetAlert message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please enter a valid quantity!',
+                            });
+                            return false; // Prevent form submission
+                        }
+
+                        // Check if quantity exceeds available stock
+                        if (quantity > availableStock) {
+                            // Display SweetAlert message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Quantity exceeds available stock!',
+                            });
+                            return false; // Prevent form submission
+                        }
+                
+                        return true; // Allow form submission
+                    }
+                </script>
+                
 
 </body>
 

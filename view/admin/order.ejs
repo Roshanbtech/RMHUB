@@ -220,7 +220,7 @@
 </head>
 
 <body>
-    <%- include("nav") %>
+    <!-- <%- include("nav") %> -->
         <%- include("sidebar") %>
 
 
@@ -237,10 +237,10 @@
                     <thead>
                         <tr>
                             <th>Si No.</th>
-                            <!-- <th>IDs</th> -->
+                            <th>Order ID</th>
                             <th>User</th>
                             <th>Products</th>
-                            <th>Stock</th>
+                            <!-- <th>Stock</th> -->
                             <th>Date & Time</th>
                             <th>Order Status</th>
                             <th>Price</th>
@@ -255,7 +255,8 @@
                                 <td>
                                     <%= index + 1 %>
                                 </td>
-                                <!-- <td> <strong>OrderID:</strong><br><%= order._id %>
+                                <td> <strong style="color:red"><br><%= order._id.toString().slice(-7).toUpperCase() %></strong></td>
+                                <!-- <td> <strong>OrderID:</strong><br><%= order._id.toString().slice(-7).toUpperCase() %>
                              <strong>UserID:</strong><br><%= order.userId._id %>
                              <strong>ProductIDs:</strong><br><%= order.orderItems.map(item => item.productId._id).join(', ')%>
                              <strong>AddressID:</strong><br><%=  order.shippingAddress %>
@@ -268,11 +269,11 @@
                                     <% let products=order.orderItems.map(item=> item.productId.model).join(', '); %>
                                         <%= products %>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <% let stock=order.orderItems.map(item=> item.productId.availableStock).join(', ');
                                         %>
                                         <%= stock %>
-                                </td>
+                                </td> -->
                                 <td>
                                     <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata'
                                         , weekday: 'long' }) %>
@@ -316,7 +317,7 @@
                                                                 <% } %>
                                                                     <% }) %>
                                 </td>
-                                <td><strong class="pmt">
+                                <td><strong style="color: blue" class="pmt">
                                         <%= order.paymentMethod %>
                                     </strong></td>
 
@@ -360,7 +361,7 @@
                                     <h3>Request <%= index+1 %>
                                     </h3>
                                     <p><strong>Request ID:</strong>
-                                        <%= request._id %>
+                                        <%= request._id.toString().slice(-7).toUpperCase() %>
                                     </p>
                                     <p><strong>User:</strong>
                                         <%= request.userId.firstName %>

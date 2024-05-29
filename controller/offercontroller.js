@@ -1,5 +1,5 @@
 const Product = require('../model/admin/productmodel')
-const Category = require('../model/admin/adminmodel')
+const Category = require('../model/admin/categorymodel')
 
 
 
@@ -11,7 +11,13 @@ const prod_offer = async (req, res) => {
     res.render('admin/offers.ejs', { products })
 
 }
-
+/**
+ * Asynchronously fetches product details by ID and responds with the product information.
+ *
+ * @param {Object} req - The request object containing parameters.
+ * @param {Object} res - The response object to send data back.
+ * @return {Object} JSON response indicating success and product details or an error message.
+ */
 const prod_details = async (req, res) => {
 
     try {

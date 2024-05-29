@@ -6,12 +6,13 @@ const reportcontroller = require('../controller/reportcontroller')
 const bannercontroller = require('../controller/bannercontroller');
 
 const upload = require('../middleware/multer');
-const isAdminAuthenticated = require('../middleware/authenticitymiddleware');
+const isAdminAuthenticated = require('../middleware/authorizeAdmin');
 
 
 router.get('/login', isAdminAuthenticated, admincontroller.login)
 router.post('/login', isAdminAuthenticated, admincontroller.loginpost)
 router.get('/dashboard', isAdminAuthenticated, admincontroller.dashboard)
+router.get('/chart', isAdminAuthenticated, admincontroller.chart)
 router.get('/users', isAdminAuthenticated, admincontroller.userlist)
 router.post('/blockUser/:id', isAdminAuthenticated, admincontroller.blockUser)
 router.get('/products', isAdminAuthenticated, admincontroller.products)
@@ -63,7 +64,7 @@ router.post('/addbanner', upload.array('bannerImage', 5), bannercontroller.addBa
 
 
 
-router.get('/logout', admincontroller.logout)
+router.get('/logout', isAdminAuthenticated, admincontroller.logout)
 
 
 

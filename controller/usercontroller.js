@@ -5,8 +5,9 @@ const collection2 = require('../model/user/otpmodel')
 const collection3 = require('../model/admin/productmodel')
 //const Cart=require('../model/cart/cartmodel')
 const { Cart, CartItem } = require("../model/cart/cartmodel")
-const Category = require('../model/admin/adminmodel');
+const Category = require('../model/admin/categorymodel');
 const Coupon = require('../model/admin/couponmodel');
+const Order = require('../model/cart/ordermodel');
 const nodemailer = require('nodemailer')
 const dotenv = require('dotenv');
 dotenv.config();
@@ -715,6 +716,7 @@ const applyCoupon = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Coupon is not active' });
     }
 
+    
     let cart = await Cart.findOne({ userId: user._id });
 
     // Calculate the total price of the items in the cart
@@ -727,6 +729,13 @@ const applyCoupon = async (req, res) => {
     if (coupon.discountValue > totalPrice) {
       return res.status(400).json({ success: false, message: 'The coupon discount exceeds the total order price' });
     }
+
+   // Check if the coupon was already applied in any past order
+   const appliedCoupon = await Order.findOne({ appliedCoupon: coupon._id, userId: user._id });
+   console.log('applied', appliedCoupon)
+   if (appliedCoupon) {
+     return res.status(400).json({ success: false, message: 'Coupon already applied' });
+   }
 
     cart.coupon = coupon._id;
     await cart.save();

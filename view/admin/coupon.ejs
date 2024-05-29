@@ -169,66 +169,120 @@
             font-weight: bold;
             text-align: center;
         }
+
+        #editCouponForm {
+            padding: 20px;
+        }
+
+        #editCouponForm .form-group {
+            margin-bottom: 20px;
+        }
+
+        #editCouponForm .form-label {
+            font-weight: bold;
+            color: black;
+        }
+
+        #editCouponForm .form-control {
+            border-radius: 10px;
+            border: 1px solid #3CF696;
+            padding: 10px;
+            width: 100%;
+            background-color: #ffffff;
+            /* Set background color to white */
+        }
+
+        #editCouponForm .btn-primary {
+            background-color: #3CF696;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #editCouponForm .btn-primary:hover {
+            background-color: #32c084;
+        }
+
+        /* Title styles */
+        #editCouponModal .modal-title {
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+
+        #editCouponModal .modal-header {
+            background-color: #3CF696;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            padding: 15px 20px;
+        }
     </style>
 </head>
 
 <body>
-    <%- include("nav") %>
-        <%- include("sidebar") %>
+    <%- include("sidebar") %>
 
-            <div class="main-content">
-                <div class="button-wrapper">
-                    <button class="add-coupon-button" data-bs-toggle="modal" data-bs-target="#addCouponModal">Add
-                        Coupon</button>
-                </div>
-                <h3 style="text-align: center; font-weight:bold"><img src="/images/c2.svg" alt="Logo" class="logo-small"
-                        style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-                    Coupon List</h3>
-                <table id="example" class="table table-hover" style="width:100%">
-                    <thead>
+        <div class="main-content">
+            <div class="button-wrapper">
+                <button class="add-coupon-button" data-bs-toggle="modal" data-bs-target="#addCouponModal">Add
+                    Coupon</button>
+            </div>
+            <h3 style="text-align: center; font-weight:bold"><img src="/images/c2.svg" alt="Logo" class="logo-small"
+                    style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+                Coupon List</h3>
+            <table id="example" class="table table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Si. No</th>
+                        <th>Coupon Code</th>
+                        <th>Discount Value</th>
+                        <th>Expiration Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        <th>Others</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% coupons.forEach((coupon, index)=> { %>
                         <tr>
-                            <th>Si. No</th>
-                            <th>Coupon Code</th>
-                            <th>Discount Value</th>
-                            <th>Expiration Date</th>
-                            <th>Status</th>
-
-                            <th>Others</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% coupons.forEach((coupon, index)=> { %>
-                            <tr>
-                                <td>
-                                    <%= index + 1 %>
-                                </td>
-                                <td>
-                                    <%= coupon.code %>
-                                </td>
-                                <td>
-                                    <% if (coupon.discountType === "percentage") { %><%= coupon.discountValue %>%<% } else if (coupon.discountType === "fixed") { %>
-                                        ₹<%= coupon.discountValue %>
-                                    <% } %>
-                                </td>
-                                <td>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <%= coupon.code %>
+                            </td>
+                            <td>
+                                <% if (coupon.discountType==="percentage" ) { %>
+                                    <%= coupon.discountValue %>%<% } else if (coupon.discountType==="fixed" ) { %>
+                                            ₹<%= coupon.discountValue %>
+                                                <% } %>
+                            </td>
+                            <td>
+                                <%= new Date(coupon.expirationDate).toLocaleDateString('en-IN', {
+                                    timeZone: 'Asia/Kolkata' , weekday: 'long' }) %>
                                     <%= new Date(coupon.expirationDate).toLocaleDateString('en-IN', {
-                                        timeZone: 'Asia/Kolkata' , weekday: 'long' }) %>
-                                        <%= new Date(coupon.expirationDate).toLocaleDateString('en-IN', {
-                                            timeZone: 'Asia/Kolkata' , day: 'numeric' , month: 'long' , year: 'numeric'
-                                            }) %>
-                                            <%= new Date(coupon.expirationDate).toLocaleTimeString('en-IN', {
-                                                timeZone: 'Asia/Kolkata' , hour12: true }) %>
-                                </td>
-                                <td
-                                    class="status <%= (coupon.isActive && new Date(coupon.expirationDate) > new Date()) ? 'active' : 'expired' %>">
-                                    <% if (coupon.isActive && new Date(coupon.expirationDate)> new Date()) { %>
-                                        Active
-                                        <% } else { %>
-                                            Expired
-                                            <% } %>
-                                </td>
+                                        timeZone: 'Asia/Kolkata' , day: 'numeric' , month: 'long' , year: 'numeric' })
+                                        %>
+                                        <%= new Date(coupon.expirationDate).toLocaleTimeString('en-IN', {
+                                            timeZone: 'Asia/Kolkata' , hour12: true }) %>
+                            </td>
+                            <td
+                                class="status <%= (coupon.isActive && new Date(coupon.expirationDate) > new Date()) ? 'active' : 'expired' %>">
+                                <% if (coupon.isActive && new Date(coupon.expirationDate)> new Date()) { %>
+                                    Active
+                                    <% } else { %>
+                                        Expired
+                                        <% } %>
+                            </td>
+                            <td>
+                                <button class="add-coupon-button edit-coupon-btn" data-bs-toggle="modal" data-bs-target="#editCouponModal" data-coupon-id="<%= coupon._id %>">Edit</button>
 
-                                <!-- <td class="action">
+
+                            </td>
+
+                            <!-- <td class="action">
                             <br>
                             <form action="/admin/toggle-coupon/<%= coupon.id %>" method="POST">
                                 <button class="toggle-button" style="border-radius: 5px">
@@ -237,61 +291,250 @@
                             </form>
                             <br>
                         </td> -->
-                                <td>
-                                    <button style="background-color: red; border-radius: 5px;"
-                                        onclick="confirmDelete('<%= coupon.id %>')">Delete</button>
-                                </td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
+                            <td>
+                                <button style="background-color: red; border-radius: 5px;"
+                                    onclick="confirmDelete('<%= coupon.id %>')">Delete</button>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Edit Coupon Modal -->
+        <div class="modal fade" id="editCouponModal" tabindex="-1" aria-labelledby="editCouponModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editCouponForm" action="/coupon/editcoupon" method="POST"
+                            onsubmit="return validateEditForm()">
+                            <div class="mb-3">
+                                <label for="editCode" class="form-label">Coupon Code</label>
+                                <input type="text" class="form-control" id="editCode" name="code" 
+                                    >
+                                <div id="editCodeError" class="error"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editDiscountType" class="form-label">Discount Type</label>
+                                <select class="form-control" id="editDiscountType" name="discountType">
+                                    <option value="fixed">Fixed Discount</option>
+                                    <option value="percentage">Percentage Discount</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editDiscountValue" class="form-label">Discount Value</label>
+                                <input type="number" class="form-control" id="editDiscountValue" name="discountValue"
+                                    >
+                                <div id="editDiscountValueError" class="error"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editExpirationDate" class="form-label">Expiration Date</label>
+                                <input type="date" class="form-control" id="editExpirationDate" name="expirationDate"
+                                    >
+                                <div id="editExpirationDateError" class="error"></div>
+                            </div>
+                            <input type="hidden" id="couponId" name="couponId">
+                            <button type="submit" class="btn btn-primary">Update Coupon</button>
+                        </form>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <%- include("couponmodal") %>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-                    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-                    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-                <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-                <script>
-                    $(document).ready(function () {
-                        $('#example').DataTable(); // Correctly initializes DataTable
+
+        <%- include("couponmodal") %>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+                integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('#example').DataTable(); // Correctly initializes DataTable
+                });
+            </script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+            <script>
+                function confirmDelete(couponId) {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3cf696",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If the user confirms, redirect to the delete route
+                            window.location.href = `/coupon/delcoupon/${couponId}`;
+                        }
                     });
-                </script>
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                }
+            </script>
+            <script>
+                $(document).ready(function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const successMessage = urlParams.get('successMessage');
+                    const errorMessage = urlParams.get('error');
 
-                <script>
-                    function confirmDelete(couponId) {
+                    if (successMessage) {
                         Swal.fire({
-                            title: "Are you sure?",
-                            text: "You won't be able to revert this!",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#3cf696",
-                            cancelButtonColor: "#d33",
-                            confirmButtonText: "Yes, delete it!"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                // If the user confirms, redirect to the delete route
-                                window.location.href = `/coupon/delcoupon/${couponId}`;
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: successMessage,
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
                             }
                         });
                     }
-                </script>
-
-                <% if (successMessage) { %>
-                    <script>
+                    if (errorMessage) {
                         Swal.fire({
-                            position: "top-end",
-                            icon: "success",
-                            title: "<%= successMessage %>",
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'error',
+                            title: errorMessage,
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
                         });
-                    </script>
-                    <% } %>
+                    }
+                });
+
+                
+            </script>
+            <script>
+                // JavaScript to handle opening of the edit coupon modal
+$(document).ready(function () {
+    $('#editCouponModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var couponId = button.data('coupon-id'); // Extract coupon ID from data attribute
+        console.log(couponId);
+        var modal = $(this);
+
+        // Store the couponId in a variable accessible within the event listener function
+        window.couponId = couponId;
+
+        // Fetch coupon details from the server using AJAX
+        $.get(`/coupon/editcoupon/${couponId}`, function (coupon) {
+            // Populate form fields in the modal with the retrieved data
+            modal.find('#editCode').val(coupon.code);
+            modal.find('#editDiscountType').val(coupon.discountType);
+            modal.find('#editDiscountValue').val(coupon.discountValue);
+            modal.find('#editExpirationDate').val(coupon.expirationDate);
+        });
+    });
+});
+
+// Add an event listener to the form submission
+document.getElementById('editCouponForm').addEventListener('submit', function(event) {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+    
+    // Retrieve couponId from the window object
+    const couponId = window.couponId;
+
+    // Serialize form data into JSON object
+    const formData = {
+        code: document.getElementById('editCode').value,
+        discountType: document.getElementById('editDiscountType').value,
+        discountValue: document.getElementById('editDiscountValue').value,
+        expirationDate: document.getElementById('editExpirationDate').value
+    };
+    
+    // Send AJAX request to the server
+    fetch(`/coupon/editcoupon/${couponId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (response.ok) {
+            // If the response is successful, redirect or handle the success message
+            window.location.href = '/coupon/coupon?successMessage=Coupon updated successfully';
+        } else {
+            // If there is an error response, handle it appropriately
+            throw new Error('Failed to update coupon');
+        }
+    })
+    .catch(error => {
+        // Handle any errors that occur during the AJAX request
+        console.error('Error updating coupon:', error);
+        // Optionally, display an error message to the user
+    });
+});
+
+</script>
+<script>
+    // JavaScript form validation
+    function validateEditForm() {
+        const code = document.getElementById('editCode').value;
+        const discountType = document.getElementById('editDiscountType').value;
+        const discountValue = document.getElementById('editDiscountValue').value;
+        const expirationDate = document.getElementById('editExpirationDate').value;
+
+        let isValid = true;
+
+        // Validate Coupon Code
+        if (!code) {
+            document.getElementById('editCodeError').innerText = 'Coupon code is required';
+            isValid = false;
+        } else {
+            document.getElementById('editCodeError').innerText = '';
+        }
+
+        // Validate Discount Value
+        if (!discountValue) {
+            document.getElementById('editDiscountValueError').innerText = 'Discount value is required';
+            isValid = false;
+        } else if (discountValue <= 0) {
+            document.getElementById('editDiscountValueError').innerText = 'Discount value must be greater than zero';
+            isValid = false;
+        } else {
+            document.getElementById('editDiscountValueError').innerText = '';
+        }
+
+        // Validate Expiration Date
+        if (!expirationDate) {
+            document.getElementById('editExpirationDateError').innerText = 'Expiration date is required';
+            isValid = false;
+        } else {
+            document.getElementById('editExpirationDateError').innerText = '';
+        }
+
+        return isValid;
+    }
+
+    // Add event listener to form submission
+    document.getElementById('editCouponForm').addEventListener('submit', function(event) {
+        // Prevent the default form submission behavior if validation fails
+        if (!validateEditForm()) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+
+
 </body>
 
 </html>

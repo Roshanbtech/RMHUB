@@ -164,7 +164,7 @@
             <% if (user && user.wallet) { %>
                 <h2>Wallet Balance</h2>
                 <% if (user.wallet.balance> 0) { %>
-                    <p style="text-align: center"><strong>₹<%= user.wallet.balance %></strong></p>
+                    <p style="text-align: center"><strong>₹<%= Number(user.wallet.balance).toLocaleString('en-IN') %></strong></p>
                     <% } else { %>
                         <p style="text-align: center"><strong class="debit">-₹<%= Math.abs(user.wallet.balance) %>
                                     </strong></p>
@@ -202,12 +202,12 @@
                             <td>
                                 <% if (transaction.amount> 0) { %>
                                     <% if (transaction.description==='Item Purchased' || transaction.description==='Order Placed' ) { %>
-                                        <span class="debit">-₹<%= transaction.amount %></span>
+                                        <span class="debit">-₹<%= Number(transaction.amount).toLocaleString('en-IN') %></span>
                                         <% } else { %>
-                                            <span class="credit">+₹<%= transaction.amount %></span>
+                                            <span class="credit">+₹<%= Number(transaction.amount).toLocaleString('en-IN') %></span>
                                             <% } %>
                                                 <% } else { %>
-                                                    <span class="debit">-₹<%= Math.abs(transaction.amount) %></span>
+                                                    <span class="debit">-₹<%= Number(Math.abs(transaction.amount)).toLocaleString('en-IN') %></span>
                                                     <% } %>
                             </td>
                             <td>

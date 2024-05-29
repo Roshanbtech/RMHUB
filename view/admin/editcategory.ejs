@@ -7,6 +7,8 @@
     <title>RMHUB</title>
     <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -108,15 +110,31 @@
         .in-exs {
             color: red;
         }
+        .back-btn {
+            position: absolute;
+            top: 60px;
+            left: 40px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
+        }
+
+        .back-btn i {
+            margin-right: 5px;
+        }
     </style>
 </head>
 
 <body>
-
-    <div class="navbar">
+    <%- include("sidebar") %>
+    <!-- <div class="navbar">
         <img src="/images/NavImg.jpg" alt="Logo">
-    </div>
-
+    </div> -->
+    <!-- <button type="button" class="back-btn" onclick="location.href ='/admin/category'">
+        <i class="fas fa-arrow-left"></i> Back To Category
+    </button> -->
     <div class="container">
 
         <div class="form-container">

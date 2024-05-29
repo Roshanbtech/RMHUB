@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/RHUB').then(() => {
+require('dotenv').config();
+mongoose.connect(process.env.MONGODB_URI).then(() => {
   console.log('mongodb had connected');
 }).catch(() => {
   console.log('mongodb has not connected');

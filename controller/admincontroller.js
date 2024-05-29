@@ -1,18 +1,15 @@
 const collection = require('../model/user/usermodel')
-const collection1 = require('../model/admin/adminmodel')
+const collection1 = require('../model/admin/categorymodel')
 const collection3 = require('../model/admin/productmodel')
 const order = require('../model/cart/ordermodel');
+const bestSelling = require('../helpers/bestSelling');
 require('dotenv').config()
 
 
 const login = (req, res) => {
-    try{
-        if (!req.session.admin) {
-            res.render("admin/login.ejs")
-        } else {
-            res.redirect('/admin/dashboard')
-        }
-    }catch(err){
+    try {
+        res.render("admin/login.ejs")
+    } catch (err) {
         console.log(err)
     }
 }
@@ -56,13 +53,360 @@ const loginpost = (req, res) => {
     }
 }
 
-const dashboard = (req, res) => {
-    //console.log(req.session.admin+'s')
-    if (!req.session.admin) {
-        res.render('admin/login.ejs')
-    } else {
-        res.render('admin/dashboard.ejs')
+const dashboard = async (req, res) => {
+    // Check if the admin is logged in
+    // if (!req.session.admin) {
+    //     return res.render('admin/login.ejs');
+    // }
+
+    // Local variables for the dashboard
+    const locals = {
+        title: "R.M.HUB - Dashboard",
+    };
+
+    try {
+        // Fetch all users and products
+        const users = await collection.find();
+        const products = await collection3.find();
+
+        // Count users and products
+        const usersCount = await collection.countDocuments();
+        const productsCount = await collection3.countDocuments();
+
+        // Aggregate delivered orders to get count and total revenue
+        const confirmedOrders = await order.aggregate([
+            { $match: { orderStatus: "delivered" } },
+            {
+                $group: {
+                    _id: null,
+                    count: { $sum: 1 },
+                    totalRevenue: { $sum: "$totalPrice" },
+                },
+            },
+        ]);
+        console.log(confirmedOrders, 'co')
+
+        // Count the number of delivered orders
+        const ordersCount = await order.countDocuments({ orderStatus: "delivered" });
+        console.log(ordersCount, 'oc')
+
+        // Get best-selling products, brands, and categories
+        const bestSellingProducts = await bestSelling.getBestSellingProducts();
+        const bestSellingBrands = await bestSelling.getBestSellingBrands();
+        const bestSellingCategories = await bestSelling.getBestSellingCategories();
+
+        // Log best-selling products, brands, and categories
+        console.log("Best Selling Products:", bestSellingProducts);
+        console.log("Best Selling Brands:", bestSellingBrands);
+        console.log("Best Selling Categories:", bestSellingCategories);
+        // Render the dashboard
+        res.render("admin/dashboard", {
+            locals,
+            users,
+            products,
+            usersCount,
+            ordersCount,
+            productsCount,
+            bestSellingBrands,
+            bestSellingProducts,
+            bestSellingCategories,
+            totalRevenue: confirmedOrders[0] ? confirmedOrders[0].totalRevenue : 0,
+            admin: req.session.admin, // Corrected from req.user to req.session.admin
+        });
+    } catch (error) {
+        console.error("Error loading dashboard:", error);
+        res.status(500).send("Server Error");
     }
+};
+
+const chart = async (req, res) => {
+    try {
+
+        let timeBaseForSalesChart = req.query.salesChart;
+        let timeBaseForOrderNoChart = req.query.orderChart;
+        let timeBaseForOrderTypeChart = req.query.orderType;
+        let timeBaseForCategoryBasedChart = req.query.categoryChart;
+
+        function getDatesAndQueryData(timeBaseForChart, chartType) {
+            let startDate, endDate;
+            let groupingQuery, sortQuery;
+
+            if (timeBaseForChart === "yearly") {
+                startDate = new Date(new Date().getFullYear(), 0, 1);
+                endDate = new Date(new Date().getFullYear(), 11, 31, 23, 59, 59, 999);
+
+                groupingQuery = {
+                    _id: {
+                        month: { $month: { $toDate: "$createdAt" } },
+                        year: { $year: { $toDate: "$createdAt" } },
+                    },
+                    totalSales: { $sum: "$totalPrice" },
+                    totalOrder: { $sum: 1 },
+                };
+
+                sortQuery = { "_id.year": 1, "_id.month": 1 };
+            } else if (timeBaseForChart === "weekly") {
+                startDate = new Date();
+                endDate = new Date();
+
+                startDate.setDate(startDate.getDate() - 6);
+                startDate.setUTCHours(0, 0, 0, 0);
+                endDate.setUTCHours(23, 59, 59, 999);
+
+                groupingQuery = {
+                    _id: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+                    },
+                    totalSales: { $sum: "$totalPrice" },
+                    totalOrder: { $sum: 1 },
+                };
+
+                sortQuery = { _id: 1 };
+            } else if (timeBaseForChart === "daily") {
+                startDate = new Date();
+                endDate = new Date();
+
+                startDate.setUTCHours(0, 0, 0, 0);
+                endDate.setUTCHours(23, 59, 59, 999);
+
+                groupingQuery = {
+                    _id: {
+                        hour: { $hour: { date: "$createdAt" } },
+                        date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt", timezone: "UTC" } },
+                    },
+                    totalSales: { $sum: "$totalPrice" },
+                    totalOrder: { $sum: 1 },
+                };
+
+                sortQuery = { "_id.date": 1, "_id.hour": 1 };
+            }
+
+            if (chartType === "sales") {
+                return { groupingQuery, sortQuery, startDate, endDate };
+            } else if (chartType === "orderType") {
+                return { startDate, endDate };
+            } else if (chartType === "categoryBasedChart") {
+                return { startDate, endDate };
+            } else if (chartType === "orderNoChart") {
+                return { groupingQuery, sortQuery, startDate, endDate };
+            }
+        }
+
+        const salesChartInfo = getDatesAndQueryData(
+            timeBaseForSalesChart,
+            "sales"
+        );
+
+        const orderChartInfo = getDatesAndQueryData(
+            timeBaseForOrderTypeChart,
+            "orderType"
+        );
+
+        const categoryBasedChartInfo = getDatesAndQueryData(
+            timeBaseForCategoryBasedChart,
+            "categoryBasedChart"
+        );
+
+        const orderNoChartInfo = getDatesAndQueryData(
+            timeBaseForOrderNoChart,
+            "orderNoChart"
+        );
+
+        let salesChartData = await order.aggregate([
+            {
+                $match: {
+                    $and: [
+                        {
+                            createdAt: {
+                                $gte: salesChartInfo.startDate,
+                                $lte: salesChartInfo.endDate,
+                            },
+                            orderStatus: {
+                                $nin: ["Cancelled", "Pending", "Failed", "Refunded"],
+                            },
+                        },
+                        {
+                            paymentStatus: {
+                                $nin: ["pending", "failed", "refunded", "cancelled"],
+                            },
+                        },
+                    ],
+                },
+            },
+
+            {
+                $group: salesChartInfo.groupingQuery,
+            },
+            {
+                $sort: salesChartInfo.sortQuery,
+            },
+        ]).exec();
+
+        let orderNoChartData = await order.aggregate([
+            {
+                $match: {
+                    $and: [
+                        {
+                            createdAt: {
+                                $gte: orderNoChartInfo.startDate,
+                                $lte: orderNoChartInfo.endDate,
+                            },
+                            orderStatus: {
+                                $nin: ["Cancelled", "Failed", "Refunded"],
+                            },
+                        },
+                        {
+                            paymentStatus: {
+                                $nin: ["pending", "failed", "refunded", "cancelled"],
+                            },
+                        },
+                    ],
+                },
+            },
+
+            {
+                $group: orderNoChartInfo.groupingQuery,
+            },
+            {
+                $sort: orderNoChartInfo.sortQuery,
+            },
+        ]).exec();
+
+        let orderChartData = await order.aggregate([
+            {
+                $match: {
+                    $and: [
+                        {
+                            createdAt: {
+                                $gte: orderChartInfo.startDate,
+                                $lte: orderChartInfo.endDate,
+                            },
+                            status: {
+                                $nin: ["Failed", "Pending", "Cancelled", "Refunded"],
+                            },
+                        },
+                        {
+                            paymentStatus: {
+                                $nin: ["pending", "failed", "refunded", "cancelled"],
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $group: {
+                    _id: "$paymentMethod",
+                    totalOrder: { $sum: 1 },
+                },
+            },
+        ]).exec();
+
+        console.log(orderChartData);
+
+        let categoryWiseChartData = await order.aggregate([
+            {
+                $match: {
+                    $and: [
+                        {
+                            createdAt: {
+                                $gte: categoryBasedChartInfo.startDate,
+                                $lte: categoryBasedChartInfo.endDate,
+                            },
+                            orderStatus: {
+                                $nin: ["clientSideProcessing", "cancelled"],
+                            },
+                        },
+                        {
+                            paymentStatus: {
+                                $nin: ["pending", "failed", "refunded", "cancelled"],
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $unwind: "$orderItems",
+            },
+            {
+                $lookup: {
+                    from: "productmodels",
+                    localField: "orderItems.productId",
+                    foreignField: "_id",
+                    as: "productInfo",
+                },
+            },
+            {
+                $unwind: "$productInfo",
+            },
+            {
+                $replaceRoot: {
+                    newRoot: "$productInfo",
+                },
+            },
+            {
+                $lookup: {
+                    from: "categorymodels",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "catInfo",
+                },
+            },
+            {
+                $addFields: {
+                    categoryInfo: { $arrayElemAt: ["$catInfo", 0] },
+                },
+            },
+            {
+                $project: {
+                    catInfo: 0,
+                },
+            },
+            {
+                $addFields: {
+                    catName: "$categoryInfo.name",
+                },
+            },
+            {
+                $group: {
+                    _id: "$catName",
+                    count: { $sum: 1 },
+                },
+            },
+        ]).exec();
+
+        let saleChartInfo = {
+            timeBasis: timeBaseForSalesChart,
+            data: salesChartData,
+        };
+
+        let orderTypeChartInfo = {
+            timeBasis: timeBaseForOrderTypeChart,
+            data: orderChartData,
+        };
+
+        let categoryChartInfo = {
+            timeBasis: timeBaseForOrderTypeChart,
+            data: categoryWiseChartData,
+        };
+
+        let orderQuantityChartInfo = {
+            timeBasis: timeBaseForOrderNoChart,
+            data: orderNoChartData,
+        };
+
+        return res
+            .status(200)
+            .json({
+                saleChartInfo,
+                orderTypeChartInfo,
+                categoryChartInfo,
+                orderQuantityChartInfo,
+            });
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send('Internal Server Error');
+    }
+
 }
 const userlist = async (req, res) => {
     try {
@@ -95,8 +439,11 @@ const blockUser = async (req, res) => {
         user.isActive = !user.isActive;
         await user.save();
 
-        // Redirect back to the users list page
-        res.redirect('/admin/users');
+        // Determine the message based on the new status
+        const message = user.isActive ? 'unblocked successfully' : 'blocked successfully';
+
+        // Redirect back to the users list page with a success message
+        res.redirect(`/admin/users?successMessage=User ${message}`);
     } catch (err) {///////
         console.error(err);
         res.redirect('/error');
@@ -136,21 +483,13 @@ const addproductspost = async (req, res) => {
         return res.render('admin/addproducts.ejs', { error: 'All fields are required.' });
     }
 
-   
+
     // Other validation checks for each field can be added here
 
-    
+
     try {
 
-        const existingProducts = await collection3.findOne({ productName:{$regex: productName, $options: 'i'} });
-        console.log(existingProducts, 'existingProducts')
-        if (existingProducts) {
-            // const successMessage = req.query.successMessage;
-            // const categories = await collection1.find({ isListed: true });
-            return res.redirect('/admin/addproducts?successMessage=Product model already exists.');
-            // res.render('admin/addproducts.ejs', { error: 'Product model already exists.', categories, successMessage });
-        }
-    
+
         // Create a new product instance
         const newProduct = new collection3({
             productName,
@@ -319,8 +658,8 @@ const addcategorypost = async (req, res) => {
 
     const category = {
         name: categoryName,
-
     }
+
     const existingcategory = await collection1.findOne({ name: category.name })
     console.log(existingcategory)
     if (existingcategory) {
@@ -437,7 +776,7 @@ const updateOrderStatus = async (req, res) => {
 const delcategory = async (req, res) => {
     try {
         const del = req.params.id.toString().trim();
-        
+
         await collection1.findByIdAndDelete(del);
         // Redirect to the category page with success message
         res.redirect('/admin/category?successMessage=Category Deleted');
@@ -500,8 +839,8 @@ const approveReturnRequest = async (req, res) => {
             totalAmountSpent += item.quantity * item.price;
         }
 
-         // Check if a coupon was applied
-         if (foundOrder.totalPrice !== totalAmountSpent) {
+        // Check if a coupon was applied
+        if (foundOrder.totalPrice !== totalAmountSpent) {
             // Adjust totalAmountSpent if a coupon was applied
             totalAmountSpent = foundOrder.totalPrice;
         }
@@ -537,6 +876,6 @@ const approveReturnRequest = async (req, res) => {
 }
 
 module.exports = {
-    login, loginpost, dashboard, userlist, blockUser, products, addproducts, addproductspost, editproducts, editproductspost, delproducts,
+    login, loginpost, dashboard, chart, userlist, blockUser, products, addproducts, addproductspost, editproducts, editproductspost, delproducts,
     toggleProductStatus, category, addcategory, addcategorypost, editcategory, editcategorypost, toggleCategoryStatus, delcategory, orders, updateOrderStatus, orderreturn, approveReturnRequest, logout
 }
