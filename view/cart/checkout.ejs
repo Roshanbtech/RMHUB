@@ -102,6 +102,33 @@
             background-color: #3cf696;
         }
 
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3cf696;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            justify-content:center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         /* Responsive Styles */
         @media only screen and (max-width: 600px) {
             .container {
@@ -155,6 +182,7 @@
 </head>
 
 <body>
+    
     <div class="nav">
         <img src="/images/NavImg.jpg" alt="Logo">
     </div>
@@ -340,6 +368,9 @@
             <!-- Proceed Button -->
             <div style="display:flex; justify-content:center"><button type="button" class="btn btn-success"
                     onclick="confirmOrder()">Proceed</button></div>
+
+                    <div class="loader" id="loader"></div>
+
             </form>
         </div>
     </div>
@@ -414,6 +445,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     if (selectedPaymentMethod === 'paypal') {
+                        toggleLoader(true);
                         return initiatePayPalPayment();
                     }
 
@@ -421,6 +453,15 @@
                     document.getElementById('checkoutForm').submit();
                 }
             });
+        }
+
+        function toggleLoader(show) {
+            var loader = document.getElementById('loader');
+            if (show) {
+                loader.style.display = 'block';
+            } else {
+                loader.style.display = 'none';
+            }
         }
 
         async function applyCoupon() {
