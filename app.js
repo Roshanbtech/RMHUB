@@ -66,8 +66,8 @@ app.use('/wishlist', wishlistRouter)//to wishlist
 app.use('/coupon', couponRouter)//to coupon
 app.use('/payment', paymentRouter)//to payment
 
-const server = app.listen(3005, () => {
-  console.log("Server running on http://localhost:3005");
+const server = app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
 });
 
 // Graceful shutdown
