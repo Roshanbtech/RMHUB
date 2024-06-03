@@ -19,6 +19,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD
   }
 });
+console.log(transporter,'transporter');
 
 const landing = (req, res) => {
   res.render('user/landing.ejs')
@@ -97,6 +98,8 @@ const mailsender = async (data) => {
 
     // Try to save the OTP document
     await otpDocument.save();
+    console.log(otpDocument,'otpDocument')
+
 
     // Send the email with the generated OTP
     transporter.sendMail({
@@ -157,13 +160,13 @@ const validateOtp = async (req, res) => {
 
     //Find OTP document for the user's email address
     const otpDoc = await collection2.findOne({ email: req.session.data.email}).sort({ _id: -1 }).limit(1);
-
+    console.log(otpDoc,'recOtpDoc')
     if(!otpDoc) {
       console.log('OTP document not found');
       return res.render('user/otp.ejs',{message:'OTP not found. Please request a new OTP.'})
     }
     console.log('entered otp', otpvalue);
-    console.log('stored otp', x.otp);
+    console.log('stored otp', otpDoc.otp);
     if (otpDoc.otp == otpvalue) {
       // const newuser = await new collection(req.session.data).save();
 
@@ -223,6 +226,7 @@ const validateOtp = async (req, res) => {
       }
       // Save the new user to the database
       await newUser.save();
+      console.log(newUser,'newUser')
 
       // Clear session data after all operations that require it are completed
       // req.session.destroy();
