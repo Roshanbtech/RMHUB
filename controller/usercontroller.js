@@ -44,7 +44,7 @@ const signuppost = async (req, res) => {
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
       mobileNumber: req.body.mobileNumber,
-      referalCode: req.body.referalCode || 'Not Created' // Default value if referalCode is not provided
+      referalCode: req.body.referalCode
     };
 
    
