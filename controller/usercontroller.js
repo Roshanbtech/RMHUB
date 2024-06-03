@@ -43,56 +43,13 @@ const signuppost = async (req, res) => {
       password: req.body.password,
       confirmPassword: req.body.confirmPassword,
       mobileNumber: req.body.mobileNumber,
-      referalCode: req.body.referalCode
+      referalCode: req.body.referalCode || 'Not Created' // Default value if referalCode is not provided
     };
 
-    //  // Check if user input a referral code
-    //  if (req.body.referalCode) {
-    //   // Find the user with the provided referral code
-    //   const referrer = await collection.findOne({ referalCode: req.body.referalCode });
-
-    //   // If referrer found, credit their wallet with ₹50
-    //   if (referrer) {
-    //     // Initialize wallet if not exists
-    //     if (!referrer.wallet) {
-    //       referrer.wallet = {
-    //         balance: 0,
-    //         transactions: []
-    //       };
-    //     }
-
-    //     referrer.wallet.balance += 50;
-    //     referrer.wallet.transactions.push({
-    //       amount: 50,
-    //       description: 'Referral bonus credited',
-    //       date: new Date()
-    //     });
-    //     await referrer.save();
-    //   }
-
-    //   // Credit referred user's wallet with ₹100
-    //   // Initialize wallet if not exists
-    //   // if (!data.wallet) {
-    //   //   data.wallet = {
-    //   //     balance: 0,
-    //   //     transactions: []
-    //   //   };
-    //   // }
-
-    //   data.wallet.balance += 100;
-    //   data.wallet.transactions.push({
-    //     amount: 100,
-    //     description: 'Referral signup bonus credited',
-    //     date: new Date()
-    //   });
-
-    // }
-
-
-
+   
     // Check if user already exists
     const existingUser = await collection.findOne({ email: data.email });
-    console.log(existingUser);
+    // console.log(existingUser);
     if (existingUser) {
       res.render('user/signup.ejs', { exists: "User Already Exists" });
     }
@@ -192,17 +149,22 @@ const resendOtp = (req, res) => {
 
 const validateOtp = async (req, res) => {
   try {
-    const x = await collection2.findOne({}).sort({ _id: -1 }).limit(1);
+    //Combine OTP parts into a single value
     const otpvalue = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
     console.log('Request body:', req.body);
     console.log('OTP parts:', req.body.otp1, req.body.otp2, req.body.otp3, req.body.otp4);
     console.log('Type of OTP parts:', typeof req.body.otp1, typeof req.body.otp2, typeof req.body.otp3, typeof req.body.otp4);
 
+    //Find OTP document for the user's email address
+    const otpDocument = await collection2.findOne({ email: req.session.data.email}).sort({ _id: -1 }).limit(1);
 
-
+    if(!otpDocument) {
+      console.log('OTP document not found');
+      return res.render('user/otp.ejs',{message:'OTP not found. Please request a new OTP.'})
+    }
     console.log('entered otp', otpvalue);
     console.log('stored otp', x.otp);
-    if (x.otp == otpvalue) {
+    if (otpDocument.otp == otpvalue) {
       // const newuser = await new collection(req.session.data).save();
 
       const newUser = new collection({

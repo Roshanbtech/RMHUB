@@ -20,48 +20,134 @@
     .b {
       background-color: #3cf696;
     }
+
+    .navbar-logo {
+      height: 50px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar-nav {
+        text-align: center;
+      }
+
+      .nav-item {
+        margin-left: 0 !important;
+      }
+
+      .form-inline {
+        width: 100%;
+        justify-content: center;
+        padding-top: 10px;
+      }
+
+      .navbar-nav.ml-auto {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    .carousel-item img {
+      width: 100%;
+      height: auto;
+    }
+
+    .mycontainer {
+      position: relative;
+    }
+
+    .mycontainer img {
+      width: 100%;
+      height: auto;
+    }
+
+    .c1 {
+      position: absolute;
+      bottom: 10%;
+      left: 10%;
+      color: black;
+    }
+
+    .c1 h3 {
+      font-size: 1.5rem;
+    }
+
+    .c1 p {
+      font-size: 1rem;
+    }
+
+    .b {
+      background-color: #3cf696;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 576px) {
+      .c1 h3 {
+        font-size: 1.2rem;
+      }
+
+      .c1 p {
+        font-size: 0.9rem;
+      }
+
+      .b {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+
+      .navbar {
+        flex-direction: column;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .navbar-expand-lg .navbar-collapse {
+        padding-left: 60px;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg fixed-top navbar">
-    <div class="container" style="height:60px">
-      <a class="navbar-brand custom-logo" href="#"><img class="navbar-logo" src="/images/NavImg.jpg"
-          style="height:70px;" alt="rmhub"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img class="navbar-logo" src="/images/NavImg.jpg" alt="rmhub"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link ml-3" href="/signup">Home</a>
+            <a class="nav-link" href="/signup">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link ml-3" href="/signup">Phones</a>
+            <a class="nav-link" href="/signup">Phones</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link ml-3" href="/signup">Wearables</a>
+            <a class="nav-link" href="/signup">Wearables</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link ml-3" href="/signup">Tablets</a>
+            <a class="nav-link" href="/signup">Tablets</a>
           </li>
         </ul>
         <form action="/signup" class="form-inline my-2 my-lg-0">
           <div class="input-group">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query"
-              style="border-radius: 15px;">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
             <div class="input-group-append">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
-                style="background-color:#E5E6DE; border-radius:15px"><i class="fas fa-search"
-                  style="color:black;"></i></button>
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
             </div>
           </div>
         </form>
         <div class="navbar-nav ml-auto">
-          <a class="nav-link" href="/signup"><i class="fas fa-heart navbar-icon" style="color:black;"></i></a>
-          <a class="nav-link" href="/signup"><i class="fas fa-shopping-cart navbar-icon" style="color:black;"></i></a>
-          <a class="nav-link" href="/signup"><i class="fas fa-user navbar-icon" style="color:black;"></i></a>
+          <a class="nav-link" href="/signup"><i class="fas fa-heart navbar-icon"></i></a>
+          <a class="nav-link" href="/signup"><i class="fas fa-shopping-cart navbar-icon"></i></a>
+          <a class="nav-link" href="/signup"><i class="fas fa-user navbar-icon"></i></a>
         </div>
       </div>
     </div>
@@ -102,7 +188,7 @@
           <div class="c1 container text-left">
             <h3>realme C53</h3>
             <p>108MP Camera Under 10K</p>
-            <button class="b">Shop Now</button>
+            <button class="b" onclick="location.href='/signup' ">Shop Now</button>
           </div>
         </div>
       </div>
@@ -112,16 +198,14 @@
           <div class="c1 container text-right">
             <h3>HONOR 90 5G</h3>
             <p>Share Your Vibe</p>
-            <button class="b">Shop Now</button>
+            <button class="b" onclick="location.href='/signup'">Shop Now</button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <div class="container discover" style="height:120px;width:100%">
-    <img src="/images/discover.png" class="img-fluid" alt="Responsive image"
-      style="height:100%; width:100%; object-fit: cover;">
+
+  <!-- <div class="container discover mt-4">
+    <img src="/images/discover.png" class="img-fluid" alt="Responsive image">
   </div>
   <br>
   <div class="container">
@@ -136,8 +220,7 @@
         <img src="/images/tab.png" class="img-fluid" alt="Image 3">
       </div>
     </div>
-  </div>
-  <br>
+  </div> -->
   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
     <ol class="carousel-indicators">
       <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -185,8 +268,7 @@
         <button type="button" class='b'>Shop Now</button>
       </div>
     </div>
-    <hr style=" border: 1px solid #3CF696;
-    ">
+    <hr style="border: 1px solid #3CF696;">
     <div class="row">
       <div class="col-sm" style="padding-left:100px;">
         <h2>realme Watch S</h2>
@@ -198,7 +280,7 @@
         <img src="/images/wathero.jpg" alt="Image" class="img-fluid" style="height:300px;">
       </div>
     </div>
-    <hr style=" border: 1px solid #3FC696;">
+    <hr style="border: 1px solid #3CF696;">
     <div class="row">
       <div class="col-sm" style="padding-left:40px">
         <img src="/images/phnhero.png" alt="Image" class="img-fluid">
@@ -207,7 +289,7 @@
         <h2>HONOR 90 5G</h2>
         <p>Rs.31,999</p>
         <p style="text-decoration:line-through">Rs.49,999</p>
-        <p>Offer:Enjoy 36%Off</p><br><br>
+        <p>Offer: Enjoy 36% Off</p><br><br>
         <button type="button" class='b'>Shop Now</button>
       </div>
     </div>
