@@ -156,15 +156,15 @@ const validateOtp = async (req, res) => {
     console.log('Type of OTP parts:', typeof req.body.otp1, typeof req.body.otp2, typeof req.body.otp3, typeof req.body.otp4);
 
     //Find OTP document for the user's email address
-    const otpDocument = await collection2.findOne({ email: req.session.data.email}).sort({ _id: -1 }).limit(1);
+    const otpDoc = await collection2.findOne({ email: req.session.data.email}).sort({ _id: -1 }).limit(1);
 
-    if(!otpDocument) {
+    if(!otpDoc) {
       console.log('OTP document not found');
       return res.render('user/otp.ejs',{message:'OTP not found. Please request a new OTP.'})
     }
     console.log('entered otp', otpvalue);
     console.log('stored otp', x.otp);
-    if (otpDocument.otp == otpvalue) {
+    if (otpDoc.otp == otpvalue) {
       // const newuser = await new collection(req.session.data).save();
 
       const newUser = new collection({
