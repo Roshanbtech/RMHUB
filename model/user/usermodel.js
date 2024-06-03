@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema({
   referalCode: {
     type: String,
     default: "Not created",
-    unique: true // Each referral code should be unique
+    // unique: true // Each referral code should be unique
   },
 
 
