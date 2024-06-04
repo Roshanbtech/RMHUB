@@ -54,12 +54,6 @@ const loginpost = (req, res) => {
 }
 
 const dashboard = async (req, res) => {
-    // Check if the admin is logged in
-    if (!req.session.admin) {
-        return res.render('admin/login.ejs');
-    }
-
-    // Local variables for the dashboard
     const locals = {
         title: "R.M.HUB - Dashboard",
     };
@@ -84,11 +78,11 @@ const dashboard = async (req, res) => {
                 },
             },
         ]);
-        console.log(confirmedOrders, 'co')
+        console.log(confirmedOrders, 'Confirmed Orders');
 
         // Count the number of delivered orders
         const ordersCount = await order.countDocuments({ orderStatus: "delivered" });
-        console.log(ordersCount, 'oc')
+        console.log(ordersCount, 'Orders Count');
 
         // Get best-selling products, brands, and categories
         const bestSellingProducts = await bestSelling.getBestSellingProducts();
@@ -99,6 +93,7 @@ const dashboard = async (req, res) => {
         console.log("Best Selling Products:", bestSellingProducts);
         console.log("Best Selling Brands:", bestSellingBrands);
         console.log("Best Selling Categories:", bestSellingCategories);
+
         // Render the dashboard
         res.render("admin/dashboard", {
             locals,
@@ -110,8 +105,8 @@ const dashboard = async (req, res) => {
             bestSellingBrands,
             bestSellingProducts,
             bestSellingCategories,
-            totalRevenue: confirmedOrders[0] ? confirmedOrders[0].totalRevenue : 0,
-            admin: req.session.admin, // Corrected from req.user to req.session.admin
+            totalRevenue: confirmedOrders.length ? confirmedOrders[0].totalRevenue : 0,
+            admin: req.session.admin,
         });
     } catch (error) {
         console.error("Error loading dashboard:", error);
