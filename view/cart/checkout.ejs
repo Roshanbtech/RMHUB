@@ -20,13 +20,14 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+    
 
         .container {
+            padding-top: 70px; /* Adjusted padding to accommodate navbar */
             padding: 20px;
             max-width: 1200px; /* Limit container width */
             margin: 0 auto; /* Center container horizontally */
         }
-
         .nav {
             background-color: #3cf696;
             position: fixed;
@@ -34,25 +35,25 @@
             z-index: 1;
             width: 100%;
             text-align: center; /* Center the logo */
-            padding: 10px 0; /* Add padding top and bottom */
         }
-
+    
         .nav img {
             height: 50px;
             width: auto; /* Maintain aspect ratio */
         }
-
+    
         .back-btn {
             position: absolute;
-            top: 10px;
+            top: 50%;
             left: 10px;
+            transform: translateY(-50%); /* Center vertically */
             background-color: transparent;
             border: none;
             font-size: 16px;
             color: #3cf696;
             cursor: pointer;
         }
-
+    
         .back-btn i {
             margin-right: 5px;
         }
