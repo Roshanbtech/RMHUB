@@ -475,45 +475,7 @@
         </div>
     </div>
 
-    <!-- <div class="row mt-5">
-        <div class="col-12">
-            <div class="text-center">
-                <div class="title-bg">
-                    <h2 class="text-white">Our Products</h2>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- Featured Products -->
-    <!-- <div class="container mt-5">
-        <% for (let i=0; i < data4.length; i +=4) { %>
-            <div class="row mt-4">
-                <% for (let j=i; j < i + 4 && j < data4.length; j++) { %>
-                    <div class="col-sm">
-                        <div class="card h-100" style="border-radius: 20px;">
-                            <img src="/<%= data4[j].image[0] %>" class="card-img-top" alt="...">
-                            <div class="card-body d-flex flex-column"
-                                style="background-color: #e5e6de;border-radius: 20px;">
-                                <h5 class="card-title">
-                                    <%= data4[j].model %>
-                                </h5>
-                                <p class="card-text">
-                                    <%= data4[j].color %>
-                                </p>
-                                <p class="card-text">
-                                    <%= data4[j].category?.name %>
-                                </p>
-                                <p class="card-text">₹<%= Number(data4[j].price).toLocaleString('en-IN') %>
-                                </p>
-                                <a href="/signup" class="snake-btn">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <% } %>
-            </div>
-            <% } %>
-    </div> -->
+    
 
 
     <!-- Secondary Carousel -->
@@ -618,6 +580,7 @@
                     <li class="list-group-item" >
                         <a class="nav-link" href="/signup">Home</a>
                     </li>
+                    <li class="list-group-item">
                     <form action="/signup" class="form-inline my-2 my-lg-0">
                         <div class="input-group">
                           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
@@ -626,6 +589,7 @@
                           </div>
                         </div>
                     </form>
+                    </li>
                     <li class="list-group-item">
                         <a class="nav-link" href="/signup">Phones</a>
                     </li>
