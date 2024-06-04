@@ -24,8 +24,8 @@ console.log(transporter,'transporter');
 const landing = async(req, res) => {
   try{
     const category = await Category.find({});
-    const data4 = await collection3.findOne({isListed:true}).populate('category');
-    res.render('user/landing.ejs',{data4 : data4,category:category})
+    const data4= await collection3.findOne({isListed:true}).populate('category');
+    res.render('user/landing.ejs',{data4,category})
 
   }catch(err){
     console.log(err);
