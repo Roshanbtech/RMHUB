@@ -55,9 +55,9 @@ const loginpost = (req, res) => {
 
 const dashboard = async (req, res) => {
     // Check if the admin is logged in
-    // if (!req.session.admin) {
-    //     return res.render('admin/login.ejs');
-    // }
+    if (!req.session.admin) {
+        return res.render('admin/login.ejs');
+    }
 
     // Local variables for the dashboard
     const locals = {
