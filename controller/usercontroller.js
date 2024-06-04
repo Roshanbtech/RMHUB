@@ -21,8 +21,16 @@ const transporter = nodemailer.createTransport({
 });
 console.log(transporter,'transporter');
 
-const landing = (req, res) => {
-  res.render('user/landing.ejs')
+const landing = async(req, res) => {
+  try{
+    const category = await Category.find({});
+    const data4 = await collection3.findOne({isListed:true}).populate('category');
+    res.render('user/landing.ejs',{data4 : data4,category:category})
+
+  }catch(err){
+    console.log(err);
+    res.status(500).send('Internal Server Error')
+  }
 }
 
 const signup = async (req, res) => {
