@@ -452,7 +452,6 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         if (selectedPaymentMethod === 'paypal') {
-                            toggleLoader(true);
                             return initiatePayPalPayment();
                         }
 
