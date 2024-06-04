@@ -41,7 +41,6 @@ const landing = async(req, res) => {
         query.$or.push({ category: category._id });
       }
     }
-   
     if (req.query.model) {
       query.model = { $regex: req.query.model, $options: 'i' };
     }
@@ -49,9 +48,9 @@ const landing = async(req, res) => {
       const price = parseFloat(req.query.price);
       query.price = { $lte: price };
     }
-    // Fetch products based on the constructed query
+
     const products = await collection3.find(query).sort(sortOptions).populate('category');
-    res.render('user/landing.ejs',{data4:products})
+    res.render('user/landing.ejs', { data4: products });
 
   }catch(err){
     console.log(err);
