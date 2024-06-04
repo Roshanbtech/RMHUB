@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RMHUB</title>
     <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 
     <style>
@@ -20,8 +22,11 @@
         }
 
         .container {
-            margin-top: 20px;
             padding: 20px;
+            max-width: 1200px;
+            /* Limit container width */
+            margin: 0 auto;
+            /* Center container horizontally */
         }
 
         .nav {
@@ -29,21 +34,48 @@
             position: fixed;
             top: 0;
             z-index: 1;
-            display: flex;
-            justify-content: center;
             width: 100%;
+            text-align: center;
+            /* Center the logo */
+            padding: 10px 0;
+            /* Add padding top and bottom */
         }
 
         .nav img {
             height: 50px;
             width: auto;
-            /* Add this to maintain aspect ratio */
+            /* Maintain aspect ratio */
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
+        }
+
+        .back-btn i {
+            margin-right: 5px;
+        }
+
+        .address-area,
+        .payment-area,
+        .coupon-area {
+            background-color: #e5e6de;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            /* Reduce margin for smaller screens */
         }
 
         th,
@@ -90,93 +122,34 @@
             cursor: pointer;
         }
 
-        .address-area,
-        .payment-area {
-            background-color: #e5e6de;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
+        /* Other styles remain the same */
 
-        input[type="radio"]:checked::before {
-            background-color: #3cf696;
-        }
-
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3cf696;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Responsive Styles */
         @media only screen and (max-width: 600px) {
             .container {
                 padding: 10px;
             }
 
+            .nav img {
+                height: 40px;
+            }
+
             .address-area,
-            .payment-area {
+            .payment-area,
+            .coupon-area {
                 padding: 10px;
             }
 
-            /* Adjust any other styles as needed for smaller screens */
-        }
-
-        @keyframes zoomInAndOut {
-            0% {
-                transform: scale(1);
+            .back-btn {
+                top: 20px;
+                left: 20px;
             }
 
-            50% {
-                transform: scale(1.1);
+            table {
+                margin-bottom: 10px;
+                /* Reduce margin further for smaller screens */
+                font-size: 14px;
+                /* Decrease font size for smaller screens */
             }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .logo-small {
-
-            animation: zoomInAndOut 1s infinite;
-            animation-direction: alternate;
-            animation-timing-function: ease-in-out;
-        }
-
-        .back-btn {
-            position: absolute;
-            top: 60px;
-            left: 40px;
-            background-color: transparent;
-            border: none;
-            font-size: 16px;
-            color: #3cf696;
-            cursor: pointer;
-        }
-
-        .back-btn i {
-            margin-right: 5px;
         }
     </style>
 </head>
@@ -189,16 +162,16 @@
     <button type="button" class="back-btn" onclick="location.href ='/cart/getcart'">
         <i class="fas fa-arrow-left"></i> Back To Cart
     </button>
-    <div class="container" style="margin-top: 50px;">
-        <h2 style="display: flex; justify-content:center"><img src="/images/checkout-svgrepo-com.svg" alt="Logo"
-                class="logo-small"
+    <div class="container">
+        <h2 style="display: flex; justify-content:center"><img src="/images/checkout-svgrepo-com.svg"
+                alt="Logo" class="logo-small"
                 style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">Checkout
         </h2>
 
         <!-- Shipping Address -->
         <div class="address-area">
-            <h2 style="display: flex"><img src="/images/home-address-residential-address-svgrepo-com.svg " alt="Logo"
-                    class="logo-small"
+            <h2 style="display: flex"><img src="/images/home-address-residential-address-svgrepo-com.svg "
+                    alt="Logo" class="logo-small"
                     style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
                 Shipping Address</h2>
 
@@ -207,8 +180,8 @@
                     style="width:100%; height:30px; border-radius: 13px;background-color:#d8f0dd">
                     <% user.address.forEach((address)=> { %>
                         <option value="<%= address._id %>">
-                            <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city %>, <%=
-                                            address.state %>, <%= address.pincode %>
+                            <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city
+                                        %>, <%= address.state %>, <%= address.pincode %>
                         </option>
                         <% }); %>
                 </select>
@@ -217,49 +190,55 @@
                 <input type="hidden" name="selectedAddress" id="selectedAddress">
 
                 <!-- Use This Address Button -->
-                <button type="button" class="btn btn-success" onclick="useAddress()" style="margin-top: 10px">Use This
+                <button type="button" class="btn btn-success" onclick="useAddress()"
+                    style="margin-top: 10px">Use This
                     Address</button>
-
         </div>
 
         <!-- Cart Details -->
-        <h2>Order Details</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>SI No.</th>
-                    <th>Product Image</th>
-                    <th>Product Name</th>
-                    <th>Description</th>
-                    <th>Total Price</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% cartItems.forEach((item, index)=> { %>
-                    <tr>
-                        <td>
-                            <%= index + 1 %>
-                        </td>
-                        <td><img src="/<%= item.productId.image[0] %>" alt="..." class="img-responsive"
-                                style="max-width: 100px; max-height: 100px;" /></td>
-                        <td>
-                            <h4>
-                                <%= item.productId.model %>
-                            </h4>
-                        </td>
-                        <td>
-                            <%= item.productId.description %>
-                        </td>
-                        <td>₹<%= item.price %>
-                        </td>
-                        <td>
-                            <%= item.quantity %>
-                        </td>
-                    </tr>
-                    <% }); %>
-            </tbody>
-        </table>
+        <div>
+            <h2>Order Details</h2>
+            <div style="overflow-x:auto;"> <!-- Add horizontal scrolling for smaller screens -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SI No.</th>
+                            <th>Product Image</th>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Total Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Your table rows for cart details here -->
+                        <% cartItems.forEach((item, index)=> { %>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td><img src="/<%= item.productId.image[0] %>" alt="..."
+                                        class="img-responsive"
+                                        style="max-width: 100px; max-height: 100px;" /></td>
+                                <td>
+                                    <h4>
+                                        <%= item.productId.model %>
+                                    </h4>
+                                </td>
+                                <td>
+                                    <%= item.productId.description %>
+                                </td>
+                                <td>₹<%= item.price %>
+                                </td>
+                                <td>
+                                    <%= item.quantity %>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
         <!-- Order Summary -->
         <div class="coupon-area">
@@ -283,7 +262,8 @@
                             <% coupons.forEach((item)=> { %>
                                 <% if (!coupon.isApplied) { %>
                                     <option value="<%= item.code %>">
-                                        <%= item.code %> - <%= item.discountType==='fixed' ? '₹' : 'percent' %>
+                                        <%= item.code %> - <%= item.discountType==='fixed' ? '₹' : 'percent'
+                                                %>
                                                 <%= item.discountValue %> OFF
                                     </option>
 
@@ -296,7 +276,8 @@
 
 
             <!-- Apply Coupon Button -->
-            <button type="button" class="btn btn-warning" onclick="applyCoupon()" <% if (coupon.isApplied) { %>
+            <button type="button" class="btn btn-warning" onclick="applyCoupon()" <% if (coupon.isApplied) {
+                %>
                 disabled
                 <% } %>
                     style="margin-top: 10px;">Apply
@@ -311,9 +292,10 @@
                         <%= coupon.discountValue ? (parseFloat(totalPrice) +
                             parseFloat(coupon.discountValue)).toFixed(2) : totalPrice.toFixed(2) %>
                     </span></li>
-                <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">Discounted
-                    Amount: ₹ <span id="discountedPrice"><%- Number(coupon.discountValue).toLocaleString('en-IN')
-                            %></span>
+                <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">
+                    Discounted
+                    Amount: ₹ <span id="discountedPrice"><%-
+                            Number(coupon.discountValue).toLocaleString('en-IN') %></span>
                 </li>
                 <li id="finalAmount">Net Amount: ₹ <span id="finalPrice">
                         <%= totalPrice.toFixed(2) %>
@@ -323,372 +305,54 @@
                 disabled
                 <% } %> onclick="removeCoupon()">Remove Coupon
             </button>
-
-            <!-- <h3>Total Price: ₹ <span id="totalPrice"><%= totalPrice %></span></h3>
-<h3 id="discountedAmount" style="display: none;">Discounted Amount: ₹ <span id="discountedPrice"></span></h3>
-<h3 >Net Amount: ₹ <span id="finalPrice"></span></h3> -->
         </div>
-
-        <!-- <h3 style="text-align: center; font-size:larger; font-weight:bold">Total Price: ₹ <%= totalPrice %></h3> -->
-
         <!-- Payment Options -->
         <div class="payment-area">
-            <!DOCTYPE html>
-            <html lang="en">
+            <h2 style="display: flex"><img src="/images/payment-method-svgrepo-com.svg " alt="Logo"
+                    class="logo-small"
+                    style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+                Payment Method</h2>
+            <div>
+                <label>
+                    <input type="radio" name="paymentMethod" value="cod"
+                        onclick="selectPaymentMethod('cod')"> Cash on
+                    Delivery
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="paymentMethod" value="Wallet" <% if (insufficient) { %>
+                    disabled
+                    <% } %> onclick="selectPaymentMethod('Wallet')">
+                        Wallet (Balance: ₹<span id="walletBalance" style="font-weight: bold;">
+                            <%= Number(user.wallet.balance).toLocaleString('en-IN') %>
+                        </span> <i class="fa fa-wallet" style="color: #3cf696;"></i>
+                        )
 
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>RMHUB</title>
-                <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-                    rel="stylesheet">
-                <link rel="stylesheet"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-
-                <style>
-                    body {
-                        font-family: 'Open Sans', sans-serif;
-                        line-height: 1.5;
-                        margin: 0;
-                        padding: 0;
-                        background-color: #f4f4f4;
-                    }
-
-                    .container {
-                        padding: 20px;
-                        max-width: 1200px;
-                        /* Limit container width */
-                        margin: 0 auto;
-                        /* Center container horizontally */
-                    }
-
-                    .nav {
-                        background-color: #3cf696;
-                        position: fixed;
-                        top: 0;
-                        z-index: 1;
-                        width: 100%;
-                        text-align: center;
-                        /* Center the logo */
-                        padding: 10px 0;
-                        /* Add padding top and bottom */
-                    }
-
-                    .nav img {
-                        height: 50px;
-                        width: auto;
-                        /* Maintain aspect ratio */
-                    }
-
-                    .back-btn {
-                        position: absolute;
-                        top: 10px;
-                        left: 10px;
-                        background-color: transparent;
-                        border: none;
-                        font-size: 16px;
-                        color: #3cf696;
-                        cursor: pointer;
-                    }
-
-                    .back-btn i {
-                        margin-right: 5px;
-                    }
-
-                    .address-area,
-                    .payment-area,
-                    .coupon-area {
-                        background-color: #e5e6de;
-                        padding: 20px;
-                        margin-bottom: 20px;
-                        border-radius: 10px;
-                    }
-
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-bottom: 20px;
-                        /* Reduce margin for smaller screens */
-                    }
-
-                    th,
-                    td {
-                        padding: 8px;
-                        border: 1px solid #dee2e6;
-                        text-align: center;
-                    }
-
-                    th {
-                        background-color: #3cf696;
-                    }
-
-                    td {
-                        background-color: #e5e6de;
-                    }
-
-                    th,
-                    td:hover {
-                        background-color: #d8f0dd;
-                    }
-
-                    .btn {
-                        padding: 10px 20px;
-                        border-radius: 10px;
-                        display: flex;
-                        justify-content: center;
-                        cursor: pointer;
-                    }
-
-                    .btn-warning {
-                        background-color: #ffd166;
-                        border-color: #ffd166;
-                        color: #000;
-                    }
-
-                    .btn-success {
-                        background-color: #3cf696;
-                        border-color: #3cf696;
-                        color: #fff;
-                    }
-
-                    button {
-                        cursor: pointer;
-                    }
-
-                    /* Other styles remain the same */
-
-                    @media only screen and (max-width: 600px) {
-                        .container {
-                            padding: 10px;
-                        }
-
-                        .nav img {
-                            height: 40px;
-                        }
-
-                        .address-area,
-                        .payment-area,
-                        .coupon-area {
-                            padding: 10px;
-                        }
-
-                        .back-btn {
-                            top: 20px;
-                            left: 20px;
-                        }
-
-                        table {
-                            margin-bottom: 10px;
-                            /* Reduce margin further for smaller screens */
-                            font-size: 14px;
-                            /* Decrease font size for smaller screens */
-                        }
-                    }
-                </style>
-            </head>
-
-            <body>
-
-                <div class="nav">
-                    <img src="/images/NavImg.jpg" alt="Logo">
-                </div>
-                <button type="button" class="back-btn" onclick="location.href ='/cart/getcart'">
-                    <i class="fas fa-arrow-left"></i> Back To Cart
-                </button>
-                <div class="container">
-                    <h2 style="display: flex; justify-content:center"><img src="/images/checkout-svgrepo-com.svg"
-                            alt="Logo" class="logo-small"
-                            style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">Checkout
-                    </h2>
-
-                    <!-- Shipping Address -->
-                    <div class="address-area">
-                        <h2 style="display: flex"><img src="/images/home-address-residential-address-svgrepo-com.svg "
-                                alt="Logo" class="logo-small"
-                                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-                            Shipping Address</h2>
-
-                        <form action="/cart/checkout" method="POST" id="checkoutForm">
-                            <select name="shippingAddress" id="shippingAddress"
-                                style="width:100%; height:30px; border-radius: 13px;background-color:#d8f0dd">
-                                <% user.address.forEach((address)=> { %>
-                                    <option value="<%= address._id %>">
-                                        <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city
-                                                    %>, <%= address.state %>, <%= address.pincode %>
-                                    </option>
-                                    <% }); %>
-                            </select>
-
-                            <!-- Hidden input field to store selected address -->
-                            <input type="hidden" name="selectedAddress" id="selectedAddress">
-
-                            <!-- Use This Address Button -->
-                            <button type="button" class="btn btn-success" onclick="useAddress()"
-                                style="margin-top: 10px">Use This
-                                Address</button>
-                    </div>
-
-                    <!-- Cart Details -->
-                    <div>
-                        <h2>Order Details</h2>
-                        <div style="overflow-x:auto;"> <!-- Add horizontal scrolling for smaller screens -->
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>SI No.</th>
-                                        <th>Product Image</th>
-                                        <th>Product Name</th>
-                                        <th>Description</th>
-                                        <th>Total Price</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Your table rows for cart details here -->
-                                    <% cartItems.forEach((item, index)=> { %>
-                                        <tr>
-                                            <td>
-                                                <%= index + 1 %>
-                                            </td>
-                                            <td><img src="/<%= item.productId.image[0] %>" alt="..."
-                                                    class="img-responsive"
-                                                    style="max-width: 100px; max-height: 100px;" /></td>
-                                            <td>
-                                                <h4>
-                                                    <%= item.productId.model %>
-                                                </h4>
-                                            </td>
-                                            <td>
-                                                <%= item.productId.description %>
-                                            </td>
-                                            <td>₹<%= item.price %>
-                                            </td>
-                                            <td>
-                                                <%= item.quantity %>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Order Summary -->
-                    <div class="coupon-area">
-                        <h2 style="display: flex">
-                            <img src="/images/c2.svg" alt="Coupon" class="logo-small"
-                                style="width: 35px; height: 35px; border: 2px solid #3cf696; border-radius: 50%; background-color: #e5e6de;">
-                            Apply Coupon
-                        </h2>
-
-                        <!-- Coupon Dropdown -->
-                        <select name="coupon" id="coupon"
-                            style="width: 100%; height: 30px; border-radius: 13px; background-color: #d8f0dd;">
-                            <% if (coupon.isApplied) { %>
-                                <option value="<%= coupon.couponCode %>" disabled selected>
-                                    <%= coupon.couponCode %> - Applied
-                                </option>
-                                <% } else { %>
-
-                                    <option value="" selected disabled>Select Coupon</option>
-                                    <% } %>
-                                        <% coupons.forEach((item)=> { %>
-                                            <% if (!coupon.isApplied) { %>
-                                                <option value="<%= item.code %>">
-                                                    <%= item.code %> - <%= item.discountType==='fixed' ? '₹' : 'percent'
-                                                            %>
-                                                            <%= item.discountValue %> OFF
-                                                </option>
-
-
-                                                <% } %>
-                                                    <% }); %>
-                        </select>
-                        <input type="hidden" name="couponCode" id="couponCode">
-                        <input type="hidden" id="couponsData" value='<%- JSON.stringify(coupons) %>'>
-
-
-                        <!-- Apply Coupon Button -->
-                        <button type="button" class="btn btn-warning" onclick="applyCoupon()" <% if (coupon.isApplied) {
-                            %>
-                            disabled
+                        <% if (insufficient) { %>
+                            <small style="color:red" class="text-danger">Insufficient Balance</small>
                             <% } %>
-                                style="margin-top: 10px;">Apply
-                        </button>
-                    </div>
+                </label>
+                <br>
+                <label>
+                    <input type="radio" name="paymentMethod" value="paypal"
+                        onclick="selectPaymentMethod('paypal')">
+                    PayPal
+                </label>
 
-                    <!-- Total Price and Discounted Amount -->
-                    <div class="payment-area" style="margin-top:50px">
-                        <h2 style="text-align: center; margin-bottom:30px;">Amount Summary</h2>
-                        <ul>
-                            <li>Total Price: ₹ <span id="totalPrice">
-                                    <%= coupon.discountValue ? (parseFloat(totalPrice) +
-                                        parseFloat(coupon.discountValue)).toFixed(2) : totalPrice.toFixed(2) %>
-                                </span></li>
-                            <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">
-                                Discounted
-                                Amount: ₹ <span id="discountedPrice"><%-
-                                        Number(coupon.discountValue).toLocaleString('en-IN') %></span>
-                            </li>
-                            <li id="finalAmount">Net Amount: ₹ <span id="finalPrice">
-                                    <%= totalPrice.toFixed(2) %>
-                                </span></li>
-                        </ul>
-                        <button type="button" class="btn btn-danger" <% if (!coupon.isApplied) { %>
-                            disabled
-                            <% } %> onclick="removeCoupon()">Remove Coupon
-                        </button>
-                    </div>
-                    <!-- Payment Options -->
-                    <div class="payment-area">
-                        <h2 style="display: flex"><img src="/images/payment-method-svgrepo-com.svg " alt="Logo"
-                                class="logo-small"
-                                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-                            Payment Method</h2>
-                        <div>
-                            <label>
-                                <input type="radio" name="paymentMethod" value="cod"
-                                    onclick="selectPaymentMethod('cod')"> Cash on
-                                Delivery
-                            </label>
-                            <br>
-                            <label>
-                                <input type="radio" name="paymentMethod" value="Wallet" <% if (insufficient) { %>
-                                disabled
-                                <% } %> onclick="selectPaymentMethod('Wallet')">
-                                    Wallet (Balance: ₹<span id="walletBalance" style="font-weight: bold;">
-                                        <%= Number(user.wallet.balance).toLocaleString('en-IN') %>
-                                    </span> <i class="fa fa-wallet" style="color: #3cf696;"></i>
-                                    )
+            </div>
 
-                                    <% if (insufficient) { %>
-                                        <small style="color:red" class="text-danger">Insufficient Balance</small>
-                                        <% } %>
-                            </label>
-                            <br>
-                            <label>
-                                <input type="radio" name="paymentMethod" value="paypal"
-                                    onclick="selectPaymentMethod('paypal')">
-                                PayPal
-                            </label>
+            <!-- Hidden input field to store selected payment method -->
+            <input type="hidden" name="selectedPaymentMethod" id="selectedPaymentMethod">
 
-                        </div>
+            <!-- Proceed Button -->
+            <div style="display:flex; justify-content:center"><button type="button" class="btn btn-success"
+                    onclick="confirmOrder()">Proceed</button></div>
 
-                        <!-- Hidden input field to store selected payment method -->
-                        <input type="hidden" name="selectedPaymentMethod" id="selectedPaymentMethod">
+            <div class="loader" id="loader"></div>
 
-                        <!-- Proceed Button -->
-                        <div style="display:flex; justify-content:center"><button type="button" class="btn btn-success"
-                                onclick="confirmOrder()">Proceed</button></div>
-
-                        <div class="loader" id="loader"></div>
-
-                        </form>
-                    </div>
-                </div>
+            </form>
         </div>
+    </div>
 
 
         <!-- SweetAlert2 library for showing alert -->
