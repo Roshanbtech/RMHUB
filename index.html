@@ -1,249 +1,338 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>RMHUB</title>
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
     <style>
-        .sidebar {
-            display: flex;
-            flex-direction: column;
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
         }
 
-        .sidebar h4,
-        .sidebar button {
-            display: flex;
-            align-items: center;
+        .container {
+            padding: 20px;
+            max-width: 1200px; /* Limit container width */
+            margin: 0 auto; /* Center container horizontally */
         }
 
-        .sidebar img.logo-small {
-            margin-right: 10px;
+        .nav {
+            background-color: #3cf696;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+            width: 100%;
+            text-align: center; /* Center the logo */
+            padding: 10px 0; /* Add padding top and bottom */
         }
 
-        .sidebar button {
+        .nav img {
+            height: 50px;
+            width: auto; /* Maintain aspect ratio */
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             background-color: transparent;
             border: none;
-            text-align: left;
-            width: 100%;
-            padding: 10px 20px;
-            transition: background-color 0.3s;
+            font-size: 16px;
+            color: #3cf696;
+            cursor: pointer;
         }
 
-        .sidebar button:hover {
-            background-color: #f1f1f1;
+        .back-btn i {
+            margin-right: 5px;
         }
 
-        .sidebar hr {
-            margin: 20px 0;
-        }
-
-        .main {
-            flex-grow: 1;
-        }
-
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dashboard-header img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-
-        .dashboard-cards {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .dashboard-cards .card {
-            flex: 1;
-            min-width: 250px;
-            max-width: 300px;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
+        .address-area,
+        .payment-area,
+        .coupon-area {
+            background-color: #e5e6de;
+            padding: 20px;
             margin-bottom: 20px;
+            border-radius: 10px;
         }
 
-        @media (max-width: 767px) {
-            .sidebar {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 200px;
-                background-color: #f8f9fa;
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-                z-index: 1000;
-                flex-direction: column;
-                align-items: flex-start;
-                padding-top: 20px;
-            }
-
-            .sidebar.active {
-                display: flex;
-            }
-
-            .hamburger-menu {
-                display: block;
-                cursor: pointer;
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Reduce margin for smaller screens */
         }
 
-        @media (min-width: 768px) {
-            .hamburger-menu {
-                display: none;
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        th {
+            background-color: #3cf696;
+        }
+
+        td {
+            background-color: #e5e6de;
+        }
+
+        th,
+        td:hover {
+            background-color: #d8f0dd;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .btn-warning {
+            background-color: #ffd166;
+            border-color: #ffd166;
+            color: #000;
+        }
+
+        .btn-success {
+            background-color: #3cf696;
+            border-color: #3cf696;
+            color: #fff;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* Other styles remain the same */
+
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .nav img {
+                height: 40px;
+            }
+
+            .address-area,
+            .payment-area,
+            .coupon-area {
+                padding: 10px;
+            }
+            
+            .back-btn {
+                top: 20px;
+                left: 20px;
+            }
+            
+            table {
+                margin-bottom: 10px; /* Reduce margin further for smaller screens */
+                font-size: 14px; /* Decrease font size for smaller screens */
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="sidebar">
-                    <h4>
-                        <img src="/images/users-avatar-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:40px;height:40px;border:1px solid black;border-radius:50px;background-color:black">
-                        <span> Hello Admin!..</span>
-                    </h4>
-                    <hr>
-                    <button onclick="location.href='/admin/dashboard'">
-                        <img src="/images/dashboard-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:30px;height:30px">
-                        <span>Dashboard</span>
-                    </button>
-                    <button onclick="location.href='/admin/users'">
-                        <img src="/images/Users.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Users</span>
-                    </button>
-                    <button onclick="location.href='/admin/products'">
-                        <img src="/images/product.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Products</span>
-                    </button>
-                    <button onclick="location.href='/admin/category'">
-                        <img src="/images/Category.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Category</span>
-                    </button>
-                    <button onclick="location.href='/admin/orders'">
-                        <img src="/images/orders-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:30px;height:30px">
-                        <span>Orders</span>
-                    </button>
-                    <button onclick="location.href='/admin/sales-report'">
-                        <img src="/images/revenue.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Sales Report</span>
-                    </button>
-                    <button onclick="location.href='/coupon/coupon'">
-                        <img src="/images/c2.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Coupons</span>
-                    </button>
-                    <button onclick="location.href='/admin/logout'">
-                        <img src="/images/logout-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:30px;height:30px;">
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </div>
-            <main class="main my-5 mt-2 col">
-                <div class="container">
-                    <div class="dashboard-header">
-                        <div class="hamburger-menu" onclick="toggleSidebar()">
-                            <img src="/images/menu.svg" alt="Menu" style="width:30px;height:30px;">
-                        </div>
-                        <h1><%- locals.title %></h1>
-                        <div class="user-info">
-                            <img src="/images/users-avatar-svgrepo-com.svg"
-                                style="background-color: #3cf696;border:1px solid black" alt="User">
-                            <span>Admin</span>
-                        </div>
-                    </div>
+    
+    <div class="nav">
+        <img src="/images/NavImg.jpg" alt="Logo">
+    </div>
+    <button type="button" class="back-btn" onclick="location.href ='/cart/getcart'">
+        <i class="fas fa-arrow-left"></i> Back To Cart
+    </button>
+    <div class="container">
+        <h2 style="display: flex; justify-content:center"><img src="/images/checkout-svgrepo-com.svg" alt="Logo"
+                class="logo-small"
+                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">Checkout
+        </h2>
 
-                    <div class="dashboard-cards">
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/Users.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Users </h5>
-                                <h6 class="card-text" id="usersCount"><%- usersCount %></h6>
-                            </div>
-                        </div>
+        <!-- Shipping Address -->
+        <div class="address-area">
+            <h2 style="display: flex"><img src="/images/home-address-residential-address-svgrepo-com.svg " alt="Logo"
+                class="logo-small"
+                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+            Shipping Address</h2>
 
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/product.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Products</h5>
-                                <h6 class="card-text" id="productsCount"><%- productsCount %></h6>
-                            </div>
-                        </div>
+        <form action="/cart/checkout" method="POST" id="checkoutForm">
+            <select name="shippingAddress" id="shippingAddress"
+                style="width:100%; height:30px; border-radius: 13px;background-color:#d8f0dd">
+                <% user.address.forEach((address)=> { %>
+                    <option value="<%= address._id %>">
+                        <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city %>, <%=
+                                        address.state %>, <%= address.pincode %>
+                    </option>
+                    <% }); %>
+            </select>
 
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/orders-svgrepo-com.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Orders</h5>
-                                <h6 class="card-text" id="ordersCount"><%- ordersCount %></h6>
-                            </div>
-                        </div>
+            <!-- Hidden input field to store selected address -->
+            <input type="hidden" name="selectedAddress" id="selectedAddress">
 
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/revenue.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Revenue</h5>
-                                <h6 class="card-text" id="totalRevenue">₹ <%-
-                                        Number(totalRevenue).toLocaleString('en-IN') %>
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Use This Address Button -->
+            <button type="button" class="btn btn-success" onclick="useAddress()" style="margin-top: 10px">Use This
+                Address</button>
+        </div>
 
-                    <div class="container-fluid" style="margin-top: 40px;">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3 class="text-center">Top Categories</h3>
-                                <table class="table table-striped" id="example">
-                                    <thead>
-                                        <tr style="background-color: #3cf696">
-                                            <th>Category Name</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% bestSellingCategories.forEach(category=> { %>
-                                            <tr
-                                                style="background-color: #e5e6de;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                                <td>
-                                                    <%= category.categoryName %>
-                                                </td>
-                                                <td>
-                                                    <%= category.count %>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
+        <!-- Cart Details -->
+        <div>
+            <h2>Order Details</h2>
+            <div style="overflow-x:auto;"> <!-- Add horizontal scrolling for smaller screens -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SI No.</th>
+                            <th>Product Image</th>
+                            <th>Product Name</th>
+                            <th>Description</th>
+                            <th>Total Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    <!-- Your table rows for cart details here -->
+                    <% cartItems.forEach((item, index)=> { %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td><img src="/<%= item.productId.image[0] %>" alt="..." class="img-responsive"
+                                    style="max-width: 100px; max-height: 100px;" /></td>
+                            <td>
+                                <h4>
+                                    <%= item.productId.model %>
+                                </h4>
+                            </td>
+                            <td>
+                                <%= item.productId.description %>
+                            </td>
+                            <td>₹<%= item.price %>
+                            </td>
+                            <td>
+                                <%= item.quantity %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </div>
+        </div>
 
-                            <div class="col-md-4">
-                                <h3 class="text-center">Top Brands</h3>
-                                <table class="table table-striped" id="example">
-                                    <thead>
-                                        <tr style="background-color: #3cf696">
-                                            <th>Brand Name</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <
+        <!-- Order Summary -->
+        <div class="coupon-area">
+            <h2 style="display: flex">
+                <img src="/images/c2.svg" alt="Coupon" class="logo-small"
+                    style="width: 35px; height: 35px; border: 2px solid #3cf696; border-radius: 50%; background-color: #e5e6de;">
+                Apply Coupon
+            </h2>
+
+            <!-- Coupon Dropdown -->
+            <select name="coupon" id="coupon"
+                style="width: 100%; height: 30px; border-radius: 13px; background-color: #d8f0dd;">
+                <% if (coupon.isApplied) { %>
+                    <option value="<%= coupon.couponCode %>" disabled selected>
+                        <%= coupon.couponCode %> - Applied
+                    </option>
+                    <% } else { %>
+
+                        <option value="" selected disabled>Select Coupon</option>
+                        <% } %>
+                            <% coupons.forEach((item)=> { %>
+                                <% if (!coupon.isApplied) { %>
+                                    <option value="<%= item.code %>">
+                                        <%= item.code %> - <%= item.discountType==='fixed' ? '₹' : 'percent' %>
+                                                <%= item.discountValue %> OFF
+                                    </option>
+
+
+                                    <% } %>
+                                        <% }); %>
+            </select>
+            <input type="hidden" name="couponCode" id="couponCode">
+            <input type="hidden" id="couponsData" value='<%- JSON.stringify(coupons) %>'>
+
+
+            <!-- Apply Coupon Button -->
+            <button type="button" class="btn btn-warning" onclick="applyCoupon()" <% if (coupon.isApplied) { %>
+                disabled
+                <% } %>
+                    style="margin-top: 10px;">Apply
+            </button>
+        </div>
+
+         <!-- Total Price and Discounted Amount -->
+         <div class="payment-area" style="margin-top:50px">
+            <h2 style="text-align: center; margin-bottom:30px;">Amount Summary</h2>
+            <ul>
+                <li>Total Price: ₹ <span id="totalPrice">
+                        <%= coupon.discountValue ? (parseFloat(totalPrice) +
+                            parseFloat(coupon.discountValue)).toFixed(2) : totalPrice.toFixed(2) %>
+                    </span></li>
+                <li id="discountedAmount" style="display: <%- coupon.isApplied ? 'block' : 'none' %>;">Discounted
+                    Amount: ₹ <span id="discountedPrice"><%- Number(coupon.discountValue).toLocaleString('en-IN') %></span>
+                </li>
+                <li id="finalAmount">Net Amount: ₹ <span id="finalPrice">
+                        <%= totalPrice.toFixed(2) %>
+                    </span></li>
+            </ul>
+            <button type="button" class="btn btn-danger" <% if (!coupon.isApplied) { %>
+                disabled
+                <% } %> onclick="removeCoupon()">Remove Coupon
+            </button>
+        </div>
+        <!-- Payment Options -->
+        <div class="payment-area">
+            <h2 style="display: flex"><img src="/images/payment-method-svgrepo-com.svg " alt="Logo" class="logo-small"
+                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+            Payment Method</h2>
+        <div>
+            <label>
+                <input type="radio" name="paymentMethod" value="cod" onclick="selectPaymentMethod('cod')"> Cash on
+                Delivery
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="paymentMethod" value="Wallet" <% if (insufficient) { %>
+                disabled
+                <% } %> onclick="selectPaymentMethod('Wallet')">
+                    Wallet (Balance: ₹<span id="walletBalance" style="font-weight: bold;">
+                        <%= Number(user.wallet.balance).toLocaleString('en-IN') %>
+                    </span> <i class="fa fa-wallet" style="color: #3cf696;"></i>
+                    )
+
+                    <% if (insufficient) { %>
+                        <small style="color:red" class="text-danger">Insufficient Balance</small>
+                        <% } %>
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="paymentMethod" value="paypal" onclick="selectPaymentMethod('paypal')">
+                PayPal
+            </label>
+
+        </div>
+
+        <!-- Hidden input field to store selected payment method -->
+        <input type="hidden" name="selectedPaymentMethod" id="selectedPaymentMethod">
+
+        <!-- Proceed Button -->
+        <div style="display:flex; justify-content:center"><button type="button" class="btn btn-success"
+                onclick="confirmOrder()">Proceed</button></div>
+
+                <div class="loader" id="loader"></div>
+
+        </form>
+    </div>
+    </div>
+</body>
+</html>
