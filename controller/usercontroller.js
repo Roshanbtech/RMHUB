@@ -23,34 +23,8 @@ console.log(transporter,'transporter');
 
 const landing = async(req, res) => {
   try{
-    let query = { isListed: true };
-
-    // Check if there are query parameters for filtering
-    if (req.query.query) {
-      const searchRegex = { $regex: req.query.query, $options: 'i' };
-      const category = await Category.findOne({ name: searchRegex });
-      query.$or = [
-        { productName: searchRegex },
-        // { category: category._id },
-        { model: searchRegex },
-        { color: searchRegex },
-      ];
-
-      // Add category search if category is found
-      if (category) {
-        query.$or.push({ category: category._id });
-      }
-    }
-    if (req.query.model) {
-      query.model = { $regex: req.query.model, $options: 'i' };
-    }
-    if (req.query.price) {
-      const price = parseFloat(req.query.price);
-      query.price = { $lte: price };
-    }
-
-    const products = await collection3.find(query).sort(sortOptions).populate('category');
-    res.render('user/landing.ejs', { data4: products });
+  
+    res.render('user/landing.ejs');
 
   }catch(err){
     console.log(err);
