@@ -23,10 +23,8 @@
 
         .container {
             padding: 20px;
-            max-width: 1200px;
-            /* Limit container width */
-            margin: 0 auto;
-            /* Center container horizontally */
+            max-width: 1200px; /* Limit container width */
+            margin: 0 auto; /* Center container horizontally */
         }
 
         .nav {
@@ -35,16 +33,13 @@
             top: 0;
             z-index: 1;
             width: 100%;
-            text-align: center;
-            /* Center the logo */
-            padding: 10px 0;
-            /* Add padding top and bottom */
+            text-align: center; /* Center the logo */
+            padding: 10px 0; /* Add padding top and bottom */
         }
 
         .nav img {
             height: 50px;
-            width: auto;
-            /* Maintain aspect ratio */
+            width: auto; /* Maintain aspect ratio */
         }
 
         .back-btn {
@@ -74,8 +69,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-            /* Reduce margin for smaller screens */
+            margin-bottom: 20px; /* Reduce margin for smaller screens */
         }
 
         th,
@@ -122,13 +116,38 @@
             cursor: pointer;
         }
 
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3cf696;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Initially hide the loader */
+            z-index: 9999;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         /* Other styles remain the same */
 
         @media only screen and (max-width: 600px) {
             .container {
                 padding: 10px;
             }
-
+            
             .nav img {
                 height: 40px;
             }
@@ -138,17 +157,21 @@
             .coupon-area {
                 padding: 10px;
             }
-
+            
             .back-btn {
                 top: 20px;
                 left: 20px;
             }
-
+            
             table {
-                margin-bottom: 10px;
-                /* Reduce margin further for smaller screens */
-                font-size: 14px;
-                /* Decrease font size for smaller screens */
+                margin-bottom: 10px; /* Reduce margin further for smaller screens */
+                font-size: 14px; /* Decrease font size for smaller screens */
+            }
+            
+            .loader {
+                border-width: 8px; /* Adjust loader border width for smaller screens */
+                width: 80px; /* Adjust loader size for smaller screens */
+                height: 80px; /* Adjust loader size for smaller screens */
             }
         }
     </style>
