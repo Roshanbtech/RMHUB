@@ -62,7 +62,8 @@ const userSchema = new mongoose.Schema({
   },
   referalCode: {
     type: String,
-    default: "Not created",
+    // default: "Not created",
+    default: null
   },
 
 

@@ -292,7 +292,7 @@
             <button type="button" class="wallet-button" onclick="location.href='/profile/wallet'" title="My Wallet">
                 <img src="/images/wallet.svg" style=" width:30px;height:30px;" alt="Password Icon">
             </button>
-            <% if (user.referalCode !== "Not created" ) { %>
+            <% if (!user.referalCode) { %>
                 <div class="profile-details">
                     <label for="referalCode">Referral Code:</label>
                     <span id="referalCode"><strong>
