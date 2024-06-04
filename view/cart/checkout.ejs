@@ -376,7 +376,7 @@
             <div style="display:flex; justify-content:center"><button type="button" class="btn btn-success"
                     onclick="confirmOrder()">Proceed</button></div>
 
-            <div class="loader" id="loader"></div>
+            <!-- <div class="loader" id="loader"></div> -->
 
             </form>
         </div>
@@ -462,15 +462,7 @@
                 });
             }
 
-            function toggleLoader(show) {
-                var loader = document.getElementById('loader');
-                if (show) {
-                    loader.style.display = 'block';
-                } else {
-                    loader.style.display = 'none';
-                }
-            }
-
+           
             async function applyCoupon() {
                 const selectedCoupon = document.getElementById('coupon').value;
                 console.log(`Selected coupon: ${selectedCoupon}`);
