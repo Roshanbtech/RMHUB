@@ -15,7 +15,8 @@
     <link href="/css/style.css" rel="stylesheet">
     <style>
         .navbar {
-            background-color: #3cf696;}
+            background-color: #3cf696;
+        }
 
         /* Dropdown container */
         .dropdown {
@@ -297,27 +298,25 @@
             /* Make links bold */
         }
 
-      
+
 
         .list-group-item {
             border: 1px solid #3cf696;
             background-color: black;
         }
-      
-        a{
+
+        a {
             color: #3cf696;
             text-decoration: none;
             font-weight: bold;
             text-align: center;
         }
-      
+
         .list-group-flush>.list-group-item {
             border-width: 3px 2px 3px 2px;
             border-color: #3cf696;
             border-style: ridge;
         }
-
-        
     </style>
 </head>
 
@@ -614,54 +613,58 @@
     });
     </script> -->
     <div class="modal fade" id="navbarModal" tabindex="-1" role="dialog" aria-labelledby="navbarModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="background-color: #d8f0dd">
-            <div class="modal-header" style="background-color: #3CF696; color: #fff">
-                <h5 class="modal-title" id="navbarModalLabel">Navigation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" >
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" >
-                        <a class="nav-link" href="/home">Home</a>
-                    </li>
-                    <form action="/signup" class="form-inline my-2 my-lg-0">
-                        <div class="input-group">
-                          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query">
-                          <div class="input-group-append">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-                          </div>
-                        </div>
-                    </form>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/phones">Phones</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/wearables">Watches</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/tablets">Tablets</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/wishlist/getwishlist">Wishlist</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/cart/getcart">Cart</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/profile/getprofile">Profile</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                </ul>
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="background-color: #d8f0dd">
+                <div class="modal-header" style="background-color: #3CF696; color: #fff">
+                    <h5 class="modal-title" id="navbarModalLabel">Navigation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/home">Home</a>
+                        </li>
+                        <li class="list-group-item">
+                            <form action="/signup" class="form-inline my-2 my-lg-0">
+                                <div class="input-group">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Search"
+                                        aria-label="Search" name="query">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i
+                                                class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/phones">Phones</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/wearables">Watches</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/tablets">Tablets</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/wishlist/getwishlist">Wishlist</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/cart/getcart">Cart</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/profile/getprofile">Profile</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="nav-link" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
 
