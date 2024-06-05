@@ -286,6 +286,7 @@
         <br><br>
 
         <!-- Reviews Modal -->
+<!-- Reviews Modal -->
 <div class="modal fade" id="reviewsModal" tabindex="-1" role="dialog" aria-labelledby="reviewsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -295,8 +296,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="reviews-container">
+            <div class="modal-body">
                 <!-- Reviews content will be loaded here -->
+                <ol id="reviews-list" class="list-unstyled">
+                    <!-- Reviews will be dynamically added here -->
+                </ol>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -304,6 +308,7 @@
         </div>
     </div>
 </div>
+
         <!-- Footer -->
         <%- include("footer") %>
 
