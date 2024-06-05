@@ -24,9 +24,10 @@ router.get('/wearables', checkSessionAndBlocked, usercontroller.wearables)
 router.get('/tablets', checkSessionAndBlocked, usercontroller.tablets)
 router.get('/proddes/:id', checkSessionAndBlocked, usercontroller.proddes)
 router.post('/rating/:id', checkSessionAndBlocked, usercontroller.rating)
+router.get('/reviews/:id', checkSessionAndBlocked, usercontroller.reviews)
 router.get('/home', checkSessionAndBlocked, usercontroller.home)
 router.post('/applyCoupon', checkSessionAndBlocked, usercontroller.applyCoupon)
-router.post('/removeCoupon', checkSessionAndBlocked, usefrcontroller.removeCoupon)
+router.post('/removeCoupon', checkSessionAndBlocked, usercontroller.removeCoupon)
 router.get('/logout', checkSessionAndBlocked, usercontroller.logout)
 
 
