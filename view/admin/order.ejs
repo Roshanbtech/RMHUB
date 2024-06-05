@@ -220,7 +220,6 @@
 </head>
 
 <body>
-    <!-- <%- include("nav") %> -->
         <%- include("sidebar") %>
 
 
@@ -256,11 +255,7 @@
                                     <%= index + 1 %>
                                 </td>
                                 <td> <strong style="color:red"><br><%= order._id.toString().slice(-7).toUpperCase() %></strong></td>
-                                <!-- <td> <strong>OrderID:</strong><br><%= order._id.toString().slice(-7).toUpperCase() %>
-                             <strong>UserID:</strong><br><%= order.userId._id %>
-                             <strong>ProductIDs:</strong><br><%= order.orderItems.map(item => item.productId._id).join(', ')%>
-                             <strong>AddressID:</strong><br><%=  order.shippingAddress %>
-                        </td> -->
+                              
                                 <td>
                                     <%= order.userId.firstName %>
                                         <%= order.userId.lastName %>
