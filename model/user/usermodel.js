@@ -89,7 +89,6 @@ const userSchema = new mongoose.Schema({
       },
       date: {
         type: Date,
-        default: new Date()
       }
 
     }]
@@ -115,6 +114,14 @@ userSchema.pre('save', function(next) {
 
 userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ referalCode: 1 }, { unique: true }); // Enforce uniqueness on referalCode
+userSchema.path('wallet.transactions').set(function(transactions) {
+  transactions.forEach(transaction => {
+    if (!transaction.date) {
+      transaction.date = new Date();
+    }
+  });
+  return transactions;
+});
 
 
 const user = mongoose.model('userModel', userSchema);
