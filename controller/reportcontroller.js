@@ -1,9 +1,8 @@
 const Order = require('../model/cart/ordermodel')
 const product = require('../model/admin/productmodel')
 const exceljs = require('exceljs');
-// const PDFDocument = require('pdfkit');
+const PDFDocument = require('pdfkit');
 // const pdf = require('html-pdf');
-const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
@@ -263,118 +262,118 @@ worksheet.getRow(1).eachCell((cell) => {
 }
 
 
-// const exportToPdf = async (req, res) => {
-//     let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
-//     let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
-//     startDate.setUTCHours(0, 0, 0, 0);
-//     endDate.setUTCHours(23, 59, 59, 999);
+const exportToPdf = async (req, res) => {
+    let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
+    let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+    startDate.setUTCHours(0, 0, 0, 0);
+    endDate.setUTCHours(23, 59, 59, 999);
 
-//     try {
-//         const orders = await Order.aggregate([
-//             { $match: { createdAt: { $gte: startDate, $lte: endDate }, orderStatus: { $ne: 'cancelled' } } },
-//             {
-//                 $lookup: {
-//                     from: "usermodels",
-//                     localField: "userId",
-//                     foreignField: "_id",
-//                     as: "customer",
-//                 },
-//             },
-//             { $unwind: "$orderItems" },
-//             {
-//                 $lookup: {
-//                     from: "productmodels",
-//                     localField: "orderItems.productId",
-//                     foreignField: "_id",
-//                     as: "productDetails",
-//                 },
-//             },
-//             {
-//                 $group: {
-//                     _id: "$_id",
-//                     orderId: { $first: "$_id" },
-//                     orderDate: { $first: "$createdAt" },
-//                     user: { $first: "$customer.firstName" },
-//                     products: { $push: "$orderItems" },
-//                     shippingAddress: { $first: "$shippingAddress" },
-//                     paymentMethod: { $first: "$paymentMethod" },
-//                     status: { $first: "$orderStatus" },
-//                     totalAmount: { $first: "$totalPrice" },
-//                 },
-//             },
-//             {
-//                 $unwind: "$products"
-//             },
-//             {
-//                 $lookup: {
-//                     from: "productmodels",
-//                     localField: "products.productId",
-//                     foreignField: "_id",
-//                     as: "products.productDetails",
-//                 },
-//             },
-//             {
-//                 $group: {
-//                     _id: "$_id",
-//                     orderId: { $first: "$orderId" },
-//                     orderDate: { $first: "$orderDate" },
-//                     user: { $first: "$user" },
-//                     products: {
-//                         $push: {
-//                             productId: "$products.productId",
-//                             quantity: "$products.quantity",
-//                             price: "$products.price",
-//                             productName: { $arrayElemAt: ["$products.productDetails.productName", 0] }
-//                         }
-//                     },
-//                     shippingAddress: { $first: "$shippingAddress" },
-//                     paymentMethod: { $first: "$paymentMethod" },
-//                     status: { $first: "$status" },
-//                     totalAmount: { $first: "$totalAmount" },
-//                 },
-//             },
-//         ]);
+    try {
+        const orders = await Order.aggregate([
+            { $match: { createdAt: { $gte: startDate, $lte: endDate }, orderStatus: { $ne: 'cancelled' } } },
+            {
+                $lookup: {
+                    from: "usermodels",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "customer",
+                },
+            },
+            { $unwind: "$orderItems" },
+            {
+                $lookup: {
+                    from: "productmodels",
+                    localField: "orderItems.productId",
+                    foreignField: "_id",
+                    as: "productDetails",
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    orderId: { $first: "$_id" },
+                    orderDate: { $first: "$createdAt" },
+                    user: { $first: "$customer.firstName" },
+                    products: { $push: "$orderItems" },
+                    shippingAddress: { $first: "$shippingAddress" },
+                    paymentMethod: { $first: "$paymentMethod" },
+                    status: { $first: "$orderStatus" },
+                    totalAmount: { $first: "$totalPrice" },
+                },
+            },
+            {
+                $unwind: "$products"
+            },
+            {
+                $lookup: {
+                    from: "productmodels",
+                    localField: "products.productId",
+                    foreignField: "_id",
+                    as: "products.productDetails",
+                },
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    orderId: { $first: "$orderId" },
+                    orderDate: { $first: "$orderDate" },
+                    user: { $first: "$user" },
+                    products: {
+                        $push: {
+                            productId: "$products.productId",
+                            quantity: "$products.quantity",
+                            price: "$products.price",
+                            productName: { $arrayElemAt: ["$products.productDetails.productName", 0] }
+                        }
+                    },
+                    shippingAddress: { $first: "$shippingAddress" },
+                    paymentMethod: { $first: "$paymentMethod" },
+                    status: { $first: "$status" },
+                    totalAmount: { $first: "$totalAmount" },
+                },
+            },
+        ]);
 
-//         // Create a new PDF document
-//         const doc = new PDFDocument();
+        // Create a new PDF document
+        const doc = new PDFDocument();
 
-//         // Set response headers for PDF
-//         res.setHeader('Content-Type', 'application/pdf');
-//         res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
+        // Set response headers for PDF
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
 
-//         // Pipe the PDF to the response
-//         doc.pipe(res);
+        // Pipe the PDF to the response
+        doc.pipe(res);
 
-//         // Add content to the PDF
-//         doc.fontSize(16).text('Sales Report', { align: 'center', underline: true, lineGap: 10, width: 500 }).moveDown();
+        // Add content to the PDF
+        doc.fontSize(16).text('Sales Report', { align: 'center', underline: true, lineGap: 10, width: 500 }).moveDown();
 
-//         // Add items with numbering
-//         doc.font('Helvetica');
+        // Add items with numbering
+        doc.font('Helvetica');
 
-//         orders.forEach((order, index) => {
-//             doc.text(`Order ${index + 1}`, { width: 100 , align: 'left', lineGap: 10, width: 500, underline: true });
-//             doc.text(`orderID:${order.orderId} - ${order.orderDate.toDateString()} - User:${order.user}`);
+        orders.forEach((order, index) => {
+            doc.text(`Order ${index + 1}`, { width: 100 , align: 'left', lineGap: 10, width: 500, underline: true });
+            doc.text(`orderID:${order.orderId} - ${order.orderDate.toDateString()} - User:${order.user}`);
 
-//             // Format products as a list
-//             const productList = order.products.map(item => `Order:${item.productName} - ₹${item.price.toFixed(2)} -(${item.quantity})`).join(', ');
-//             doc.text(productList);
-//             // console.log(productList,"productList")
-//             console.log(order, "order")
+            // Format products as a list
+            const productList = order.products.map(item => `Order:${item.productName} - ₹${item.price.toFixed(2)} -(${item.quantity})`).join(', ');
+            doc.text(productList);
+            // console.log(productList,"productList")
+            console.log(order, "order")
 
-//             doc.text(`Shipping Address: ${order.shippingAddress}`);
-//             doc.text(`Payment Method: ${order.paymentMethod}`);
-//             doc.text(`Status: ${order.status}`);
-//             doc.text(`Total Amount: ₹${order.totalAmount}`);
-//             doc.moveDown();
-//         });
+            doc.text(`Shipping Address: ${order.shippingAddress}`);
+            doc.text(`Payment Method: ${order.paymentMethod}`);
+            doc.text(`Status: ${order.status}`);
+            doc.text(`Total Amount: ₹${order.totalAmount}`);
+            doc.moveDown();
+        });
 
-//         // Finalize the PDF
-//         doc.end();
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
+        // Finalize the PDF
+        doc.end();
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
 // const exportToPdf = async (req, res) => {
@@ -680,75 +679,6 @@ worksheet.getRow(1).eachCell((cell) => {
 //         res.status(500).send('Internal Server Error');
 //     }
 // };
-
-const exportToPdf = async (req, res) => {
-    let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
-    let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
-
-    try {
-        const orders = await Order.aggregate([
-            { $match: { createdAt: { $gte: startDate, $lte: endDate }, orderStatus: { $ne: 'cancelled' } } },
-            {
-                $lookup: {
-                    from: "usermodels",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "customer",
-                },
-            },
-            { $unwind: "$orderItems" },
-            {
-                $lookup: {
-                    from: "productmodels",
-                    localField: "orderItems.productId",
-                    foreignField: "_id",
-                    as: "productDetails",
-                },
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    customer: { $first: "$customer" },
-                    shippingAddress: { $first: "$shippingAddress" },
-                    paymentMethod: { $first: "$paymentMethod" },
-                    status: { $first: "$orderStatus" },
-                    totalAmount: { $first: "$totalPrice" },
-                    createdAt: { $first: "$createdAt" },
-                    orderedItems: {
-                        $push: {
-                            product_name: { $arrayElemAt: ["$productDetails.productName", 0] },
-                            model: { $arrayElemAt: ["$productDetails.model", 0] },
-                            price: "$orderItems.price",
-                            quantity: "$orderItems.quantity",
-                        },
-                    },
-                },
-            },
-        ]);
-
-        const templatePath = path.resolve(__dirname, '..', 'views', 'admin', 'salesreport-pdf.ejs');
-        const templateContent = fs.readFileSync(templatePath, 'utf8');
-
-        const ejs = require('ejs');
-        const html = ejs.render(templateContent, { orders });
-
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.setContent(html);
-        const pdfBuffer = await page.pdf({ format: 'A4' });
-        await browser.close();
-
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
-        res.send(pdfBuffer);
-    } catch (err) {
-        console.error('Error generating PDF:', err);
-        res.status(500).send('Internal Server Error');
-    }
-};
-
 
 
 module.exports = {
