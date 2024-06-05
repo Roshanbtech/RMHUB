@@ -526,17 +526,32 @@ const tablets = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
+// const proddes = async (req, res) => {
+//   try {
+
+//     const user = req.session.user;
+//     const userId = user._id;
+//     // Fetch product details based on the product ID from the URL parameter
+//     const productId = req.params.id; // Assuming the parameter name is "productId"
+//     const product = await collection3.findById(productId).populate('category'); // Assuming collection3 is your product model
+//     // console.log(product.image[0])
+
+//     // Render the product description page with the fetched product details
+//     res.render('user/productdescription.ejs', { product, productId, userId });
+
+//   } catch (error) {
+//     console.error('Error fetching product details:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// }
+
 const proddes = async (req, res) => {
   try {
-
     const user = req.session.user;
     const userId = user._id;
-    // Fetch product details based on the product ID from the URL parameter
-    const productId = req.params.id; // Assuming the parameter name is "productId"
-    const product = await collection3.findById(productId).populate('category'); // Assuming collection3 is your product model
-    // console.log(product.image[0])
+    const productId = req.params.id;
+    const product = await collection3.findById(productId).populate('category').populate('reviews.user');
 
-    // Render the product description page with the fetched product details
     res.render('user/productdescription.ejs', { product, productId, userId });
 
   } catch (error) {
@@ -545,46 +560,81 @@ const proddes = async (req, res) => {
   }
 }
 
+// const rating = async (req, res) => {
+//   try {
+//     const productId = req.params.id;
+//     // Extract productId, rating, and review from the request body
+//     const { rating, review } = req.body;
+
+//     // Convert rating to a number
+//     const ratingValue = parseInt(rating);
+
+//     // Check if ratingValue is a valid number
+//     if (isNaN(ratingValue) || ratingValue < 1 || ratingValue > 5) {
+//       return res.status(400).json({ error: 'Invalid rating value' });
+//     }
+
+//     // Find the corresponding product in the database
+//     const product = await collection3.findById(productId);
+
+//     // If product not found, return an error response
+//     if (!product) {
+//       return res.status(404).json({ error: 'Product not found' });
+//     }
+
+//     // Add the rating to the product document
+//     product.ratings.push(ratingValue);
+//     product.reviews.push(review);
+
+//     // Calculate the average rating and update the product document
+//     const totalRatings = product.ratings.length;
+//     const sumOfRatings = product.ratings.reduce((acc, cur) => acc + cur, 0);
+//     console.log(sumOfRatings, totalRatings)
+//     const averageRating = Math.floor(sumOfRatings / totalRatings);
+//     console.log(averageRating);
+//     // Update the product document with the new average rating
+//     product.ratings = averageRating;
+
+//     // Save the updated product document
+//     await product.save();
+
+//     // Send a success response
+//     // res.status(200).json({ message: 'Rating and review submitted successfully', product });
+//     res.render('user/productdescription.ejs', { product, productId });
+
+//   } catch (error) {
+//     console.error('Error submitting rating and review:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
+
 const rating = async (req, res) => {
   try {
     const productId = req.params.id;
-    // Extract productId, rating, and review from the request body
+    const userId = req.session.user._id; // Assuming user ID is stored in the session
     const { rating, review } = req.body;
 
-    // Convert rating to a number
     const ratingValue = parseInt(rating);
-
-    // Check if ratingValue is a valid number
     if (isNaN(ratingValue) || ratingValue < 1 || ratingValue > 5) {
       return res.status(400).json({ error: 'Invalid rating value' });
     }
 
-    // Find the corresponding product in the database
     const product = await collection3.findById(productId);
-
-    // If product not found, return an error response
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
 
-    // Add the rating to the product document
-    product.ratings.push(ratingValue);
-    product.reviews.push(review);
+    product.ratings.push({ user: userId, value: ratingValue });
+    product.reviews.push({ user: userId, text: review });
 
-    // Calculate the average rating and update the product document
     const totalRatings = product.ratings.length;
-    const sumOfRatings = product.ratings.reduce((acc, cur) => acc + cur, 0);
-    console.log(sumOfRatings, totalRatings)
-    const averageRating = Math.floor(sumOfRatings / totalRatings);
-    console.log(averageRating);
-    // Update the product document with the new average rating
-    product.ratings = averageRating;
+    const sumOfRatings = product.ratings.reduce((acc, cur) => acc + cur.value, 0);
+    const averageRating = (sumOfRatings / totalRatings).toFixed(2); // Calculate accurate average rating
+    product.averageRating = averageRating; // Ensure averageRating field is present in the schema
 
-    // Save the updated product document
     await product.save();
+    await product.populate('ratings.user reviews.user').execPopulate();
 
-    // Send a success response
-    // res.status(200).json({ message: 'Rating and review submitted successfully', product });
     res.render('user/productdescription.ejs', { product, productId });
 
   } catch (error) {

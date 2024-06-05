@@ -17,7 +17,9 @@ const productSchema = new mongoose.Schema({
   isListed: { type: Boolean, default: true },
   status: { type: String },
   ratings: [{ user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, type: Number, default: 0, min: 0, max: 5 }],
-  reviews: [{ type: String }],
+  reviews: [{
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    ,    text: { type: String, required: true }} ],
   shape: { type: String },
   color: { type: String },
   offerPrice: { type: Number, min: 0 },

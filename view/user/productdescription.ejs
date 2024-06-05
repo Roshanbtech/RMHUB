@@ -234,7 +234,7 @@
                                     <% } %>
                                         <% } %>
                                             <div class="rating-dropdown-content">
-                                                <a>See Reviews</a>
+                                                <a href="#" id="seeReviewsLink">See Reviews</a>
                                             </div>
                     </div>
                     <div class="product-price">
@@ -284,6 +284,32 @@
             </div>
         </div>
         <br><br>
+
+         <!-- Reviews Modal -->
+  <div class="modal fade" id="reviewsModal" tabindex="-1" role="dialog" aria-labelledby="reviewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reviewsModalLabel">Product Reviews</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="reviews-container">
+          <% product.reviews.forEach(function(review) { %>
+            <div class="review-card">
+              <h2><%= review.user.name %></h2>
+              <p><%= review.text %></p>
+              <span>Rating: <%= review.rating %>/5</span>
+            </div>
+          <% }); %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
         <!-- Footer -->
         <%- include("footer") %>
 
@@ -296,6 +322,13 @@
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
                 <script>
+
+                    document.getElementById('seeReviewsLink').addEventListener('click', function (event) {
+                        event.preventDefault();
+                        // Show the reviews modal
+                        $('#reviewsModal').modal('show');
+                    });
+                    
                     $(document).ready(function () {
                         $('#mainImage').elevateZoom();
                     });
