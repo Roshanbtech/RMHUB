@@ -21,7 +21,6 @@
     "express-flash": "^0.0.2",
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
-    "html-pdf": "^3.0.1",
     "jspdf": "^2.5.1",
     "mongoose": "^8.1.0",
     "morgan": "^1.10.0",
@@ -32,8 +31,6 @@
     "path": "^0.12.7",
     "paypal-rest-sdk": "^1.8.1",
     "pdfkit": "^0.15.0",
-    "pdfmake": "^0.2.10",
-    "puppeteer": "^22.10.0",
     "sweetalert2": "^11.10.4",
     "validator": "^13.11.0"
   }
