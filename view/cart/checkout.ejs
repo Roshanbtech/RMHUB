@@ -179,6 +179,20 @@
 
             }
         }
+
+        .add-address-btn {
+            position: absolute;
+            top: 10px; /* Adjust based on your layout */
+            right: 10px; /* Adjust based on your layout */
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #3cf696;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
     </style>
 </head>
 
@@ -198,6 +212,9 @@
 
         <!-- Shipping Address -->
         <div class="address-area">
+            <button type="button" class="add-address-btn" onclick="location.href='/profile/addaddress'" title="Add Address">
+                <i class="fas fa-plus"></i> Add Address
+            </button>
             <h2 style="display: flex"><img src="/images/home-address-residential-address-svgrepo-com.svg "
                     alt="Logo" class="logo-small"
                     style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
