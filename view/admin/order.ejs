@@ -257,18 +257,14 @@
                                 <td> <strong style="color:red"><br><%= order._id.toString().slice(-7).toUpperCase() %></strong></td>
                               
                                 <td>
-                                    <%= order.userId.firstName %>
-                                        <%= order.userId.lastName %>
+                                    <%= order?.userId?.firstName %>
+                                        <%= order?.userId?.lastName %>
                                 </td>
                                 <td>
                                     <% let products=order.orderItems.map(item=> item.productId.model).join(', '); %>
                                         <%= products %>
                                 </td>
-                                <!-- <td>
-                                    <% let stock=order.orderItems.map(item=> item.productId.availableStock).join(', ');
-                                        %>
-                                        <%= stock %>
-                                </td> -->
+                                
                                 <td>
                                     <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata'
                                         , weekday: 'long' }) %>
@@ -303,7 +299,7 @@
                                 <td>₹<%= order.totalPrice %>
                                 </td>
                                 <td>
-                                    <% order.userId.address.forEach((address, index)=> { %>
+                                    <% order?.userId?.address.forEach((address, index)=> { %>
                                         <strong>Address <%= index + 1 %>:</strong><br>
                                         <%= address.addressLineOne %>, <%= address.addressLineTwo %>, <%= address.city
                                                     %>, <%= address.state %>, <%= address.pincode %><br>
