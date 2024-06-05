@@ -2,7 +2,8 @@ const Order = require('../model/cart/ordermodel')
 const product = require('../model/admin/productmodel')
 const exceljs = require('exceljs');
 // const PDFDocument = require('pdfkit');
-const pdf = require('html-pdf');
+// const pdf = require('html-pdf');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
@@ -529,6 +530,157 @@ worksheet.getRow(1).eachCell((cell) => {
 // };
 
 
+// const exportToPdf = async (req, res) => {
+//     let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
+//     let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
+//     startDate.setUTCHours(0, 0, 0, 0);
+//     endDate.setUTCHours(23, 59, 59, 999);
+
+//     try {
+//         const orders = await Order.aggregate([
+//             { $match: { createdAt: { $gte: startDate, $lte: endDate }, orderStatus: { $ne: 'cancelled' } } },
+//             {
+//                 $lookup: {
+//                     from: "usermodels",
+//                     localField: "userId",
+//                     foreignField: "_id",
+//                     as: "customer",
+//                 },
+//             },
+//             { $unwind: "$orderItems" },
+//             {
+//                 $lookup: {
+//                     from: "productmodels",
+//                     localField: "orderItems.productId",
+//                     foreignField: "_id",
+//                     as: "productDetails",
+//                 },
+//             },
+//             {
+//                 $group: {
+//                     _id: "$_id",
+//                     orderId: { $first: "$_id" },
+//                     orderDate: { $first: "$createdAt" },
+//                     user: { $first: "$customer.firstName" },
+//                     shippingAddress: { $first: "$shippingAddress" },
+//                     paymentMethod: { $first: "$paymentMethod" },
+//                     status: { $first: "$orderStatus" },
+//                     totalAmount: { $first: "$totalPrice" },
+//                     products: {
+//                         $push: {
+//                             name: { $arrayElemAt: ["$productDetails.model", 0] },
+//                             image: { $arrayElemAt: ["$productDetails.image", 0] },
+//                             quantity: "$orderItems.quantity",
+//                         }
+//                     },
+//                 },
+//             },
+//         ]);
+
+//         // Create HTML template for PDF
+//         let html = `
+//             <html>
+//             <head>
+//                 <style>
+//                     table {
+//                         border-collapse: collapse;
+//                         width: 100%;
+//                     }
+//                     th, td {
+//                         border: 1px solid #dddddd;
+//                         text-align: left;
+//                         padding: 8px;
+//                     }
+//                     th {
+//                         background-color: #f2f2f2;
+//                     }
+//                     tr:nth-child(even) {
+//                         background-color: #f9f9f9;
+//                     }
+//                     .no-border {
+//                         border: none !important;
+//                     }
+//                     thead {
+//                         display: table-header-group;
+//                     }
+//                     @media print {
+//                         thead { 
+//                             display: table-header-group; 
+//                         }
+//                     }
+//                 </style>
+//             </head>
+//             <body>
+//             <div style="text-align: center; margin-top: 20px;">
+//                 <h1>Sales Report</h1>
+//                 </div>
+//                 <table id="salesTable" class="table table-hover" cellspacing="5" style="background-color: #d8f0dd; margin-top: 60px;">
+//                     <tr>
+//                         <th style="background-color: #3cf696;">S.No</th>
+//                         <th style="background-color: #3cf696;">Order ID</th>
+//                         <th style="background-color: #3cf696;">Order Date</th>
+//                         <th style="background-color: #3cf696;">Customer</th>
+//                         <th style="background-color: #3cf696;">Product Name</th>
+//                         <th style="background-color: #3cf696;">Quantity</th>
+//                         <th style="background-color: #3cf696;">Shipping Address</th>
+//                         <th style="background-color: #3cf696;">Payment Method</th>
+//                         <th style="background-color: #3cf696;">Status</th>
+//                         <th style="background-color: #3cf696;">Total Amount</th>
+//                     </tr>`;
+
+//         // Loop through each order
+//         let i = 1;
+//         orders.forEach((order, index) => {
+//             // Loop through each product in the order
+//             order.products.forEach((product, index) => {
+//                 if (index === 0) { // Display order details only for the first product
+//                     html += `
+//                         <tr>
+//                             <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${i++}</td>
+//                             <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderId.toString().slice(-7).toUpperCase()}</td>
+//                             <td  style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderDate.toDateString()}</td>
+//                             <td  style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.user}</td>`;
+//                 }
+//                 // Display product details
+//                 html += `
+//                     <td style= " background-color: #e5e6de;">${product.name}</td>
+//                     <td style= " background-color: #e5e6de;">${product.quantity}</td>`;
+//                 if (index === 0) { // Display order details only for the first product
+//                     html += `
+//                             <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.shippingAddress}</td>
+//                             <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.paymentMethod}</td>
+//                             <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.status}</td>
+//                             <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">₹${order.totalAmount}</td>
+//                         </tr>`;
+//                 } else {
+//                     html += `</tr>`;
+//                 }
+//             });
+//         });
+
+//         html += `
+//                 </table>
+//             </body>
+//             </html>`;
+
+//         // Generate PDF from HTML
+//         pdf.create(html).toStream((err, stream) => {
+//             if (err) {
+//                 console.error('Error generating PDF:', err);
+//                 res.status(500).send('Internal Server Error');
+//             } else {
+//                 res.setHeader('Content-Type', 'application/pdf');
+//                 res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
+//                 stream.pipe(res);
+//             }
+//         });
+
+//     } catch (err) {
+//         console.error('Error fetching sales report:', err);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
 const exportToPdf = async (req, res) => {
     let startDate = req.query.startDate ? new Date(req.query.startDate) : new Date();
     let endDate = req.query.endDate ? new Date(req.query.endDate) : new Date();
@@ -558,127 +710,45 @@ const exportToPdf = async (req, res) => {
             {
                 $group: {
                     _id: "$_id",
-                    orderId: { $first: "$_id" },
-                    orderDate: { $first: "$createdAt" },
-                    user: { $first: "$customer.firstName" },
+                    customer: { $first: "$customer" },
                     shippingAddress: { $first: "$shippingAddress" },
                     paymentMethod: { $first: "$paymentMethod" },
                     status: { $first: "$orderStatus" },
                     totalAmount: { $first: "$totalPrice" },
-                    products: {
+                    createdAt: { $first: "$createdAt" },
+                    orderedItems: {
                         $push: {
-                            name: { $arrayElemAt: ["$productDetails.model", 0] },
-                            image: { $arrayElemAt: ["$productDetails.image", 0] },
+                            product_name: { $arrayElemAt: ["$productDetails.productName", 0] },
+                            model: { $arrayElemAt: ["$productDetails.model", 0] },
+                            price: "$orderItems.price",
                             quantity: "$orderItems.quantity",
-                        }
+                        },
                     },
                 },
             },
         ]);
 
-        // Create HTML template for PDF
-        let html = `
-            <html>
-            <head>
-                <style>
-                    table {
-                        border-collapse: collapse;
-                        width: 100%;
-                    }
-                    th, td {
-                        border: 1px solid #dddddd;
-                        text-align: left;
-                        padding: 8px;
-                    }
-                    th {
-                        background-color: #f2f2f2;
-                    }
-                    tr:nth-child(even) {
-                        background-color: #f9f9f9;
-                    }
-                    .no-border {
-                        border: none !important;
-                    }
-                    thead {
-                        display: table-header-group;
-                    }
-                    @media print {
-                        thead { 
-                            display: table-header-group; 
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-            <div style="text-align: center; margin-top: 20px;">
-                <h1>Sales Report</h1>
-                </div>
-                <table id="salesTable" class="table table-hover" cellspacing="5" style="background-color: #d8f0dd; margin-top: 60px;">
-                    <tr>
-                        <th style="background-color: #3cf696;">S.No</th>
-                        <th style="background-color: #3cf696;">Order ID</th>
-                        <th style="background-color: #3cf696;">Order Date</th>
-                        <th style="background-color: #3cf696;">Customer</th>
-                        <th style="background-color: #3cf696;">Product Name</th>
-                        <th style="background-color: #3cf696;">Quantity</th>
-                        <th style="background-color: #3cf696;">Shipping Address</th>
-                        <th style="background-color: #3cf696;">Payment Method</th>
-                        <th style="background-color: #3cf696;">Status</th>
-                        <th style="background-color: #3cf696;">Total Amount</th>
-                    </tr>`;
+        const templatePath = path.resolve(__dirname, '..', 'views', 'admin', 'salesreport-pdf.ejs');
+        const templateContent = fs.readFileSync(templatePath, 'utf8');
 
-        // Loop through each order
-        let i = 1;
-        orders.forEach((order, index) => {
-            // Loop through each product in the order
-            order.products.forEach((product, index) => {
-                if (index === 0) { // Display order details only for the first product
-                    html += `
-                        <tr>
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${i++}</td>
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderId.toString().slice(-7).toUpperCase()}</td>
-                            <td  style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.orderDate.toDateString()}</td>
-                            <td  style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.user}</td>`;
-                }
-                // Display product details
-                html += `
-                    <td style= " background-color: #e5e6de;">${product.name}</td>
-                    <td style= " background-color: #e5e6de;">${product.quantity}</td>`;
-                if (index === 0) { // Display order details only for the first product
-                    html += `
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.shippingAddress}</td>
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.paymentMethod}</td>
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">${order.status}</td>
-                            <td style=" background-color: #e5e6de;"rowspan="${order.products.length}">₹${order.totalAmount}</td>
-                        </tr>`;
-                } else {
-                    html += `</tr>`;
-                }
-            });
-        });
+        const ejs = require('ejs');
+        const html = ejs.render(templateContent, { orders });
 
-        html += `
-                </table>
-            </body>
-            </html>`;
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(html);
+        const pdfBuffer = await page.pdf({ format: 'A4' });
+        await browser.close();
 
-        // Generate PDF from HTML
-        pdf.create(html).toStream((err, stream) => {
-            if (err) {
-                console.error('Error generating PDF:', err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
-                stream.pipe(res);
-            }
-        });
-
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
+        res.send(pdfBuffer);
     } catch (err) {
-        console.error('Error fetching sales report:', err);
+        console.error('Error generating PDF:', err);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 module.exports = {

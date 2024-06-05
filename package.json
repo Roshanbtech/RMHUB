@@ -33,6 +33,7 @@
     "paypal-rest-sdk": "^1.8.1",
     "pdfkit": "^0.15.0",
     "pdfmake": "^0.2.10",
+    "puppeteer": "^22.10.0",
     "sweetalert2": "^11.10.4",
     "validator": "^13.11.0"
   }
