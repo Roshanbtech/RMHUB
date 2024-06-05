@@ -334,10 +334,10 @@
                                 reviewsContainer.innerHTML = ''; // Clear previous content
                                 
                                 // Loop through the reviews and create HTML elements to display them
-                                reviews.forEach(function (review) {
+                                reviews.forEach(function(review) {
                                     var reviewElement = document.createElement('div');
-                                    reviewElement.textContent = review.content; // Adjust this based on your review schema
-                                    
+                                    reviewElement.textContent = review;
+                                
                                     // Append the review element to the reviews container
                                     reviewsContainer.appendChild(reviewElement);
                                 });
