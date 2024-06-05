@@ -3,7 +3,6 @@ const axios = require('axios');
 const fs = require('fs');
 const ejs = require('ejs');
 const path = require('path');
-const pdf = require('html-pdf');
 
 const { Cart, CartItem } = require("../model/cart/cartmodel");
 const User = require('../model/user/usermodel');
