@@ -234,7 +234,7 @@
                                     <% } %>
                                         <% } %>
                                             <div class="rating-dropdown-content">
-                                                <a href="#" id="seeReviewsBtn" data-toggle="modal" data-target="#reviewsModal">See Reviews</a>
+                                                <a href="#" data-toggle="modal" data-target="#reviewsModal">See Reviews</a>
                                             </div>
                     </div>
                     <div class="product-price">
@@ -315,40 +315,6 @@
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-                <script>
-                    // Add a click event listener to the "See Reviews" button/link
-                    document.getElementById('seeReviewsBtn').addEventListener('click', function () {
-                        // Get the product ID from the product description page (you may need to store it somewhere accessible)
-                        var productId = '<%= product._id %>'; // Use the appropriate method to get the product ID
-                
-                        // Make an AJAX request to fetch the reviews for the product
-                        $.ajax({
-                            url: '/reviews/' + productId,
-                            type: 'GET',
-                            success: function (response) {
-                                // Assuming the response contains reviews data in JSON format
-                                var reviews = response.reviews;
-                
-                                // Populate the modal with the reviews content
-                                var reviewsContainer = document.getElementById('reviews-container');
-                                reviewsContainer.innerHTML = ''; // Clear previous content
-                                
-                                // Loop through the reviews and create HTML elements to display them
-                                reviews.forEach(function (review) {
-                                    var reviewElement = document.createElement('div');
-                                    reviewElement.textContent = review.content; // Adjust this based on your review schema
-                                    
-                                    // Append the review element to the reviews container
-                                    reviewsContainer.appendChild(reviewElement);
-                                });
-                            },
-                            error: function (error) {
-                                console.error('Error fetching reviews:', error);
-                                // Handle error (e.g., display an error message)
-                            }
-                        });
-                    });
-                </script>
                 <script>
                     $(document).ready(function () {
                         $('#mainImage').elevateZoom();
