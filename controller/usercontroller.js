@@ -593,6 +593,27 @@ const rating = async (req, res) => {
   }
 }
 
+const reviews = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    // Retrieve the product details including reviews
+    const product = await collection3.findById(productId).populate('reviews');
+
+    // Check if the product exists
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Return the reviews as JSON response
+    res.json({ reviews: product.reviews });
+} catch (error) {
+    // Handle errors
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+}
+
 const logout = async (req, res) => {
   delete req.session.user;
   delete req.session.isLoggedIn;
@@ -738,4 +759,4 @@ const removeCoupon = async (req, res) => {
 
 }
 
-module.exports = { landing, signup, signuppost, mailsender, applyCoupon, removeCoupon, phones, wearables, rating, tablets, home, login, loginpost, validateOtp, resendOtp, proddes, logout, forpasmail, forpasmailpost, forpasotp, forpasotppost, forpasreset, forpasresetpost }
+module.exports = { landing, signup, signuppost, mailsender, applyCoupon, reviews, removeCoupon, phones, wearables, rating, tablets, home, login, loginpost, validateOtp, resendOtp, proddes, logout, forpasmail, forpasmailpost, forpasotp, forpasotppost, forpasreset, forpasresetpost }
