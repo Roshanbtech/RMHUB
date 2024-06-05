@@ -6,6 +6,13 @@ mongoose.connect(process.env.MONGODB_URI).then(() => {
   console.log('mongodb has not connected');
 });
 
+// Define the function to generate a unique referral code
+function generateUniqueReferralCode() {
+  // Example: Generate a random string of 6 characters
+  return Math.random().toString(36).substring(2, 8);
+}
+
+
 // User schema for storing user information and authentication
 const userSchema = new mongoose.Schema({
   firstName: { // User's first name
@@ -62,8 +69,8 @@ const userSchema = new mongoose.Schema({
   },
   referalCode: {
     type: String,
-    // default: "Not created",
-    default: null
+    unique: true
+    // default: null
   },
 
 
@@ -93,7 +100,22 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+// Pre-save hook to generate a unique referral code
+userSchema.pre('save', function(next) {
+  if (!this.isNew) {
+    return next(); // Skip if the document is not new
+  }
+
+  // Generate a unique referral code
+  this.referalCode = generateUniqueReferralCode();
+
+  next();
+});
+
+
 userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ referalCode: 1 }, { unique: true }); // Enforce uniqueness on referalCode
+
 
 const user = mongoose.model('userModel', userSchema);
 module.exports = user;
