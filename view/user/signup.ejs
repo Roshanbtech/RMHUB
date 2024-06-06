@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -32,14 +34,35 @@
         }
 
         .form-container {
-            width: 400px;
+            width: 100%; /* CHANGED */
+            max-width: 400px; /* CHANGED */
             padding: 20px;
-            /* Reduced padding */
             background-color: #fff;
             border-radius: 20px;
             box-shadow: 0px 0px 20px #3cf696;
             animation: slideIn 1s ease;
         }
+        
+
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 10px; /* CHANGED */
+            }
+        
+            .signup-title {
+                font-size: 20px; /* CHANGED */
+                padding: 8px 16px; /* CHANGED */
+            }
+        
+            .form-control {
+                padding: 8px; /* CHANGED */
+            }
+        
+            .btn {
+                padding: 8px 16px; /* CHANGED */
+            }
+        }
+        
 
         @keyframes slideIn {
             from {
