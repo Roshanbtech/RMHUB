@@ -89,6 +89,15 @@ const getcart = async (req, res) => {
         const cart = await Cart.findOne({ userId: user._id }).populate('cartItems.productId');
         const totalPrice = cart.cartItems.reduce((total, item) => total + (item.quantity * item.price), 0);
 
+        if (!cart) {
+            cart = new Cart({
+                userId: user._id,
+                cartItems: []
+            });
+            await cart.save();
+            req.session.cartId = cart._id;
+        }
+
         // Calculate total price using regular price or offer price depending on whether an offer is applied
 
 

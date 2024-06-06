@@ -235,6 +235,12 @@ const validateOtp = async (req, res) => {
       await newUser.save();
       console.log(newUser,'newUser')
 
+      // Create an empty cart for the new user
+      const newCart = new Cart({
+        userId: newUser._id,
+        cartItems: []
+    });
+    await newCart.save();
       // Clear session data after all operations that require it are completed
       // req.session.destroy();
 
