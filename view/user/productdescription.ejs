@@ -325,7 +325,7 @@
                     document.getElementById('seeReviewsBtn').addEventListener('click', function () {
                         // Get the product ID from the product description page (you may need to store it somewhere accessible)
                         var productId = '<%= product._id %>'; // Use the appropriate method to get the product ID
-                
+                    
                         // Make an AJAX request to fetch the reviews for the product
                         $.ajax({
                             url: '/reviews/' + productId,
@@ -333,18 +333,18 @@
                             success: function (response) {
                                 // Assuming the response contains reviews data in JSON format
                                 var reviews = response.reviews;
-                
+                    
                                 // Populate the modal with the reviews content
-                                var reviewsContainer = document.getElementById('reviews-container');
-                                reviewsContainer.innerHTML = ''; // Clear previous content
-                                
-                                // Loop through the reviews and create HTML elements to display them
-                                reviews.forEach(function(review) {
-                                    var reviewElement = document.createElement('div');
-                                    reviewElement.textContent = review;
-                                
-                                    // Append the review element to the reviews container
-                                    reviewsContainer.appendChild(reviewElement);
+                                var reviewsList = document.getElementById('reviews-list');
+                                reviewsList.innerHTML = ''; // Clear previous content
+                    
+                                // Loop through the reviews and create list items to display them
+                                reviews.forEach(function (review) {
+                                    var listItem = document.createElement('li');
+                                    listItem.textContent = review; // Assuming each review is a string
+                    
+                                    // Append the list item to the reviews list
+                                    reviewsList.appendChild(listItem);
                                 });
                             },
                             error: function (error) {
@@ -353,6 +353,7 @@
                             }
                         });
                     });
+                    
                 </script>
                 <script>
                     $(document).ready(function () {
