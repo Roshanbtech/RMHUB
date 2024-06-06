@@ -114,6 +114,7 @@ userSchema.pre('save', function(next) {
 
 
 userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ referalCode: 1 }, { unique: true }); // Enforce uniqueness on referalCode
 
 
 const user = mongoose.model('userModel', userSchema);
