@@ -359,11 +359,16 @@ const exportToPdf = async (req, res) => {
             doc.text(productList);
             // console.log(productList,"productList")
             console.log(order, "order")
+            doc.text(`ProductName: ${order.products.map(item => item.productName).join(', ')}`);
+            doc.text(`ActualPrice: ${order.products.reduce((total, item) => total + item.price, 0).toFixed(2)}`);
+            doc.text(`Quantity: ${order.products.reduce((total, item) => total + item.quantity, 0)}`);
+            
 
             doc.text(`Shipping Address: ${order.shippingAddress}`);
             doc.text(`Payment Method: ${order.paymentMethod}`);
-            doc.text(`Status: ${order.status}`);
-            doc.text(`Total Amount: ₹${order.totalAmount}`);
+            doc.text(`Order Status: ${order.status}`);
+            doc.text(`Payment Status: ${order.paymentStatus}`);
+            doc.text(`Order Total: ₹${order.totalAmount}`);
             doc.moveDown();
         });
 

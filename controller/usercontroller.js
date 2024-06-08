@@ -19,7 +19,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD
   }
 });
-console.log(transporter,'transporter');
 
 const landing = async(req, res) => {
   try{
@@ -80,7 +79,7 @@ const signuppost = async (req, res) => {
     await mailsender(data);
     res.render('user/otp.ejs');
   } catch (error) {
-    console.log(error);
+    console.log(error,'error during signup');
     res.status(500).send("Server error");
   };
 }
@@ -90,11 +89,11 @@ let genotp = () => {
 }
 
 const mailsender = async (data) => {
-  console.log("MAILSENDER");
+  // console.log("MAILSENDER");
 
   // Generate OTP
   const generatedOTP = genotp();
-  console.log(generatedOTP);
+  // console.log(generatedOTP);
 
   try {
     // Create OTP document
@@ -161,19 +160,19 @@ const validateOtp = async (req, res) => {
   try {
     //Combine OTP parts into a single value
     const otpvalue = req.body.otp1 + req.body.otp2 + req.body.otp3 + req.body.otp4;
-    console.log('Request body:', req.body);
-    console.log('OTP parts:', req.body.otp1, req.body.otp2, req.body.otp3, req.body.otp4);
-    console.log('Type of OTP parts:', typeof req.body.otp1, typeof req.body.otp2, typeof req.body.otp3, typeof req.body.otp4);
+    // console.log('Request body:', req.body);
+    // console.log('OTP parts:', req.body.otp1, req.body.otp2, req.body.otp3, req.body.otp4);
+    // console.log('Type of OTP parts:', typeof req.body.otp1, typeof req.body.otp2, typeof req.body.otp3, typeof req.body.otp4);
 
     //Find OTP document for the user's email address
     const otpDoc = await collection2.findOne({ email: req.session.data.email}).sort({ _id: -1 }).limit(1);
-    console.log(otpDoc,'recOtpDoc')
+    // console.log(otpDoc,'recOtpDoc')
     if(!otpDoc) {
       console.log('OTP document not found');
       return res.render('user/otp.ejs',{message:'OTP not found. Please request a new OTP.'})
     }
-    console.log('entered otp', otpvalue);
-    console.log('stored otp', otpDoc.otp);
+    // console.log('entered otp', otpvalue);
+    // console.log('stored otp', otpDoc.otp);
     if (otpDoc.otp == otpvalue) {
       // const newuser = await new collection(req.session.data).save();
 
@@ -233,7 +232,7 @@ const validateOtp = async (req, res) => {
       }
       // Save the new user to the database
       await newUser.save();
-      console.log(newUser,'newUser')
+      // console.log(newUser,'newUser')
 
       // Create an empty cart for the new user
       const newCart = new Cart({
@@ -271,7 +270,7 @@ const loginpost = async (req, res) => {
     const check = await collection.findOne({ email: req.body.email })
     //compare hashed password with plain text
     const validPassword = await bcrypt.compare(req.body.password, check.password)
-    console.log(req.body.password)
+    // console.log(req.body.password)
     req.session.user = req.body.email
     if (validPassword) {
       req.session.isLoggedIn = true
@@ -282,20 +281,11 @@ const loginpost = async (req, res) => {
     }
   }
   catch (error) {
+    console.log(error,'error during login')  
     res.redirect('/login?message=Invalid Credentials')
   }
 }
-// const aftlan=async(req,res)=>{
-//   try{
-//     const user = req.session.user;
-//     const products = await collection3.find({});
 
-//     res.render('user/newlanding.ejs',{user, data4:products})
-//   }catch(err){
-//     console.log(err)
-//     res.status(500).send('Internal Server Error');
-//   }
-// }
 const home = async (req, res) => {
   try {
 
@@ -354,7 +344,7 @@ const home = async (req, res) => {
 
     res.render('user/newlanding.ejs', { user, data4: products });
   } catch (err) {
-    console.log(err);
+    console.log(err,'error in home');
     res.status(500).send('Internal Server Error');
   }
 };
@@ -412,17 +402,6 @@ const phones = async (req, res) => {
 };
 
 
-// const phones=async(req,res)=>{
-//   try{
-//     const data1 =  await collection3.find({category:'Phones',isListed:true})
-//     console.log(data1)
-//       res.render('user/phones.ejs',{data1})
-//   }catch (error) {
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// }
-
 const wearables = async (req, res) => {
   try {
     const category = await Category.findOne({ name: { $regex: 'Wearables', $options: 'i' } });
@@ -469,26 +448,7 @@ const wearables = async (req, res) => {
   }
 };
 
-// const wearables=async(req,res)=>{
-// try{
-//   const data2 =  await collection3.find({category:'Wearables',isListed:true})
-//   console.log(data2)
-//     res.render('user/wearables.ejs',{data2})
-// }catch (error) {
-//   console.error(error);
-//   res.status(500).send('Internal Server Error');
-// }
-// }
-// const tablets = async (req, res) => {
-//   try {
-//       // Fetch only the products where isListed is true
-//       const data3 = await collection3.find({ category: 'Tablets', isListed: true });
-//       res.render('user/tablets.ejs', { data3 });
-//   } catch (error) {
-//       console.error(error);
-//       res.status(500).send('Internal Server Error');
-//   }
-// };
+
 
 const tablets = async (req, res) => {
   try {

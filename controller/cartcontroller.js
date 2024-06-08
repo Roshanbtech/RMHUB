@@ -267,10 +267,10 @@ const checkoutpost = async (req, res) => {
 
         }
         const userId = user._id; // Change this line if you are using user's id
-        console.log(userId)
+        // console.log(userId)
 
         const { shippingAddress, paymentMethod, couponCode } = req.body;
-        console.log(shippingAddress, paymentMethod, couponCode)
+        // console.log(shippingAddress, paymentMethod, couponCode)
 
         let Address = await address.findOne({ _id: shippingAddress });
         Address = `${Address.addressLineOne},${Address.addressLineTwo}, ${Address.city}, ${Address.state}, ${Address.pincode}`;

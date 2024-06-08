@@ -7,14 +7,14 @@ const getprofile = async (req, res) => {
   try {
     // Assuming the user's email is stored in req.session.user
     const userEmail = req.session.user;
-    console.log(userEmail)
+    // console.log(userEmail)
     if (!userEmail) {
       return res.status(401).send('Unauthorized'); // User is not logged in
     }
 
     // Find the user in the database using the email
     const user = await User.findOne({ email: userEmail }).populate('address');
-    console.log('user', user)
+    // console.log('user', user)
     if (!user) {
       return res.status(404).send('User not found');
     }
@@ -345,7 +345,7 @@ const genReferalcode = async (req, res) => {
     }
 
     const referalCode = randomString(6);
-    console.log('referalCode', referalCode);
+    // console.log('referalCode', referalCode);
 
 
     const userEmail = req.session.user;
@@ -358,7 +358,7 @@ const genReferalcode = async (req, res) => {
       return res.status(404).send('User not found');
     }
     const user = await User.findById(nameExt._id);
-    console.log('user', user);
+    // console.log('user', user);
 
     user.referalCode = referalCode;
     await user.save();
@@ -368,6 +368,7 @@ const genReferalcode = async (req, res) => {
 
   } catch (error) {
     console.error('Error generating referal code:', error);
+    res.status(500).send('Internal Server Error');
   }
 }
 
