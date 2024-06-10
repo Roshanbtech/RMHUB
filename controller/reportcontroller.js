@@ -298,6 +298,7 @@ const exportToPdf = async (req, res) => {
                     shippingAddress: { $first: "$shippingAddress" },
                     paymentMethod: { $first: "$paymentMethod" },
                     status: { $first: "$orderStatus" },
+                    paymentStatus: { $first: "$paymentStatus" },
                     totalAmount: { $first: "$totalPrice" },
                 },
             },
