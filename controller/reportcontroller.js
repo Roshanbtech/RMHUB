@@ -330,6 +330,7 @@ const exportToPdf = async (req, res) => {
                     shippingAddress: { $first: "$shippingAddress" },
                     paymentMethod: { $first: "$paymentMethod" },
                     status: { $first: "$status" },
+                    paymentStatus: { $first: "$paymentStatus" },
                     totalAmount: { $first: "$totalAmount" },
                 },
             },
@@ -356,10 +357,10 @@ const exportToPdf = async (req, res) => {
             doc.text(`orderID:${order.orderId} - ${order.orderDate.toDateString()} - User:${order.user}`);
 
             // Format products as a list
-            const productList = order.products.map(item => `Order:${item.productName} - ₹${item.price.toFixed(2)} -(${item.quantity})`).join(', ');
-            doc.text(productList);
-            // console.log(productList,"productList")
-            console.log(order, "order")
+            // const productList = order.products.map(item => `Order:${item.productName} - ₹${item.price.toFixed(2)} -(${item.quantity})`).join(', ');
+            // doc.text(productList);
+            // // console.log(productList,"productList")
+            // console.log(order, "order")
             doc.text(`ProductName: ${order.products.map(item => item.productName).join(', ')}`);
             doc.text(`ProductModel: ${order.products.map(item => item.productModel).join(', ')}`);
             doc.text(`ActualPrice: ${order.products.reduce((total, item) => total + item.price, 0).toFixed(2)}`);
