@@ -261,7 +261,7 @@
                                         <%= order?.userId?.lastName %>
                                 </td>
                                 <td>
-                                    <% let products=order.orderItems.map(item=> item.productId.model).join(', '); %>
+                                    <% let products=order.orderItems.map(item=> item?.productId?.model).join(', '); %>
                                         <%= products %>
                                 </td>
                                 
@@ -379,7 +379,7 @@
                                                                 alt="<%= item.productId.model %>"
                                                                 style="max-width: 50px; max-height: 50px;"></td>
                                                         <td>
-                                                            <%= item?.productId?.model %>
+                                                            <%= item.productId.model %>
                                                         </td>
                                                         <td>
                                                             <%= item.quantity %>
