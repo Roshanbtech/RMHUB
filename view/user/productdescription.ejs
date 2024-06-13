@@ -202,14 +202,14 @@
                         </div>
                         <div class="img-item">
                             <% if (product.image[2]) { %>
-                                <img src="/<%= product.image[1].replace(/\\/g, '/') %>" alt="shoe image"
+                                <img src="/<%= product.image[2].replace(/\\/g, '/') %>" alt="shoe image"
                                     onclick="changeImage('/<%= product.image[2].replace(/\\/g, '/') %>')">
                             <% } %>
                         </div>
                         <div class="img-item">
                             <% if (product.image[3]) { %>
                                 <img src="/<%= product.image[3].replace(/\\/g, '/') %>" alt="shoe image"
-                                    onclick="changeImage('/<%= product.image[1].replace(/\\/g, '/') %>')">
+                                    onclick="changeImage('/<%= product.image[3].replace(/\\/g, '/') %>')">
                             <% } %>
                         </div>
                     </div>
