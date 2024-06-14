@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RMHUB</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-4RPSIlbkI9XK3Xy3w1sCBmbPrAgY+Rlj/ETD6ZIu3YLFjPd1l0s7Ly6mvJTuQw3Bvn53AfB4L2j7sfuk2JLqmA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .card-wrapper {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-imgs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .img-display {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .img-display img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+
+        .img-display img:hover {
+            transform: scale(1.1);
+        }
+
+        .img-select {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .img-select .img-item {
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .img-select .img-item img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .img-select .img-item img:hover {
+            transform: scale(1.1);
+        }
+
+        .product-content {
+            padding: 20px;
+            background-color: #e5e6de;
+            border-radius: 15px;
+        }
+
+        .product-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .product-rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .product-rating .fas.fa-star.filled {
+            color: gold;
+        }
+
+        .product-rating .far.fa-star {
+            color: black;
+        }
+
+        .rating-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .product-rating:hover .rating-dropdown-content {
+            display: block;
+        }
+
+        .product-price {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .product-detail {
+            margin-bottom: 20px;
+        }
+
+        .product-detail h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .product-detail ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        .product-detail ul li {
+            margin-bottom: 10px;
+        }
+
+        .purchase-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .purchase-info form {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .purchase-info input[type="number"] {
+            width: 60px;
+            margin-right: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .purchase-info button {
+            background-color: #3cf696;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .purchase-info button:hover {
+            background-color: #2bbf75;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: #fff;
+            background-color: #000;
+            margin: 0 5px;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: #3cf696;
+        }
+
+        @media (min-width: 768px) {
+            .card-wrapper {
+                display: flex;
+                padding: 40px;
+            }
+
+            .product-imgs,
+            .product-content {
+                width: 50%;
+                padding: 20px;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include("nav") %>
+    <br>
+    <div class="container">
+        <div class="card-wrapper">
+            <div class="product-imgs">
+                <div class="img-display">
+                    <img id="mainImage" src="/<%= product.image[0].replace(/\\/g, '/') %>" alt="Product Image">
+                </div>
+                <div class="img-select">
+                    <div class="img-item">
+                        <img src="/<%= product.image[0].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('/<%= product.image[0].replace(/\\/g, '/') %>')">
+                    </div>
+                    <% if (product.image[1]) { %>
+                        <div class="img-item">
+                            <img src="/<%= product.image[1].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('/<%= product.image[1].replace(/\\/g, '/') %>')">
+                        </div>
+                    <% } %>
+                    <% if (product.image[2]) { %>
+                        <div class="img-item">
+                            <img src="/<%= product.image[2].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('/<%= product.image[2].replace(/\\/g, '/') %>')">
+                        </div>
+                    <% } %>
+                    <% if (product.image[3]) { %>
+                        <div class="img-item">
+                            <img src="/<%= product.image[3].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('/<%= product.image[3].replace(/\\/g, '/') %>')">
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="product-content">
+                <h2 class="product-title"><%= product.model %></h2>
+                <div class="product-rating">
+                    <span class="badge badge-success"><strong><%= product.ratings %></strong></span>
+                    <% for (let i = 1; i <= 5; i++) { %>
+                        <% if (i <= product.ratings) { %>
+                            <i class="fas fa-star filled"></i>
+                        <% } else { %>
+                            <i class="far fa-star"></i>
+                        <% } %>
+                    <% } %>
+                    <div class="rating-dropdown-content">
+                        <a href="#" id="seeReviewsBtn" data-toggle="modal" data-target="#reviewsModal">See Reviews</a>
+                    </div>
+                </div>
+                <div class="product-price">
+                    <p class="last-price">Price: <span class="badge badge-success">
+                        <% if (product.onOffer) { %>
+                            ₹<%= Number(product.offerPrice).toLocaleString('en-IN') %>
+                        <% } else { %>
+                            ₹<%= Number(product.price).toLocaleString('en-IN') %>
+                        <% } %>
+                    </span></p>
+                </div>
+                <div class="product-detail">
+                    <h2>About this item:</h2>
+                    <p><%= product.description %></p>
+                    <ul>
+                        <li>Color: <span><%= product.color %></span></li>
+                        <li>Available Stock: <span><%= product.availableStock %></span></li>
+                        <li>Category: <span><%= product.category?.name %></span></li>
+                        <li>Shipping Area: <span>All over the world</span></li>
+                    </ul>
+                </div>
+                <div class="purchase-info">
+                    <form action="/cart/addtocart" method="post" onsubmit="return validateQuantity()">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+                        <input type="number" name="quantity" id="quantity" value="1" min="1" class="form-control" style="width: 70px; display: inline-block;">
+                        <button type="submit" class="btn btn-success">Add to Cart <i class="fas fa-shopping-cart"></i></button>
+                    </form>
+                    <button type="button" class="btn btn-info" id="rateButton">Rate this product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeImage(src) {
+            document.getElementById('mainImage').src = src;
+        }
+
+        function validateQuantity() {
+            var quantity = document.getElementById('quantity').value;
+            if (quantity < 1) {
+                Swal.fire('Error', 'Quantity must be at least 1', 'error');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+
+</html>
