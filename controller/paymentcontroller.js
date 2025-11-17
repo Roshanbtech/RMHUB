@@ -43,8 +43,8 @@ const payment = async (req, res) => {
             intent: 'sale',
             payer: { payment_method: 'paypal' },
             redirect_urls: {
-                return_url: 'https://rmhub.shop/payment/paymentstatus',
-                cancel_url: 'https://rmhub.shop/cart/checkout',
+                return_url: 'https://rmhub.onrender.com/payment/paymentstatus',
+                cancel_url: 'https://rmhub.onrender.com/cart/checkout',
             },
             transactions: [{
                 amount: { currency: 'USD', total: amountUSD.toFixed(2) },
@@ -247,8 +247,8 @@ const paymentRetry = async (req, res) => {
             intent: 'sale',
             payer: { payment_method: 'paypal' },
             redirect_urls: {
-                return_url: `https://rmhub.shop/payment/retrypaymentstatus?orderId=${orderId}`,
-                cancel_url: 'https://rmhub.shop/cart/orderhistory',
+                return_url: `https://rmhub.onrender.com/payment/retrypaymentstatus?orderId=${orderId}`,
+                cancel_url: 'https://rmhub.onrender.com/cart/orderhistory',
             },
             transactions: [{
                 amount: { currency: 'USD', total: amountUSD.toFixed(2) },
@@ -402,8 +402,8 @@ const addToWallet = async (req, res) => {
 
             },
             redirect_urls: {
-                return_url: 'https://rmhub.shop/payment/verifyPayment',
-                cancel_url: 'https://rmhub.shop/profile/wallet/',
+                return_url: 'https://rmhub.onrender.com/payment/verifyPayment',
+                cancel_url: 'https://rmhub.onrender.com/profile/wallet/',
             },
             transactions: [{
                 amount: {
