@@ -15,17 +15,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: Arial, sans-serif;
-    }
+    body { background-color: #f8f9fa; font-family: Arial, sans-serif; }
 
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      margin-top: 30px;
-      margin-bottom: 30px;
-    }
+    .container { max-width: 600px; margin: 30px auto; }
 
     .form-container {
       width: 100%;
@@ -38,15 +30,8 @@
     }
 
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-50px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .btn-success {
@@ -63,10 +48,7 @@
       margin-top: 20px;
     }
 
-    .btn-success:hover {
-      background-color: #36e687;
-      border-color: #36e687;
-    }
+    .btn-success:hover { background-color: #36e687; border-color: #36e687; }
 
     .product-title {
       background-color: #3cf696;
@@ -78,9 +60,7 @@
       text-align: center;
     }
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+    .form-group { margin-bottom: 15px; }
 
     .form-control {
       border-radius: 10px;
@@ -90,11 +70,20 @@
       background-color: #ffffff;
     }
 
-    .image-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    /* Bootstrap custom-file tweaks (Bootstrap 4) */
+    .custom-file-label {
+      border-radius: 10px;
+      border: 1px solid #3CF696;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
+    .custom-file-input:focus ~ .custom-file-label {
+      border-color: #3CF696;
+      box-shadow: 0 0 0 0.2rem rgba(60, 246, 150, 0.25);
+    }
+
+    .image-container { display: flex; flex-wrap: wrap; gap: 10px; }
 
     .preview-image-wrapper {
       position: relative;
@@ -118,12 +107,7 @@
       cursor: default;
     }
 
-    .preview-actions {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-      justify-content: center;
-    }
+    .preview-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
 
     .mini-btn {
       border: none;
@@ -137,29 +121,17 @@
       gap: 6px;
     }
 
-    .mini-btn.crop {
-      background: #3cf696;
-      color: #000;
-      font-weight: 700;
-    }
+    .mini-btn.crop { background: #3cf696; color: #000; font-weight: 700; }
+    .mini-btn.remove { background: #e74c3c; }
 
-    .mini-btn.remove {
-      background: #e74c3c;
-    }
-
-    .error {
-      font-size: 13px;
-      margin-top: 5px;
-    }
+    .error { font-size: 13px; margin-top: 5px; }
 
     /* Cropper modal */
     #cropperModal {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.55);
       z-index: 9999;
       justify-content: center;
@@ -229,6 +201,13 @@
       font-weight: 800;
       cursor: pointer;
     }
+
+    .file-meta {
+      display: block;
+      margin-top: 8px;
+      color: #6c757d;
+      font-size: 13px;
+    }
   </style>
 </head>
 
@@ -272,9 +251,16 @@
           <div id="availableStockError" class="error"></div>
         </div>
 
+        <!-- File input (Bootstrap custom-file) -->
         <div class="form-group">
-          <input type="file" class="form-control" name="image" id="image" multiple accept="image/*">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" name="image" id="image" multiple accept="image/*">
+            <label class="custom-file-label" for="image" id="fileInputLabel">Choose files</label>
+          </div>
+
           <div id="imageError" class="error"></div>
+          <small id="fileCountLabel" class="file-meta"></small>
+
           <br>
 
           <!-- EXISTING images -->
@@ -354,9 +340,11 @@
 
   <script>
     const imageInput = document.getElementById('image');
+    const fileInputLabel = document.getElementById('fileInputLabel');
+    const fileCountLabel = document.getElementById('fileCountLabel');
     const newPreview = document.getElementById('newPreview');
 
-    // New files state (so we can remove/crop and still keep input.files accurate)
+    // New files state
     let newFiles = [];
 
     // Cropper state
@@ -372,10 +360,31 @@
     let croppingExistingWrapper = null; // for existing
     let tempObjectURL = null;
 
+    function getExistingCount() {
+      return document.querySelectorAll('input[name="existingImages"]').length;
+    }
+
+    function updateFileLabels() {
+      const existingCount = getExistingCount();
+      const newCount = newFiles.length;
+      const total = existingCount + newCount;
+
+      // Bootstrap custom-file label (avoid "No file chosen" UX)
+      if (fileInputLabel) {
+        fileInputLabel.textContent = newCount > 0 ? `${newCount} file(s) selected` : 'Choose files';
+      }
+
+      // Secondary KPI label (very clear to users)
+      if (fileCountLabel) {
+        fileCountLabel.textContent = `New uploads: ${newCount} | Existing kept: ${existingCount} | Total images: ${total}`;
+      }
+    }
+
     function syncInputFiles() {
       const dt = new DataTransfer();
       newFiles.forEach(f => dt.items.add(f));
       imageInput.files = dt.files;
+      updateFileLabels();
     }
 
     function renderNewPreviews() {
@@ -415,6 +424,8 @@
         wrapper.appendChild(actions);
         newPreview.appendChild(wrapper);
       });
+
+      updateFileLabels();
     }
 
     function removeNewFile(index) {
@@ -423,7 +434,7 @@
       renderNewPreviews();
     }
 
-    // Existing image removal (removes hidden input so backend knows it's removed)
+    // Existing image removal
     function removeExistingImage(btn) {
       const wrapper = btn.closest('.preview-image-wrapper');
       if (!wrapper) return;
@@ -432,9 +443,10 @@
       if (hidden) hidden.remove();
 
       wrapper.remove();
+      updateFileLabels();
     }
 
-    // NEW file selection: append (so user can add more without losing previous selection)
+    // NEW file selection: append
     imageInput.addEventListener('change', function () {
       const picked = Array.from(this.files || []);
       if (picked.length === 0) return;
@@ -454,7 +466,7 @@
           continue;
         }
 
-        // Avoid duplicates (name+size+lastModified is a pragmatic fingerprint)
+        // Avoid duplicates (name+size+lastModified)
         const exists = newFiles.some(x =>
           x.name === f.name && x.size === f.size && x.lastModified === f.lastModified
         );
@@ -464,8 +476,9 @@
       syncInputFiles();
       renderNewPreviews();
 
-      // Clear native picker to allow re-selecting same file again if needed
+      // Allow selecting same file again later
       this.value = '';
+      updateFileLabels();
     });
 
     // -------- Cropper plumbing --------
@@ -500,7 +513,6 @@
           autoCropArea: 1,
           responsive: true,
           background: false,
-          // aspectRatio: 1, // enable if you need fixed ratio
         });
       };
 
@@ -531,7 +543,7 @@
       openCropperWithFile(file, 'new', index);
     }
 
-    // Crop EXISTING URL: fetch -> File -> crop -> remove existing hidden input + wrapper -> add cropped as new upload
+    // Crop EXISTING URL: fetch -> File -> crop -> remove existing -> add as new upload
     async function cropExistingImage(btn) {
       const wrapper = btn.closest('.preview-image-wrapper');
       if (!wrapper) return;
@@ -548,7 +560,6 @@
         const mimeType = blob.type && blob.type.startsWith('image/') ? blob.type : 'image/jpeg';
 
         const file = new File([blob], `existing_${Date.now()}.jpg`, { type: mimeType, lastModified: Date.now() });
-
         openCropperWithFile(file, 'existing', wrapper);
       } catch (err) {
         Swal.fire({
@@ -569,7 +580,6 @@
         imageSmoothingQuality: 'high'
       });
 
-      // Prefer JPEG to keep size reasonable
       canvas.toBlob((blob) => {
         if (!blob) return;
 
@@ -584,12 +594,12 @@
         }
 
         if (cropMode === 'existing' && croppingExistingWrapper) {
-          // Remove existing hidden input + wrapper so backend won't keep the old URL
+          // Remove existing hidden input + wrapper
           const hidden = croppingExistingWrapper.querySelector('input[name="existingImages"]');
           if (hidden) hidden.remove();
           croppingExistingWrapper.remove();
 
-          // Add cropped as a new upload
+          // Add cropped to new uploads
           newFiles.push(croppedFile);
         }
 
@@ -607,7 +617,6 @@
     });
 
     // -------- Validation --------
-
     function validateForm() {
       const productName = document.getElementById('productName').value.trim();
       const price = parseFloat(document.getElementById('price').value);
@@ -617,8 +626,7 @@
       const category = document.getElementById('category').value.trim();
       const color = document.getElementById('color').value.trim();
 
-      const existingCount = document.querySelectorAll('input[name="existingImages"]').length;
-      const totalImages = existingCount + newFiles.length;
+      const totalImages = getExistingCount() + newFiles.length;
 
       let isValid = true;
 
@@ -670,13 +678,15 @@
         isValid = false;
       } else document.getElementById('colorError').innerHTML = '';
 
-      // Make sure input.files reflects our newFiles state
+      // Ensure input.files matches our newFiles
       syncInputFiles();
 
       return isValid;
     }
+
+    // Initial label state
+    updateFileLabels();
   </script>
 
 </body>
-
 </html>
