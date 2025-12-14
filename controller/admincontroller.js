@@ -472,7 +472,7 @@ const addproducts = async (req, res) => {
 
 const addproductspost = async (req, res) => {
   try {
-    const { productName, price, model, description, shape, color, availableStock, category } = req.body;
+    const { productName, price, model, description, color, availableStock, category } = req.body;
     const files = req.files || [];
 
     if (!productName || !price || !model || !description || !availableStock || !category || files.length === 0) {
@@ -499,7 +499,6 @@ const addproductspost = async (req, res) => {
       availableStock,
       image: uploadedImages,
       category,
-      shape,
       color,
     });
 
@@ -538,7 +537,7 @@ const editproducts = async (req, res) => {
 const editproductspost = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { productName, price, model, description, availableStock, category, shape, color } = req.body;
+    const { productName, price, model, description, availableStock, category, color } = req.body;
     const files = req.files || [];
 
     const product = await collection3.findById(productId);
@@ -574,7 +573,6 @@ const editproductspost = async (req, res) => {
     product.description = description;
     product.availableStock = availableStock;
     product.category = category;
-    product.shape = shape;
     product.color = color;
     product.image = finalImages;
 

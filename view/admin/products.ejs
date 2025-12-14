@@ -174,190 +174,193 @@
 
 <body>
     <!-- <%- include("nav") %> -->
-        <%- include("sidebar") %>
+    <%- include("sidebar") %>
 
 
-            <div class="main-content">
-                <div class="button-wrapper">
-                    <button class="add-product-button" onclick="location.href='/admin/addproducts'"><a>Add
-                            Product</a></button>
-                    <button style="background-color: #3cf696;  border-radius: 5px;float:left"
-                        onclick="location.href='/admin/prod-offers'">Product Offers</button>
+        <div class="main-content">
+            <div class="button-wrapper">
+                <button class="add-product-button" onclick="location.href='/admin/addproducts'"><a>Add
+                        Product</a></button>
+                <button style="background-color: #3cf696;  border-radius: 5px;float:left"
+                    onclick="location.href='/admin/prod-offers'">Product Offers</button>
 
-                </div>
-                <h3 style="text-align: center; font-weight: bold"><img src="/images/product.svg" alt="Logo"
-                        class="logo-small"
-                        style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-                    Product List</h3>
-                <table id="example" class="table table-hover" style="width:100%">
-                    <thead>
+            </div>
+            <h3 style="text-align: center; font-weight: bold"><img src="/images/product.svg" alt="Logo"
+                    class="logo-small"
+                    style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
+                Product List</h3>
+            <table id="example" class="table table-hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Si. No</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Model</th>
+                        <th>Description</th>
+                        <th>Available Stock</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        <th>Others</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% product.forEach((product, index)=> { %>
                         <tr>
-                            <th>Si. No</th>
-                            <th>Product Name</th>
-                            <th>Price</th>
-                            <th>Model</th>
-                            <th>Description</th>
-                            <th>Available Stock</th>
-                            <th>Image</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                            <th>Others</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% product.forEach((product, index)=> { %>
-                            <tr>
-                                <td>
-                                    <%= index + 1 %>
-                                </td>
-                                <td>
-                                    <%= product.productName %>
-                                </td>
-                                <!-- <td>₹<%= product.price %></td> -->
-                                <td>
-                                    <% if (product.onOffer) { %>
-                                        ₹<%= product.offerPrice %>
-                                            <!-- Display the discounted price if an offer is applied -->
-                                            <% } else { %>
-                                                ₹<%= product.price %>
-                                                    <!-- Display the original price if no offer is applied -->
-                                                    <% } %>
-                                </td>
-                                <td>
-                                    <%= product.model %>
-                                </td>
-                                <td>
-                                    <%= product.description %>
-                                </td>
-                                <td>
-                                    <%= product.availableStock %>
-                                </td>
-                                <td><img src="/<%= product.image[0] %>" alt="img" style="width: 50px;height:100px;">
-                                </td>
-                                <td>
-                                    <%= product.category?.name %>
-                                </td>
-                                <td class="status  <%= product.isListed ? 'available' : 'unavailable' %>">
-                                    <%= product.isListed ? 'Available' : 'SoftDeleted' %>
-                                </td>
-                                <td class="action">
-                                    <button style="background-color: #3cf696; width:50px; border-radius: 5px"
-                                        onclick="location.href='/admin/editproducts/<%= product.id %>'">Edit</button>
-                                    <br>
-                                    <form action="/admin/toggle-product/<%= product.id %>" method="POST">
-                                        <button class="toggle-button" style="border-radius: 5px;">
-                                            <%= product.isListed ? 'Unlist' : 'List' %>
-                                        </button>
-                                    </form>
-
-                                </td>
-                                <td><button style="background-color: red; width:50px; border-radius: 5px"
-                                        onclick="confirmDelete('<%= product.id %>')">Delete</button></td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
-            </div>
-            </div>
-            </div>
-            <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="card">
-                                <form id="offerForm" class="card-body" method="POST">
-                                    <div class="row">
-                                        <fieldset class="col card mx-2">
-                                            <legend id="product_name">Product : </legend>
-                                            <div class="mb-3">
-                                                <label for="offerDiscountRate" class="form-label">Offer Discount
-                                                    (%)</label>
-                                                <input name="offerDiscountRate" type="number" min="0"
-                                                    class="form-control" id="offerDiscountRate">
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                    <!-- Add more form fields as needed -->
-                                    <button type="submit" class="btn btn-primary m-2 w-100">Add/Modify Offer</button>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <%= product.productName %>
+                            </td>
+                            <!-- <td>₹<%= product.price %></td> -->
+                            <td>
+                                <% if (product.onOffer) { %>
+                                    ₹<%= product.offerPrice %>
+                                        <!-- Display the discounted price if an offer is applied -->
+                                        <% } else { %>
+                                            ₹<%= product.price %>
+                                                <!-- Display the original price if no offer is applied -->
+                                                <% } %>
+                            </td>
+                            <td>
+                                <%= product.model %>
+                            </td>
+                            <td>
+                                <%= product.description %>
+                            </td>
+                            <td>
+                                <%= product.availableStock %>
+                            </td>
+                            <td>
+                                <% const img0=(product.image && product.image.length) ? product.image[0]
+                                    : "/images/no-image.png" ; %>
+                                    <img src="<%= img0 %>" alt="img" style="width:50px;height:100px;object-fit:cover;" loading="lazy">
+                            </td>
+                            <td>
+                                <%= product.category?.name %>
+                            </td>
+                            <td class="status  <%= product.isListed ? 'available' : 'unavailable' %>">
+                                <%= product.isListed ? 'Available' : 'SoftDeleted' %>
+                            </td>
+                            <td class="action">
+                                <button style="background-color: #3cf696; width:50px; border-radius: 5px"
+                                    onclick="location.href='/admin/editproducts/<%= product.id %>'">Edit</button>
+                                <br>
+                                <form action="/admin/toggle-product/<%= product.id %>" method="POST">
+                                    <button class="toggle-button" style="border-radius: 5px;">
+                                        <%= product.isListed ? 'Unlist' : 'List' %>
+                                    </button>
                                 </form>
-                            </div>
+
+                            </td>
+                            <td><button style="background-color: red; width:50px; border-radius: 5px"
+                                    onclick="confirmDelete('<%= product.id %>')">Delete</button></td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+        </div>
+        </div>
+        <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="offerModalLabel">Add/Edit Offer</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <form id="offerForm" class="card-body" method="POST">
+                                <div class="row">
+                                    <fieldset class="col card mx-2">
+                                        <legend id="product_name">Product : </legend>
+                                        <div class="mb-3">
+                                            <label for="offerDiscountRate" class="form-label">Offer Discount
+                                                (%)</label>
+                                            <input name="offerDiscountRate" type="number" min="0" class="form-control"
+                                                id="offerDiscountRate">
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <!-- Add more form fields as needed -->
+                                <button type="submit" class="btn btn-primary m-2 w-100">Add/Modify Offer</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-                integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-            <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+        <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+        <script>
+            new DataTable('#example');
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <% if (successMessage) { %>
             <script>
-                new DataTable('#example');
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "<%= successMessage %>",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             </script>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <% if (successMessage) { %>
+            <% } %>
                 <script>
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "<%= successMessage %>",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    function confirmDelete(productId) {
+                        Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3cf696",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // If the user confirms, redirect to the delete route
+                                window.location.href = `/admin/delproducts/${productId}`;
+                            }
+                        });
+                    }
+
+
                 </script>
-                <% } %>
-                    <script>
-                        function confirmDelete(productId) {
-                            Swal.fire({
-                                title: "Are you sure?",
-                                text: "You won't be able to revert this!",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#3cf696",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, delete it!"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // If the user confirms, redirect to the delete route
-                                    window.location.href = `/admin/delproducts/${productId}`;
-                                }
-                            });
-                        }
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                <script>
+                    // Function to get the query parameter value by name
+                    function getQueryParameter(name) {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        return urlParams.get(name);
+                    }
 
+                    // Check for 'error' parameter in the URL
+                    const error = getQueryParameter('error');
 
-                    </script>
-                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-                    <script>
-                        // Function to get the query parameter value by name
-                        function getQueryParameter(name) {
-                            const urlParams = new URLSearchParams(window.location.search);
-                            return urlParams.get(name);
-                        }
-
-                        // Check for 'error' parameter in the URL
-                        const error = getQueryParameter('error');
-
-                        // If 'error' parameter exists, display it using Swal
-                        if (error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: error.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
-                            });
-                        }
-                    </script>
+                    // If 'error' parameter exists, display it using Swal
+                    if (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
+                        });
+                    }
+                </script>
 </body>
 
 </html>
