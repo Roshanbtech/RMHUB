@@ -3,7 +3,7 @@ const collection1 = require('../model/admin/categorymodel')
 const collection3 = require('../model/admin/productmodel')
 const order = require('../model/cart/ordermodel');
 const bestSelling = require('../helpers/bestSelling');
-const cloudinary = require('../config/cloudinary');
+const { uploadBufferToCloudinary } = require("../utils/cloudinaryUpload");
 require('dotenv').config()
 
 
@@ -471,27 +471,25 @@ const addproducts = async (req, res) => {
 };
 
 const addproductspost = async (req, res) => {
-  const { productName, price, model, description, shape, color, availableStock, category } = req.body;
-  const productImg = req.files;
-
-  if (!productName || !price || !model || !description || !availableStock || !category || !productImg) {
-    const categories = await collection1.find({ isListed: true });
-    return res.render('admin/addproducts.ejs', { error: 'All fields are required.', categories });
-  }
-
   try {
-    // Upload each file to Cloudinary
-    const uploadedImages = [];
-    for (const file of productImg) {
-      const result = await cloudinary.uploader.upload_stream(
-        { folder: 'RMHUB_products' },
-        (error, result) => {
-          if (error) throw error;
-          uploadedImages.push(result.secure_url);
-        }
-      );
-      result.end(file.buffer); // send file buffer to Cloudinary
+    const { productName, price, model, description, shape, color, availableStock, category } = req.body;
+    const files = req.files || [];
+
+    if (!productName || !price || !model || !description || !availableStock || !category || files.length === 0) {
+      const categories = await collection1.find({ isListed: true });
+      return res.render("admin/addproducts.ejs", { error: "All fields are required.", categories });
     }
+
+    const uploadResults = await Promise.all(
+      files.map((file) =>
+        uploadBufferToCloudinary(file.buffer, {
+          folder: "RMHUB_products",
+          resource_type: "image",
+        })
+      )
+    );
+
+    const uploadedImages = uploadResults.map((r) => r.secure_url);
 
     const newProduct = new collection3({
       productName,
@@ -499,26 +497,28 @@ const addproductspost = async (req, res) => {
       model,
       description,
       availableStock,
-      image: uploadedImages, // store Cloudinary URLs
+      image: uploadedImages,
       category,
       shape,
-      color
+      color,
     });
 
     await newProduct.save();
 
-    const productMgm = await collection3.find({});
+    const productMgm = await collection3.find({}).populate("category");
     const categories = await collection1.find({ isListed: true });
 
-    res.render('admin/products.ejs', { product: productMgm, categories, successMessage: "Product added successfully" });
+    return res.render("admin/products.ejs", {
+      product: productMgm,
+      categories,
+      successMessage: "Product added successfully",
+    });
   } catch (error) {
-    console.error('Error adding product:', error);
+    console.error("Error adding product:", error);
     const categories = await collection1.find({ isListed: true });
-    res.render('admin/addproducts.ejs', { error: 'An error occurred while adding the product.', categories });
+    return res.render("admin/addproducts.ejs", { error: "An error occurred while adding the product.", categories });
   }
 };
-
-
 
 const editproducts = async (req, res) => {
     try {
@@ -539,25 +539,33 @@ const editproductspost = async (req, res) => {
   try {
     const productId = req.params.id;
     const { productName, price, model, description, availableStock, category, shape, color } = req.body;
-    const productImg = req.files;
+    const files = req.files || [];
 
     const product = await collection3.findById(productId);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Upload new images if provided
-    let uploadedImages = product.image;
-    if (productImg && productImg.length > 0) {
-      uploadedImages = [];
-      for (const file of productImg) {
-        const result = await cloudinary.uploader.upload_stream(
-          { folder: 'RMHUB_products' },
-          (error, result) => {
-            if (error) throw error;
-            uploadedImages.push(result.secure_url);
-          }
-        );
-        result.end(file.buffer);
-      }
+    // Keep images that the UI says to keep
+    let keepImages = [];
+    if (Array.isArray(req.body.existingImages)) keepImages = req.body.existingImages;
+    else if (req.body.existingImages) keepImages = [req.body.existingImages];
+
+    // Upload any newly selected images
+    let newImages = [];
+    if (files.length > 0) {
+      const uploadResults = await Promise.all(
+        files.map((file) =>
+          uploadBufferToCloudinary(file.buffer, {
+            folder: "RMHUB_products",
+            resource_type: "image",
+          })
+        )
+      );
+      newImages = uploadResults.map((r) => r.secure_url);
+    }
+
+    const finalImages = [...keepImages, ...newImages];
+    if (finalImages.length === 0) {
+      return res.status(400).json({ message: "At least one image is required." });
     }
 
     product.productName = productName;
@@ -565,18 +573,18 @@ const editproductspost = async (req, res) => {
     product.model = model;
     product.description = description;
     product.availableStock = availableStock;
-    product.image = uploadedImages;
     product.category = category;
     product.shape = shape;
     product.color = color;
+    product.image = finalImages;
 
     await product.save();
 
-    const productList = await collection3.find({});
-    res.render('admin/products.ejs', { product: productList, successMessage: 'Product Updated Successfully' });
+    const productList = await collection3.find({}).populate("category");
+    return res.render("admin/products.ejs", { product: productList, successMessage: "Product Updated Successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -598,7 +606,6 @@ const delproducts = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
 
 const toggleProductStatus = async (req, res) => {
     try {
