@@ -373,7 +373,7 @@
 
                                         <% } %>
                                      </div> 
-                                    <img src="/<%= item.productId.image[0]%>" style="max-width:100px; max-height:100px"
+                                    <img src="<%= item.productId.image[0]%>" style="max-width:100px; max-height:100px"
                                         alt="<%= item.productId.model %>">
                                     <div class="product-info">
                                         <div>Name: <%= item.productId.model %>
@@ -467,7 +467,7 @@
                                         <td>
                                             <% order.orderItems.forEach(item=> { %>
                                                 <div>
-                                                    <img src="/<%= item.productId.image[0] %>"
+                                                    <img src="<%= item.productId.image[0] %>"
                                                         alt="<%= item.productId.model %>"
                                                         style="max-width: 50px; max-height: 50px;">
                                                     <br>
