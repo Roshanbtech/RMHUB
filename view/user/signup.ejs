@@ -10,14 +10,14 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
-  <!-- Optional: nicer font (safe fallback included) -->
+  <!-- Font (optional) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --primary: #3cf696;  /* same as your existing theme :contentReference[oaicite:1]{index=1} */
+      --primary: #3cf696;
       --primary-2: #22d67f;
       --ink: #0f172a;
       --muted: #64748b;
@@ -32,13 +32,12 @@
 
     body{
       font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(900px 500px at 20% 10%, rgba(60, 246, 150, 0.20), transparent 60%),
-                  radial-gradient(800px 450px at 80% 20%, rgba(34, 214, 127, 0.14), transparent 55%),
+      background: radial-gradient(900px 500px at 20% 10%, rgba(60, 246, 150, 0.18), transparent 60%),
+                  radial-gradient(800px 450px at 80% 20%, rgba(34, 214, 127, 0.12), transparent 55%),
                   var(--bg);
       color: var(--ink);
     }
 
-    /* IMPORTANT: do NOT override Bootstrap .container globally (your old code did) :contentReference[oaicite:2]{index=2} */
     .auth-shell{
       min-height: 100vh;
       display: flex;
@@ -57,10 +56,10 @@
       box-shadow: 0 18px 50px rgba(2, 8, 23, 0.10);
     }
 
+    /* LEFT PANEL */
     .brand-pane{
       background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: #052012;
-      padding: 32px 28px;
+      padding: 28px;
       position: relative;
       min-height: 100%;
     }
@@ -68,75 +67,101 @@
     .brand-pane:before{
       content:"";
       position:absolute;
-      inset:-40px -40px auto auto;
-      width: 220px;
-      height: 220px;
-      background: rgba(255,255,255,0.25);
+      inset:-60px -60px auto auto;
+      width: 240px;
+      height: 240px;
+      background: rgba(255,255,255,0.22);
       border-radius: 999px;
       filter: blur(2px);
+      pointer-events: none;
     }
 
-    .brand-logo{
-      width: 48px;
-      height: 48px;
+    .brand-top{
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-img{
+      width: 44px;
+      height: 44px;
       border-radius: 14px;
       background: rgba(255,255,255,0.25);
       border: 1px solid rgba(255,255,255,0.45);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 800;
-      letter-spacing: 0.5px;
+      object-fit: cover;
     }
 
-    .brand-title{
-      font-size: 26px;
-      font-weight: 800;
-      margin: 14px 0 6px;
+    .brand-word{
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      font-size: 18px;
       color: #062012;
+      text-transform: uppercase;
     }
 
-    .brand-sub{
-      color: rgba(6, 32, 18, 0.82);
-      font-size: 14px;
-      margin-bottom: 18px;
-      line-height: 1.5;
+    .brand-mini{
+      position: relative;
+      margin-top: 14px;
+      color: rgba(6, 32, 18, 0.85);
+      font-size: 13.5px;
+      line-height: 1.45;
+      max-width: 280px;
     }
 
-    .brand-list{
-      margin: 0;
-      padding-left: 18px;
-      color: rgba(6, 32, 18, 0.88);
-      font-size: 14px;
-      line-height: 1.75;
-    }
-
-    .brand-badge{
-      margin-top: 18px;
-      display: inline-flex;
+    .brand-icons{
+      position: relative;
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
-      background: rgba(255,255,255,0.28);
-      border: 1px solid rgba(255,255,255,0.45);
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      color: rgba(6, 32, 18, 0.90);
     }
 
+    .icon-chip{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.45);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .icon-chip svg{
+      width: 20px;
+      height: 20px;
+      opacity: 0.92;
+      color: rgba(6, 32, 18, 0.92);
+    }
+
+    .brand-hero{
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      width: 210px;
+      height: 210px;
+      opacity: 0.16;
+      pointer-events: none;
+      color: rgba(6, 32, 18, 0.92);
+      filter: drop-shadow(0 12px 18px rgba(2, 8, 23, 0.10));
+    }
+
+    /* RIGHT PANEL */
     .form-pane{
-      padding: 34px 28px;
+      padding: 32px 28px;
     }
 
     .form-header{
-      margin-bottom: 18px;
-      text-align: left; /* left aligned for ecommerce feel */
+      margin-bottom: 16px;
+      text-align: left;
     }
 
     .form-header h1{
       font-size: 22px;
       margin: 0 0 6px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .form-header p{
@@ -158,7 +183,7 @@
 
     .form-label{
       font-size: 12.5px;
-      font-weight: 700;
+      font-weight: 800;
       color: rgba(15,23,42,0.80);
       margin-bottom: 6px;
     }
@@ -184,12 +209,46 @@
       line-height: 1.35;
     }
 
+    /* Password eye toggle */
+    .pw-group .form-control{
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .pw-toggle{
+      height: 46px;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.14);
+      border-left: 0;
+      background: #fff;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .pw-toggle:focus{
+      outline: none;
+      border-color: rgba(60, 246, 150, 0.9);
+      box-shadow: 0 0 0 4px rgba(60, 246, 150, 0.12);
+    }
+
+    .pw-toggle svg{
+      width: 18px;
+      height: 18px;
+      opacity: 0.75;
+      color: rgba(15,23,42,0.9);
+    }
+
     .btn-primary-rm{
       height: 46px;
       border-radius: 12px;
       border: none;
       width: 100%;
-      font-weight: 800;
+      font-weight: 900;
       color: #06301b;
       background: linear-gradient(135deg, var(--primary), var(--primary-2));
       transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
@@ -204,11 +263,12 @@
     .muted-link{
       color: var(--muted);
       font-size: 13px;
+      margin-top: 10px;
     }
 
     .muted-link a{
       color: rgba(34, 214, 127, 1);
-      font-weight: 800;
+      font-weight: 900;
       text-decoration: none;
     }
 
@@ -216,11 +276,9 @@
       text-decoration: underline;
     }
 
-    /* Responsive */
     @media (max-width: 767.98px){
       .form-pane{ padding: 22px 18px; }
       .brand-pane{ padding: 22px 18px; }
-      .brand-title{ font-size: 22px; }
     }
   </style>
 </head>
@@ -229,150 +287,179 @@
   <div class="auth-shell">
     <div class="auth-card">
       <div class="row no-gutters">
-        <!-- LEFT BRAND PANEL (desktop) -->
+
+        <!-- LEFT: BRAND / ICONS (minimal) -->
         <div class="col-md-5 d-none d-md-block">
           <div class="brand-pane h-100">
-            <div class="brand-logo">RM</div>
-            <div class="brand-title">Welcome to RMHUB</div>
-            <div class="brand-sub">
-              Create your account to unlock a faster checkout, order tracking, and exclusive offers.
+            <div class="brand-top">
+              <img src="/images/NavImg.jpg" class="brand-img" alt="RMHUB">
+              <div class="brand-word">RMHUB</div>
             </div>
-            <ul class="brand-list">
-              <li>Quick checkout experience</li>
-              <li>Order history and tracking</li>
-              <li>Member-only discounts</li>
-              <li>Secure account protection</li>
-            </ul>
-            <div class="brand-badge">
-              <span style="font-weight:800;">Secure</span>
-              <span style="opacity:0.85;">Protected by platform-grade validation</span>
+
+            <div class="brand-mini">
+              Faster checkout. Order updates. One account.
             </div>
+
+            <div class="brand-icons" aria-label="Shopping icons">
+              <!-- Cart -->
+              <div class="icon-chip" title="Cart" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 6h15l-1.5 9h-12z"></path>
+                  <path d="M6 6l-2-3H1"></path>
+                  <circle cx="9" cy="20" r="1.5"></circle>
+                  <circle cx="18" cy="20" r="1.5"></circle>
+                </svg>
+              </div>
+
+              <!-- Bag -->
+              <div class="icon-chip" title="Bag" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 8h12l-1 14H7L6 8z"></path>
+                  <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                </svg>
+              </div>
+
+              <!-- Delivery -->
+              <div class="icon-chip" title="Delivery" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 7h11v10H3z"></path>
+                  <path d="M14 10h4l3 3v4h-7z"></path>
+                  <circle cx="7" cy="19" r="1.5"></circle>
+                  <circle cx="18" cy="19" r="1.5"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Watermark hero -->
+            <svg class="brand-hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M6 8h12l-1 14H7L6 8z"></path>
+              <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+              <path d="M7 12h10"></path>
+            </svg>
           </div>
         </div>
 
-        <!-- RIGHT FORM PANEL -->
+        <!-- RIGHT: FORM -->
         <div class="col-md-7">
           <div class="form-pane">
             <div class="form-header">
-              <h1>Create your account</h1>
-              <p>Join RMHUB to save your details and manage orders efficiently.</p>
+              <h1>Create account</h1>
+              <p>Use your email and mobile number.</p>
 
               <% if (locals.exists) { %>
-                <div class="inline-alert">
-                  <%= exists %>
-                </div>
+                <div class="inline-alert"><%= exists %></div>
               <% } %>
             </div>
 
             <form action="/signup" method="post" onsubmit="return validateForm()">
-
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="firstName" class="form-label">First name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter first name"
-                    name="firstName"
-                    id="firstName"
-                    autocomplete="given-name"
-                  />
+                  <input type="text" class="form-control" placeholder="First name" name="firstName" id="firstName" autocomplete="given-name" />
                   <div class="error" id="firstNameError"></div>
                 </div>
 
                 <div class="form-group col-md-6">
                   <label for="lastName" class="form-label">Last name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Enter last name"
-                    name="lastName"
-                    id="lastName"
-                    autocomplete="family-name"
-                  />
+                  <input type="text" class="form-control" placeholder="Last name" name="lastName" id="lastName" autocomplete="family-name" />
                   <div class="error" id="lastNameError"></div>
                 </div>
               </div>
 
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label for="mobileNumber" class="form-label">Mobile number</label>
-                  <input
-                    type="tel"
-                    class="form-control"
-                    placeholder="07XXXXXXXX"
-                    name="mobileNumber"
-                    id="mobileNumber"
-                    inputmode="numeric"
-                    autocomplete="tel"
-                  />
+                  <label for="mobileNumber" class="form-label">Mobile</label>
+                  <input type="tel" class="form-control" placeholder="07XXXXXXXX" name="mobileNumber" id="mobileNumber" inputmode="numeric" autocomplete="tel" />
                   <div class="error" id="mobileNumberError"></div>
                 </div>
 
                 <div class="form-group col-md-6">
                   <label for="email" class="form-label">Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    placeholder="name@example.com"
-                    name="email"
-                    id="email"
-                    autocomplete="email"
-                  />
+                  <input type="email" class="form-control" placeholder="name@example.com" name="email" id="email" autocomplete="email" />
                   <div class="error" id="emailError"></div>
                 </div>
               </div>
 
               <div class="form-row">
+                <!-- Password -->
                 <div class="form-group col-md-6">
                   <label for="password" class="form-label">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Create a strong password"
-                    name="password"
-                    id="password"
-                    autocomplete="new-password"
-                  />
+
+                  <div class="input-group pw-group">
+                    <input type="password" class="form-control" placeholder="Password" name="password" id="password" autocomplete="new-password" />
+
+                    <div class="input-group-append">
+                      <button
+                        type="button"
+                        class="pw-toggle"
+                        data-toggle="pw"
+                        data-target="password"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                      >
+                        <!-- eye -->
+                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <!-- eye-off -->
+                        <svg class="eye-closed d-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M2 12s3.5-7 10-7c2.3 0 4.2.8 5.7 1.8"></path>
+                          <path d="M22 12s-3.5 7-10 7c-2.3 0-4.2-.8-5.7-1.8"></path>
+                          <path d="M3 3l18 18"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
                   <div class="error" id="passwordError"></div>
                 </div>
 
+                <!-- Confirm Password -->
                 <div class="form-group col-md-6">
-                  <label for="confirmPassword" class="form-label">Confirm password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Re-enter password"
-                    name="confirmPassword"
-                    id="confirmPassword"
-                    autocomplete="new-password"
-                  />
+                  <label for="confirmPassword" class="form-label">Confirm</label>
+
+                  <div class="input-group pw-group">
+                    <input type="password" class="form-control" placeholder="Confirm password" name="confirmPassword" id="confirmPassword" autocomplete="new-password" />
+
+                    <div class="input-group-append">
+                      <button
+                        type="button"
+                        class="pw-toggle"
+                        data-toggle="pw"
+                        data-target="confirmPassword"
+                        aria-label="Show password"
+                        aria-pressed="false"
+                      >
+                        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <svg class="eye-closed d-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M2 12s3.5-7 10-7c2.3 0 4.2.8 5.7 1.8"></path>
+                          <path d="M22 12s-3.5 7-10 7c-2.3 0-4.2-.8-5.7-1.8"></path>
+                          <path d="M3 3l18 18"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
                   <div class="error" id="confirmPasswordError"></div>
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="referalCode" class="form-label">Referral code (optional)</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter referral code"
-                  name="referalCode"
-                  id="referalCode"
-                  autocomplete="off"
-                />
+                <label for="referalCode" class="form-label">Referral (optional)</label>
+                <input type="text" class="form-control" placeholder="Referral code" name="referalCode" id="referalCode" autocomplete="off" />
                 <div class="error" id="referalCodeError"></div>
               </div>
 
-              <div class="form-group mb-3">
-                <button type="submit" class="btn btn-primary-rm">
-                  Create Account
-                </button>
+              <div class="form-group mb-2">
+                <button type="submit" class="btn btn-primary-rm">Create account</button>
               </div>
 
               <p class="muted-link mb-0">
-                Already have an account?
-                <a href="/login">Login</a>
+                Already have an account? <a href="/login">Login</a>
               </p>
             </form>
 
@@ -388,6 +475,37 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script>
+    // Password visibility toggles (eye icons)
+    (function () {
+      var btns = document.querySelectorAll('[data-toggle="pw"]');
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var targetId = btn.getAttribute('data-target');
+          var input = document.getElementById(targetId);
+          if (!input) return;
+
+          var isHidden = input.type === 'password';
+          input.type = isHidden ? 'text' : 'password';
+
+          var openEye = btn.querySelector('.eye-open');
+          var closedEye = btn.querySelector('.eye-closed');
+
+          if (isHidden) {
+            openEye.classList.add('d-none');
+            closedEye.classList.remove('d-none');
+            btn.setAttribute('aria-label', 'Hide password');
+            btn.setAttribute('aria-pressed', 'true');
+          } else {
+            openEye.classList.remove('d-none');
+            closedEye.classList.add('d-none');
+            btn.setAttribute('aria-label', 'Show password');
+            btn.setAttribute('aria-pressed', 'false');
+          }
+        });
+      });
+    })();
+
+    // Validations (keeps all your IDs + error containers)
     function validateForm() {
       var firstName = document.getElementById("firstName").value.trim();
       var lastName = document.getElementById("lastName").value.trim();
@@ -399,69 +517,82 @@
 
       var isValid = true;
 
-      // Validate First Name
+      function setBorder(id, ok) {
+        var el = document.getElementById(id);
+        if (!el) return;
+
+        el.style.borderColor = ok ? "" : "red";
+
+        // Sync toggle border for password groups
+        var group = el.closest('.pw-group');
+        if (group) {
+          var toggle = group.querySelector('.pw-toggle');
+          if (toggle) toggle.style.borderColor = ok ? "" : "red";
+        }
+      }
+
+      // First Name
       if (!firstName.match(/^[a-zA-Z]+$/)) {
         document.getElementById("firstNameError").innerHTML = "*Please enter a valid first name";
-        document.getElementById("firstName").style.borderColor = "red";
+        setBorder("firstName", false);
         isValid = false;
       } else {
         document.getElementById("firstNameError").innerHTML = "";
-        document.getElementById("firstName").style.borderColor = "";
+        setBorder("firstName", true);
       }
 
-      // Validate Last Name
+      // Last Name
       if (!lastName.match(/^[a-zA-Z]+$/)) {
         document.getElementById("lastNameError").innerHTML = "*Please enter a valid last name";
-        document.getElementById("lastName").style.borderColor = "red";
+        setBorder("lastName", false);
         isValid = false;
       } else {
         document.getElementById("lastNameError").innerHTML = "";
-        document.getElementById("lastName").style.borderColor = "";
+        setBorder("lastName", true);
       }
 
-      // Validate Mobile Number
+      // Mobile
       if (!mobileNumber.match(/^\d{10}$/)) {
         document.getElementById("mobileNumberError").innerHTML = "*Please enter a 10-digit mobile number";
-        document.getElementById("mobileNumber").style.borderColor = "red";
+        setBorder("mobileNumber", false);
         isValid = false;
       } else {
         document.getElementById("mobileNumberError").innerHTML = "";
-        document.getElementById("mobileNumber").style.borderColor = "";
+        setBorder("mobileNumber", true);
       }
 
-      // Validate Email
+      // Email
       if (!email.match(/\S+@\S+\.\S+/)) {
         document.getElementById("emailError").innerHTML = "*Please enter a valid email address";
-        document.getElementById("email").style.borderColor = "red";
+        setBorder("email", false);
         isValid = false;
       } else {
         document.getElementById("emailError").innerHTML = "";
-        document.getElementById("email").style.borderColor = "";
+        setBorder("email", true);
       }
 
-      // Validate Password
+      // Password (same rule you used)
       if (!password.match(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/)) {
         document.getElementById("passwordError").innerHTML =
           "*Password must contain at least one uppercase letter, one digit, one special character, and be at least 6 characters long";
-        document.getElementById("password").style.borderColor = "red";
+        setBorder("password", false);
         isValid = false;
       } else {
         document.getElementById("passwordError").innerHTML = "";
-        document.getElementById("password").style.borderColor = "";
+        setBorder("password", true);
       }
 
-      // Validate Confirm Password
+      // Confirm Password
       if (password !== confirmPassword) {
         document.getElementById("confirmPasswordError").innerHTML = "*Passwords do not match";
-        document.getElementById("confirmPassword").style.borderColor = "red";
+        setBorder("confirmPassword", false);
         isValid = false;
       } else {
         document.getElementById("confirmPasswordError").innerHTML = "";
-        document.getElementById("confirmPassword").style.borderColor = "";
+        setBorder("confirmPassword", true);
       }
 
-      // Referral Code: optional (no validation)
-
+      // Referral Code is optional (no validation)
       return isValid;
     }
   </script>
