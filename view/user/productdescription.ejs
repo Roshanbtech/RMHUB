@@ -2,425 +2,624 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        integrity="sha512-4RPSIlbkI9XK3Xy3w1sCBmbPrAgY+Rlj/ETD6ZIu3YLFjPd1l0s7Ly6mvJTuQw3Bvn53AfB4L2j7sfuk2JLqmA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            line-height: 1.5;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RMHUB | <%= product.model %></title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-        .card-wrapper {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top:100px;
-        }
+  <!-- Bootstrap 4.5.2 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-        .product-imgs {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-        .img-display {
-            width: 100%;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
+  <style>
+    :root {
+      --rm-primary: #3cf696;
+      --rm-primary-2: #22d67f;
+      --rm-ink: #0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius: 18px;
+      --rm-radius-lg: 22px;
+    }
 
-        .img-display img {
-            width: 100%;
-            height: auto;
-            transition: transform 0.5s ease;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        .img-display img:hover {
-            transform: scale(1.1);
-        }
+    .page-wrap {
+      margin-top: 18px;
+      margin-bottom: 44px;
+    }
 
-        .img-select {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+    }
 
-        .img-select .img-item {
-            margin: 0 10px;
-            cursor: pointer;
-        }
+    .section-pad {
+      padding: 18px;
+    }
 
-        .img-select .img-item img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
+    /* Gallery */
+    .gallery-top {
+      position: relative;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.75);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
 
-        .img-select .img-item img:hover {
-            transform: scale(1.1);
-        }
+    .ribbon {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      color: rgba(15, 23, 42, 0.95);
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      box-shadow: 0 12px 18px rgba(2, 6, 23, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      z-index: 2;
+    }
 
-        .product-content {
-            padding: 20px;
-            background-color: #e5e6de;
-            border-radius: 15px;
-        }
+    .img-stage {
+      width: 100%;
+      height: 420px;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
 
-        .product-title {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+    /* KEY: full image visible */
+    .img-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 12px;
+      display: block;
+      transition: transform 180ms ease, filter 180ms ease;
+    }
 
-        .product-rating {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    .img-stage:hover img {
+      transform: scale(1.03);
+      filter: saturate(1.02);
+    }
 
-        .product-rating .fas.fa-star.filled {
-            color: gold;
-        }
+    .thumbs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 14px 18px 18px 18px;
+      background: rgba(255, 255, 255, 0.75);
+    }
 
-        .product-rating .far.fa-star {
-            color: black;
-        }
+    .thumb {
+      width: 74px;
+      height: 74px;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.10);
+      box-shadow: 0 10px 16px rgba(2, 6, 23, 0.06);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .rating-dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            padding: 12px 16px;
-            z-index: 1;
-        }
+    .thumb:hover {
+      transform: translateY(-2px);
+      border-color: rgba(34, 214, 127, 0.55);
+    }
 
-        .product-rating:hover .rating-dropdown-content {
-            display: block;
-        }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+      display: block;
+    }
 
-        .product-price {
-            text-align: center;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
+    /* Content */
+    .title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-        .product-detail {
-            margin-bottom: 20px;
-        }
+    .product-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
 
-        .product-detail h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(60, 246, 150, 0.18);
+      border: 1px solid rgba(60, 246, 150, 0.30);
+      font-weight: 900;
+      color: rgba(15, 23, 42, 0.92);
+      white-space: nowrap;
+      box-shadow: 0 10px 16px rgba(2, 6, 23, 0.06);
+    }
 
-        .product-detail ul {
-            list-style: none;
-            padding: 0;
-            text-align: center;
-        }
+    .muted {
+      color: var(--rm-muted);
+      font-weight: 700;
+    }
 
-        .product-detail ul li {
-            margin-bottom: 10px;
-        }
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
 
-        .purchase-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .rating-badge {
+      background: rgba(15, 23, 42, 0.10);
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-weight: 900;
+    }
 
-        .purchase-info form {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    .fas.fa-star.filled { color: gold; }
+    .far.fa-star { color: rgba(15, 23, 42, 0.65); }
 
-        .purchase-info input[type="number"] {
-            width: 60px;
-            margin-right: 10px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-        }
+    .btn-rm {
+      border: none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 10px 14px;
+      color: rgba(15, 23, 42, 0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34, 214, 127, 0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+    }
 
-        .purchase-info button {
-            background-color: #3cf696;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .btn-rm:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: rgba(15, 23, 42, 0.95);
+    }
 
-        .purchase-info button:hover {
-            background-color: #2bbf75;
-        }
+    .btn-soft {
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      background: rgba(255, 255, 255, 0.70);
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 10px 14px;
+      color: rgba(15, 23, 42, 0.92);
+      transition: transform 160ms ease, background 160ms ease;
+    }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
+    .btn-soft:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.85);
+      color: rgba(15, 23, 42, 0.95);
+    }
 
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            color: #fff;
-            background-color: #000;
-            margin: 0 5px;
-            border-radius: 50%;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
+    .price-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.70);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+    }
 
-        .social-links a:hover {
-            background-color: #3cf696;
-        }
+    .price-now {
+      font-weight: 900;
+      font-size: 22px;
+      margin: 0;
+    }
 
-        @media (min-width: 768px) {
-            .card-wrapper {
-                display: flex;
-                padding: 40px;
-            }
+    .price-old {
+      margin: 4px 0 0 0;
+      font-weight: 800;
+      color: rgba(15, 23, 42, 0.55);
+      text-decoration: line-through;
+      font-size: 14px;
+    }
 
-            .product-imgs,
-            .product-content {
-                width: 50%;
-                padding: 20px;
-            }
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    .about-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.70);
+      border: 1px solid rgba(15, 23, 42, 0.10);
+    }
+
+    .about-box h6 {
+      margin: 0 0 8px 0;
+      font-weight: 900;
+    }
+
+    .spec-grid {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .spec {
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.05);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      font-weight: 800;
+      color: rgba(15, 23, 42, 0.92);
+    }
+
+    .spec small {
+      display: block;
+      font-weight: 800;
+      color: rgba(15, 23, 42, 0.60);
+      margin-bottom: 2px;
+    }
+
+    .purchase-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .qty {
+      width: 110px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      background: rgba(255, 255, 255, 0.75);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .share-row {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      color: rgba(15, 23, 42, 0.92);
+      transition: transform 160ms ease, background 160ms ease;
+      text-decoration: none;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(60, 246, 150, 0.22);
+      color: rgba(15, 23, 42, 0.95);
+      text-decoration: none;
+    }
+
+    @media (max-width: 991.98px) {
+      .img-stage { height: 340px; }
+      .spec-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <%- include("nav") %>
-    <br>
-    <div class="container">
-        <div class="card-wrapper">
-            <div class="product-imgs">
-                <div class="img-display">
-                    <img id="mainImage" src="<%= product.image[0].replace(/\\/g, '/') %>" alt="Product Image">
-                </div>
-                <div class="img-select">
-                    <div class="img-item">
-                        <img src="<%= product.image[0].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('<%= product.image[0].replace(/\\/g, '/') %>')">
-                    </div>
-                    <% if (product.image[1]) { %>
-                        <div class="img-item">
-                            <img src="<%= product.image[1].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('<%= product.image[1].replace(/\\/g, '/') %>')">
-                        </div>
-                    <% } %>
-                    <% if (product.image[2]) { %>
-                        <div class="img-item">
-                            <img src="<%= product.image[2].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('<%= product.image[2].replace(/\\/g, '/') %>')">
-                        </div>
-                    <% } %>
-                    <% if (product.image[3]) { %>
-                        <div class="img-item">
-                            <img src="<%= product.image[3].replace(/\\/g, '/') %>" alt="Product Image" onclick="changeImage('<%= product.image[3].replace(/\\/g, '/') %>')">
-                        </div>
-                    <% } %>
-                </div>
+  <%- include("nav") %>
+
+  <div class="container page-wrap">
+    <div class="row">
+
+      <!-- LEFT: GALLERY -->
+      <div class="col-lg-6 mb-3">
+        <div class="glass-card">
+
+          <div class="gallery-top">
+            <% if (product.onOffer) { %>
+              <div class="ribbon"><%= product.discount %>% OFF</div>
+            <% } %>
+
+            <div class="img-stage">
+              <img
+                id="mainImage"
+                src="<%= product.image[0].replace(/\\/g, '/') %>"
+                data-zoom-image="<%= product.image[0].replace(/\\/g, '/') %>"
+                alt="<%= product.model %>">
             </div>
-            <div class="product-content">
-                <h2 class="product-title"><%= product.model %></h2>
-                <div class="product-rating">
-                    <span class="badge badge-success"><strong><%= product.ratings %></strong></span>
-                    <% for (let i = 1; i <= 5; i++) { %>
-                        <% if (i <= product.ratings) { %>
-                            <i class="fas fa-star filled"></i>
-                        <% } else { %>
-                            <i class="far fa-star"></i>
-                        <% } %>
-                    <% } %>
-                    <div class="rating-dropdown-content">
-                        <a href="#" id="seeReviewsBtn" data-toggle="modal" data-target="#reviewsModal">See Reviews</a>
-                    </div>
-                </div>
-                <div class="product-price">
-                    <p class="last-price">Price: <span class="badge badge-success">
-                        <% if (product.onOffer) { %>
-                            ₹<%= Number(product.offerPrice).toLocaleString('en-IN') %>
-                        <% } else { %>
-                            ₹<%= Number(product.price).toLocaleString('en-IN') %>
-                        <% } %>
-                    </span></p>
-                </div>
-                <div class="product-detail">
-                    <h2>About this item:</h2>
-                    <p><%= product.description %></p>
-                    <ul>
-                        <li>Color: <span><%= product.color %></span></li>
-                        <li>Available Stock: <span><%= product.availableStock %></span></li>
-                        <li>Category: <span><%= product.category?.name %></span></li>
-                        <li>Shipping Area: <span>All over the world</span></li>
-                    </ul>
-                </div>
-                <div class="purchase-info">
-                    <form action="/cart/addtocart" method="post" onsubmit="return validateQuantity()">
-                        <input type="hidden" name="productId" value="<%= product._id %>">
-                        <input type="number" name="quantity" id="quantity" value="1" min="1" class="form-control" style="width: 70px; display: inline-block;">
-                        <button type="submit" class="btn btn-success">Add to Cart <i class="fas fa-shopping-cart"></i></button>
-                    </form>
-                    <button type="button" class="btn btn-info" id="rateButton">Rate this product</button>
-                </div>
+          </div>
+
+          <div class="thumbs">
+            <div class="thumb" onclick="changeImage('<%= product.image[0].replace(/\\/g, '/') %>')">
+              <img src="<%= product.image[0].replace(/\\/g, '/') %>" alt="Thumb 1">
             </div>
+
+            <% if (product.image[1]) { %>
+              <div class="thumb" onclick="changeImage('<%= product.image[1].replace(/\\/g, '/') %>')">
+                <img src="<%= product.image[1].replace(/\\/g, '/') %>" alt="Thumb 2">
+              </div>
+            <% } %>
+
+            <% if (product.image[2]) { %>
+              <div class="thumb" onclick="changeImage('<%= product.image[2].replace(/\\/g, '/') %>')">
+                <img src="<%= product.image[2].replace(/\\/g, '/') %>" alt="Thumb 3">
+              </div>
+            <% } %>
+
+            <% if (product.image[3]) { %>
+              <div class="thumb" onclick="changeImage('<%= product.image[3].replace(/\\/g, '/') %>')">
+                <img src="<%= product.image[3].replace(/\\/g, '/') %>" alt="Thumb 4">
+              </div>
+            <% } %>
+          </div>
+
         </div>
-    </div>
-<br>
+      </div>
 
-        <!-- Reviews Modal -->
-<!-- Reviews Modal -->
-<div class="modal fade" id="reviewsModal" tabindex="-1" role="dialog" aria-labelledby="reviewsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reviewsModalLabel">Product Reviews</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+      <!-- RIGHT: CONTENT -->
+      <div class="col-lg-6 mb-3">
+        <div class="glass-card section-pad">
+
+          <div class="title-row">
+            <div>
+              <h1 class="product-title"><%= product.model %></h1>
+              <div class="muted mt-1">
+                <%= product.color %>
+                <% if (product.category && product.category.name) { %>
+                  • <%= product.category.name %>
+                <% } %>
+              </div>
             </div>
-            <div class="modal-body">
-                <!-- Reviews content will be loaded here -->
-                <ol id="reviews-list" class="list-unstyled">
-                    <!-- Reviews will be dynamically added here -->
-                </ol>
+
+            <div class="chip">
+              <i class="fas fa-box"></i>
+              <span><%= product.availableStock %> in stock</span>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+
+          <div class="rating-row">
+            <span class="rating-badge"><i class="fas fa-star mr-1"></i><%= product.ratings %></span>
+
+            <span>
+              <% for (let i = 1; i <= 5; i++) { %>
+                <% if (i <= product.ratings) { %>
+                  <i class="fas fa-star filled"></i>
+                <% } else { %>
+                  <i class="far fa-star"></i>
+                <% } %>
+              <% } %>
+            </span>
+
+            <button type="button" class="btn btn-soft" id="seeReviewsBtn" data-toggle="modal" data-target="#reviewsModal">
+              <i class="far fa-comment-dots mr-2"></i>View reviews
+            </button>
+          </div>
+
+          <div class="price-box">
+            <p class="price-now">
+              <% if (product.onOffer) { %>
+                ₹<%= Number(product.offerPrice).toLocaleString('en-IN') %>
+              <% } else { %>
+                ₹<%= Number(product.price).toLocaleString('en-IN') %>
+              <% } %>
+            </p>
+
+            <% if (product.onOffer) { %>
+              <p class="price-old">₹<%= Number(product.price).toLocaleString('en-IN') %></p>
+            <% } %>
+
+            <div class="muted" style="font-weight:800;">
+              <i class="fas fa-shipping-fast mr-2"></i>Delivery available (as per your service zones)
             </div>
+          </div>
+
+          <div class="about-box">
+            <h6>About this item</h6>
+            <div class="muted" style="text-align:left;">
+              <%= product.description %>
+            </div>
+
+            <div class="spec-grid">
+              <div class="spec"><small>Color</small><%= product.color %></div>
+              <div class="spec"><small>Stock</small><%= product.availableStock %></div>
+              <div class="spec"><small>Category</small><%= product.category?.name %></div>
+              <div class="spec"><small>Shipping</small>All over the world</div>
+            </div>
+          </div>
+
+          <div class="purchase-row">
+            <form action="/cart/addtocart" method="post" onsubmit="return validateQuantity()" class="d-flex align-items-center" style="gap:10px; flex-wrap:wrap;">
+              <input type="hidden" name="productId" value="<%= product._id %>">
+              <input type="number" name="quantity" id="quantity" value="1" min="1" class="qty">
+              <button type="submit" class="btn-rm">
+                Add to Cart <i class="fas fa-shopping-cart ml-2"></i>
+              </button>
+            </form>
+
+            <button type="button" class="btn btn-soft" id="rateButton">
+              <i class="fas fa-star mr-2"></i>Rate this product
+            </button>
+          </div>
+
+          <div class="share-row">
+            <span class="muted" style="font-weight:900;">Share:</span>
+            <a class="share-btn" href="#" id="shareFb" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="share-btn" href="#" id="shareTw" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+            <a class="share-btn" href="#" id="shareWa" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a class="share-btn" href="#" id="copyLink" aria-label="Copy link"><i class="fas fa-link"></i></a>
+          </div>
+
         </div>
+      </div>
+
     </div>
-</div>
+  </div>
 
-        <!-- Footer -->
-        <%- include("footer") %>
+  <!-- Reviews Modal -->
+  <div class="modal fade" id="reviewsModal" tabindex="-1" role="dialog" aria-labelledby="reviewsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="border-radius:18px; overflow:hidden; border:none; box-shadow: var(--rm-shadow);">
+        <div class="modal-header" style="background:linear-gradient(135deg,#3cf696,#22d67f); border-bottom:none;">
+          <h5 class="modal-title" id="reviewsModalLabel" style="font-weight:900; margin:0;">Product Reviews</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="opacity:1;">
+            <span aria-hidden="true" style="font-weight:900;">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ol id="reviews-list" class="list-unstyled mb-0"></ol>
+          <div id="reviews-empty" class="muted" style="display:none; font-weight:800;">No reviews yet.</div>
+        </div>
+        <div class="modal-footer" style="border-top:1px solid rgba(15,23,42,0.08);">
+          <button type="button" class="btn btn-soft" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            <!-- Rating Modal -->
-            <%- include("ratingmodal", { productId: productId }) %>
+  <!-- Footer -->
+  <%- include("footer") %>
 
-                <!-- Scripts -->
-                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- Rating Modal -->
+  <%- include("ratingmodal", { productId: productId }) %>
 
-                <script>
-                    // Add a click event listener to the "See Reviews" button/link
-                    document.getElementById('seeReviewsBtn').addEventListener('click', function () {
-                        // Get the product ID from the product description page (you may need to store it somewhere accessible)
-                        var productId = '<%= product._id %>'; // Use the appropriate method to get the product ID
-                    
-                        // Make an AJAX request to fetch the reviews for the product
-                        $.ajax({
-                            url: '/reviews/' + productId,
-                            type: 'GET',
-                            success: function (response) {
-                                // Assuming the response contains reviews data in JSON format
-                                var reviews = response.reviews;
-                    
-                                // Populate the modal with the reviews content
-                                var reviewsList = document.getElementById('reviews-list');
-                                reviewsList.innerHTML = ''; // Clear previous content
-                    
-                                // Loop through the reviews and create list items to display them
-                                reviews.forEach(function (review) {
-                                    var listItem = document.createElement('li');
-                                    listItem.textContent = review; // Assuming each review is a string
-                    
-                                    // Append the list item to the reviews list
-                                    reviewsList.appendChild(listItem);
-                                });
-                            },
-                            error: function (error) {
-                                console.error('Error fetching reviews:', error);
-                                // Handle error (e.g., display an error message)
-                            }
-                        });
-                    });
-                    
-                </script>
-                <script>
-                    $(document).ready(function () {
-                        $('#mainImage').elevateZoom();
-                    });
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-                    function changeImage(imageUrl) {
-                        $('#mainImage').attr('src', imageUrl).data('zoom-image', imageUrl).elevateZoom();
-                    }
+  <script>
+    // Zoom init (safe re-init)
+    function initZoom() {
+      try { $('.zoomContainer').remove(); } catch(e) {}
+      try { $('#mainImage').removeData('elevateZoom'); } catch(e) {}
+      $('#mainImage').elevateZoom();
+    }
 
-                </script>
-                <script>
-                    document.getElementById('rateButton').addEventListener('click', function () {
-                        // Get the productId from the hidden input field in the product description page
-                        var productId = document.querySelector('input[name="productId"]').value;
+    $(document).ready(function () {
+      initZoom();
 
-                        // Set the value of the productId input field in the modal form
-                        document.querySelector('#ratingReviewForm input[name="productId"]').value = productId;
+      // Share links
+      const url = window.location.href;
+      $('#shareFb').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url));
+      $('#shareTw').attr('href', 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url));
+      $('#shareWa').attr('href', 'https://wa.me/?text=' + encodeURIComponent(url));
 
-                        // Show the modal
-                        $('#ratingReviewModal').modal('show');
-                    });
-                </script>
+      $('#copyLink').on('click', async function(e){
+        e.preventDefault();
+        try {
+          await navigator.clipboard.writeText(url);
+          Swal.fire({ icon:'success', title:'Copied', text:'Link copied to clipboard.' });
+        } catch (err) {
+          Swal.fire({ icon:'error', title:'Copy failed', text:'Could not copy link.' });
+        }
+      });
+    });
 
-                <script>
-                    // Function to validate the quantity input
-                    function validateQuantity() {
-                        var quantity = parseInt(document.getElementById('quantity').value);
-                        var availableStock = parseInt('<%= product.availableStock %>');
-                
-                        // Check if quantity is not a number or is less than or equal to 0
-                        if (isNaN(quantity) || quantity <= 0) {
-                            // Display SweetAlert message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Please enter a valid quantity!',
-                            });
-                            return false; // Prevent form submission
-                        }
+    function changeImage(imageUrl) {
+      $('#mainImage')
+        .attr('src', imageUrl)
+        .attr('data-zoom-image', imageUrl);
+      initZoom();
+    }
 
-                        // Check if quantity exceeds available stock
-                        if (quantity > availableStock) {
-                            // Display SweetAlert message
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Quantity exceeds available stock!',
-                            });
-                            return false; // Prevent form submission
-                        }
-                
-                        return true; // Allow form submission
-                    }
-                </script>
-                
+    // Load reviews when modal opens (single source of truth)
+    $('#reviewsModal').on('show.bs.modal', function () {
+      const productId = '<%= product._id %>';
 
+      $.ajax({
+        url: '/reviews/' + productId,
+        type: 'GET',
+        success: function (response) {
+          const reviews = (response && response.reviews) ? response.reviews : [];
+          const reviewsList = document.getElementById('reviews-list');
+          const emptyEl = document.getElementById('reviews-empty');
+
+          reviewsList.innerHTML = '';
+
+          if (!reviews.length) {
+            emptyEl.style.display = 'block';
+            return;
+          }
+
+          emptyEl.style.display = 'none';
+
+          reviews.forEach(function (review) {
+            const li = document.createElement('li');
+            li.style.padding = '10px 12px';
+            li.style.borderRadius = '14px';
+            li.style.border = '1px solid rgba(15,23,42,0.10)';
+            li.style.background = 'rgba(255,255,255,0.70)';
+            li.style.marginBottom = '10px';
+            li.style.fontWeight = '800';
+            li.style.color = 'rgba(15,23,42,0.85)';
+            li.textContent = review;
+            reviewsList.appendChild(li);
+          });
+        },
+        error: function (error) {
+          console.error('Error fetching reviews:', error);
+        }
+      });
+    });
+
+    // Rate button -> open rating modal and bind productId into modal form
+    document.getElementById('rateButton').addEventListener('click', function () {
+      const productId = document.querySelector('input[name="productId"]').value;
+      document.querySelector('#ratingReviewForm input[name="productId"]').value = productId;
+      $('#ratingReviewModal').modal('show');
+    });
+
+    // Quantity validation (SweetAlert)
+    function validateQuantity() {
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const availableStock = parseInt('<%= product.availableStock %>');
+
+      if (isNaN(quantity) || quantity <= 0) {
+        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Please enter a valid quantity!' });
+        return false;
+      }
+
+      if (quantity > availableStock) {
+        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Quantity exceeds available stock!' });
+        return false;
+      }
+
+      return true;
+    }
+  </script>
 </body>
 
 </html>
