@@ -1,296 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wishlist | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-    <style>
-        /* Add your CSS here */
-        body {
-            font-family: 'Open Sans', sans-serif;
-            line-height: 1.5;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+  <!-- Bootstrap 4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-        .container {
-            margin-top: 0px;
-            padding: 20px;
-        }
+  <!-- DataTables (Bootstrap 4 skin) -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-        .table th,
-        .table td {
-            padding: 8px;
-            border: 1px solid #dee2e6;
-            text-align: center;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius: 18px;
+      --rm-radius-lg: 22px;
+    }
 
-        .table th {
-            background-color: #3cf696;
-            /* Header th color */
-        }
+    body{
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        .table td {
-            background-color: #e5e6de;
-            /* Table cell color */
-        }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
 
-        .table td.actions button {
-            margin-right: 5px;
-        }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+    }
 
-        .table th,
-        .table td:hover {
-            background-color: #d8f0dd;
-            /* Hover color */
-        }
+    .page-head{
+      padding: 18px 18px 12px 18px;
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      background: rgba(255,255,255,0.75);
+    }
 
-        .btn-warning {
-            background-color: #FFD166;
-            border-color: #FFD166;
-            color: #000000;
-            text-decoration: none;
-            /* Remove underline */
-            padding: 10px 20px;
-            /* Increase button size */
-            border-radius: 10px;
-            /* Add border radius */
-            display: flex;
-            justify-content: center;
-        }
+    .page-title{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 22px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
 
-        .btn-success {
-            background-color: #3cf696;
-            border-color: #3cf696;
-            color: #ffffff;
-            text-decoration: none;
-            /* Remove underline */
-            padding: 10px 20px;
-            /* Increase button size */
-            border-radius: 10px;
-            /* Add border radius */
-            display: flex;
-            justify-content: center;
-        }
+    .page-sub{
+      margin: 6px 0 0 0;
+      color: var(--rm-muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-        .btn-danger,
-        .btn-info {
-            color: #fff;
-        }
+    .user-chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(60,246,150,0.18);
+      border: 1px solid rgba(60,246,150,0.30);
+      font-weight: 900;
+      color: rgba(15,23,42,0.92);
+      white-space: nowrap;
+    }
 
-        .btn-danger:hover {
-            background-color: red;
+    /* Table container padding */
+    .table-wrap{ padding: 14px 18px 18px 18px; }
 
-        }
+    /* DataTables alignment to theme */
+    .dataTables_wrapper .row{ align-items:center; }
+    .dataTables_wrapper .dataTables_length label,
+    .dataTables_wrapper .dataTables_filter label{
+      font-weight: 900;
+      color: rgba(15,23,42,0.85);
+    }
 
-        .btn-info:hover {
-            background-color: blue;
-        }
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select{
+      border-radius: 14px !important;
+      border: 1px solid rgba(15,23,42,0.12) !important;
+      background: rgba(255,255,255,0.85) !important;
+      font-weight: 800;
+      height: 42px;
+      padding: 8px 12px;
+      outline: none;
+      box-shadow: none !important;
+    }
 
-        .btn-info i.fa-eye {
-            color: blue;
-            /* Set color for refresh icon */
-        }
+    table.dataTable{
+      border-collapse: separate !important;
+      border-spacing: 0 10px !important; /* card-like rows */
+    }
 
-        .btn-danger i.fa-trash-o {
-            color: red;
-            /* Set color for delete icon */
-        }
+    table.dataTable thead th{
+      border: none !important;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2)) !important;
+      color: rgba(15,23,42,0.95) !important;
+      font-weight: 900 !important;
+      padding: 14px 14px !important;
+    }
 
-        .btn-info i.fa-eye:hover {
-            color: #fff;
+    table.dataTable tbody tr{
+      background: transparent !important;
+    }
 
-        }
+    table.dataTable tbody td{
+      background: rgba(255,255,255,0.86) !important;
+      border-top: 1px solid rgba(15,23,42,0.08) !important;
+      border-bottom: 1px solid rgba(15,23,42,0.08) !important;
+      padding: 14px !important;
+      vertical-align: middle !important;
+    }
 
-        .btn-danger i.fa-trash-o:hover {
-            color: #fff;
+    table.dataTable tbody td:first-child{
+      border-left: 1px solid rgba(15,23,42,0.08) !important;
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+      font-weight: 900;
+    }
 
-        }
+    table.dataTable tbody td:last-child{
+      border-right: 1px solid rgba(15,23,42,0.08) !important;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
 
-        .nav {
-            background-color: #3cf696;
-            position: fixed;
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            width: 100%
-        }
+    /* Product cell layout */
+    .prod{
+      display:flex;
+      align-items:flex-start;
+      gap: 12px;
+      min-width: 280px;
+    }
 
-        .nav img {
-            height: 50px;
-            width: auto;
-            /* Add this to maintain aspect ratio */
-        }
+    .prod-img{
+      width: 74px;
+      height: 74px;
+      border-radius: 16px;
+      background:#fff;
+      border: 1px solid rgba(15,23,42,0.10);
+      box-shadow: 0 10px 16px rgba(2,6,23,0.06);
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
 
-        @keyframes zoomInAndOut {
-            0% {
-                transform: scale(1);
-            }
+    .prod-img img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      padding: 8px;
+      display:block;
+    }
 
-            50% {
-                transform: scale(1.1);
-            }
+    .prod-title{
+      margin:0;
+      font-weight: 900;
+      font-size: 15px;
+      line-height: 1.2;
+    }
 
-            100% {
-                transform: scale(1);
-            }
-        }
+    .prod-desc{
+      margin: 6px 0 0 0;
+      color: rgba(15,23,42,0.70);
+      font-weight: 700;
+      font-size: 13px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-        .logo-small {
+    .price{
+      font-weight: 900;
+      white-space: nowrap;
+    }
 
-            animation: zoomInAndOut 1s infinite;
-            animation-direction: alternate;
-            animation-timing-function: ease-in-out;
-        }
-    </style>
+    .btn-icon{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color: rgba(15,23,42,0.92);
+      box-shadow: 0 10px 16px rgba(2,6,23,0.06);
+      transition: transform 160ms ease, background 160ms ease;
+    }
+    .btn-icon:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.95);
+      text-decoration:none;
+      color: rgba(15,23,42,0.95);
+    }
+
+    .btn-cta{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .btn-cta:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
+
+    .footer-bar{
+      margin-top: 14px;
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 0 18px 18px 18px;
+    }
+
+    .empty-state{
+      padding: 22px 18px;
+      text-align:center;
+      color: rgba(15,23,42,0.80);
+      font-weight: 900;
+    }
+
+    /* Pagination */
+    .dataTables_wrapper .pagination .page-link{
+      border-radius: 12px !important;
+      margin: 0 4px;
+      border: 1px solid rgba(15,23,42,0.10) !important;
+      font-weight: 900;
+      color: rgba(15,23,42,0.85) !important;
+    }
+
+    .dataTables_wrapper .pagination .page-item.active .page-link{
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2)) !important;
+      border: none !important;
+      color: rgba(15,23,42,0.95) !important;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="nav">
-        <img src="/images/NavImg.jpg" alt="Logo">
-    </div>
-    <br>
-    <div class="container" style="margin-top:50px">
-        <h2 class="text-center" style="display: flex; justify-content:center"><img
-                src="/images/shopping-cart-fill-svgrepo-com.svg" alt="Logo" class="logo-small"
-                style="width:35px;height:35px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-            WISHLIST</h2>
-        <p>User : <%= useremail %>
-        </p>
-        <div class="row">
-            <div class="col-md-12">
-                <table id="wishlistTable" class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th style="width:5%;background-color: #3cf696">SI No.</th>
-                            <th style="width:30%;background-color: #3cf696">Product</th>
-                            <th style="width:20%;background-color: #3cf696">Price</th>
-                            <th style="width:10%;background-color:#3cf696">Actions</th> <!-- Added Actions column -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (wishlist && wishlist.items && wishlist.items.length> 0) { %>
-                            <% let totalPrice=0; %>
-                                <% wishlist.items.forEach((item,index)=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= index+1 %>
-                                        </td>
-                                        <td data-th="Product">
-                                            <div class="row">
-                                                <div class="col-sm-2 hidden-xs"><img
-                                                        src="<%= item.productId.image[0] %>" alt="..."
-                                                        class="img-responsive"
-                                                        style="max-width: 100px; max-height: 100px;" /></div>
-                                                <div class="col-sm-10">
-                                                    <h4 class="nomargin">
-                                                        <%= item.productId.model %>
-                                                    </h4>
-                                                    <p>
-                                                        <%= item.productId.description %>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td data-th="Price">₹<%= Number(item.productId.price).toLocaleString('en-IN') %>
-                                        </td>
-                                        <td class="actions" data-th="">
-                                            <button class="btn btn-info btn-sm" title="View"
-                                                onclick="location.href='/proddes/<%= item.productId._id %>'"><i
-                                                    class="fa fa-eye"></i></button>
-                                            <button class="btn btn-danger btn-sm" title="Remove"
-                                                onclick="confirmRemove('<%= item.productId._id %>')"><i
-                                                    class="fa fa-trash-o"></i></button>
-                                        </td>
-                                    </tr>
-                                    <% }); %>
-                                        <% } else { %>
-                                            <!-- <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                               
-                                <td></td>
-                                <td >Wishlist is empty</td>
-                                <td></td>
-                            </tr> -->
-                                            <h2>Wishlist is empty</h2>
-                                            <% } %>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td><a href="/home" class="btn btn-warning">Continue Shopping</a></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+  <%- include("nav") %>
+
+  <div class="container page-wrap">
+    <div class="glass-card">
+
+      <div class="page-head">
+        <div>
+          <h2 class="page-title"><i class="fas fa-heart"></i> Wishlist</h2>
+          <p class="page-sub">Quick access to your saved items. Use search + pagination to manage faster.</p>
         </div>
+        <div class="user-chip"><i class="fas fa-user"></i> <span><%= useremail %></span></div>
+      </div>
+
+      <div class="table-wrap">
+        <% if (wishlist && wishlist.items && wishlist.items.length > 0) { %>
+
+          <table id="wishlistTable" class="table table-borderless" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="width:8%;">#</th>
+                <th style="width:56%;">Product</th>
+                <th style="width:18%;">Price</th>
+                <th style="width:18%;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% wishlist.items.forEach((item, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+
+                  <td>
+                    <div class="prod">
+                      <div class="prod-img">
+                        <img src="<%= item.productId.image[0] %>" alt="<%= item.productId.model %>">
+                      </div>
+                      <div>
+                        <p class="prod-title"><%= item.productId.model %></p>
+                        <p class="prod-desc"><%= item.productId.description %></p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="price">₹<%= Number(item.productId.price).toLocaleString('en-IN') %></td>
+
+                  <td>
+                    <div class="d-flex" style="gap:10px;">
+                      <a class="btn-icon" href="/proddes/<%= item.productId._id %>" title="View">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <button class="btn-icon" type="button" title="Remove" onclick="confirmRemove('<%= item.productId._id %>')">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+
+        <% } else { %>
+          <div class="empty-state">
+            Wishlist is empty.
+          </div>
+        <% } %>
+      </div>
+
+      <div class="footer-bar">
+        <a class="btn-cta" href="/home"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+      </div>
+
     </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        $(document).ready(function () {
-            $('#wishlistTable').DataTable(); // Initialize DataTable
+  <%- include("footer") %>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      const tableEl = $('#wishlistTable');
+      if (tableEl.length) {
+        tableEl.DataTable({
+          pageLength: 10,
+          lengthMenu: [5, 10, 25, 50],
+          pagingType: "simple_numbers",
+          autoWidth: false,
+          columnDefs: [
+            { orderable: false, targets: [1, 3] } // product + actions no sort
+          ],
+          language: {
+            search: "",
+            searchPlaceholder: "Search wishlist...",
+            lengthMenu: "Show _MENU_",
+            info: "Showing _START_ to _END_ of _TOTAL_",
+            infoEmpty: "No items",
+            zeroRecords: "No matching items found"
+          }
         });
-    </script>
-    <script>
-        function confirmRemove(itemId) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3cf696",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, remove it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If the user confirms, make a GET request to remove the item
-                    fetch(`/wishlist/removefromwishlist/${itemId}`, {
-                        method: 'POST'
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Failed to remove item from wishlist');
-                            }
-                            // Handle success response (e.g., update UI)
-                            // For example, you can reload the page or update the wishlist UI
-                            location.reload(); // Reload the page after successful removal
+      }
+    });
 
-                            Swal.fire({
-                                text: 'Item removed from wishlist',
-                                icon: 'success',
-                                timer: 2000
-                            });
-                        })
-                        .catch(error => {
-                            // Handle error response (if any)
-                            console.error(error);
-                            Swal.fire("Error", "Failed to remove item from wishlist!", "error");
-                        });
-                }
-            });
+    function confirmRemove(itemId) {
+      Swal.fire({
+        title: "Remove item?",
+        text: "This will remove the item from your wishlist.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3cf696",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Remove"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/wishlist/removefromwishlist/${itemId}`, { method: 'POST' })
+            .then(response => {
+              if (!response.ok) throw new Error('Failed to remove');
+              location.reload();
+            })
+            .catch(() => Swal.fire("Error", "Failed to remove item from wishlist!", "error"));
         }
-    </script>
-
+      });
+    }
+  </script>
 </body>
-
 </html>

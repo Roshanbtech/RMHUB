@@ -307,36 +307,6 @@
             text-align: center;
         }
 
-        .share-row {
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .share-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(15, 23, 42, 0.12);
-            border: 1px solid rgba(15, 23, 42, 0.12);
-            color: rgba(15, 23, 42, 0.92);
-            transition: transform 160ms ease, background 160ms ease;
-            text-decoration: none;
-        }
-
-        .share-btn:hover {
-            transform: translateY(-1px);
-            background: rgba(60, 246, 150, 0.22);
-            color: rgba(15, 23, 42, 0.95);
-            text-decoration: none;
-        }
-
         @media (max-width: 991.98px) {
             .img-stage {
                 height: 340px;
@@ -504,18 +474,6 @@
                             </button>
                         </div>
 
-                        <div class="share-row">
-                            <span class="muted" style="font-weight:900;">Share:</span>
-                            <a class="share-btn" href="#" id="shareFb" aria-label="Share on Facebook"><i
-                                    class="fab fa-facebook-f"></i></a>
-                            <a class="share-btn" href="#" id="shareTw" aria-label="Share on Twitter"><i
-                                    class="fab fa-twitter"></i></a>
-                            <a class="share-btn" href="#" id="shareWa" aria-label="Share on WhatsApp"><i
-                                    class="fab fa-whatsapp"></i></a>
-                            <a class="share-btn" href="#" id="copyLink" aria-label="Copy link"><i
-                                    class="fas fa-link"></i></a>
-                        </div>
-
                     </div>
                 </div>
 
@@ -593,12 +551,6 @@
 
                     $(document).ready(function () {
                         initZoom();
-
-                        // Share links
-                        const url = window.location.href;
-                        $('#shareFb').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url));
-                        $('#shareTw').attr('href', 'https://twitter.com/intent/tweet?url=' + encodeURIComponent(url));
-                        $('#shareWa').attr('href', 'https://wa.me/?text=' + encodeURIComponent(url));
 
                         $('#copyLink').on('click', async function (e) {
                             e.preventDefault();
