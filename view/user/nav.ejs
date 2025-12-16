@@ -1,268 +1,288 @@
-<head>
-  <link rel="stylesheet" href="/css/style.css">
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-  <style>
-    .navbar {
-        background-color: #3CF696;
-    }
+<!-- Font Awesome (keep here so all pages using nav get icons) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
-    /* Dropdown container */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    /* Dropdown content (hidden by default) */
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #e5e6de;
-      min-width: 120px;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-    }
-
-    /* Links inside the dropdown */
-    .dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-
-    /* Change color of dropdown links on hover */
-    .dropdown-content a:hover {
-      background-color: #3CF696;
-    }
-
-    /* Show the dropdown menu on hover */
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-    .navbar-nav .nav-item a {
-      display: inline-block;
-      position: relative;
-    }
-
-    .navbar-nav .nav-item a span {
-      display: inline;
-      transition: transform 0.3s ease;
-    }
-
-    .navbar-nav .nav-item a:hover span {
-      animation: jump 0.5s ease-in-out forwards;
-    }
-
-    @keyframes jump {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      25% {
-        transform: translateY(-5px);
-      }
-
-      50% {
-        transform: translateY(0);
-      }
-
-      75% {
-        transform: translateY(-2px);
-      }
-    }
-
-    .navbar-toggler-icon {
-      color: #fff;
-      background-color: black;
-      border-radius: 5px;
-      padding: 5px;
+<style>
+  :root{
+    --rm-primary:#3cf696;
+    --rm-primary-2:#22d67f;
+    --rm-ink:#0f172a;
+    --rm-muted: rgba(15, 23, 42, 0.65);
+    --rm-border: rgba(15, 23, 42, 0.10);
+    --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+    --rm-radius: 18px;
+    --nav-h: 82px;
   }
 
-  /* Custom CSS for the modal */
-  .modal-content {
-      background-color: #f8f9fa;
-      /* Background color */
-      border-radius: 20px;
-      /* Rounded corners */
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-      /* Box shadow */
+  body{ padding-top: var(--nav-h); }
+
+  .navbar.rmh-navbar{
+    background: rgba(60, 246, 150, 0.90);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    min-height: var(--nav-h);
   }
 
-  .modal-header {
-      border-bottom: none;
-      /* Remove bottom border */
+  .navbar .navbar-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:6px 0;
   }
 
-  .modal-title {
-      font-weight: bold;
-      /* Make title bold */
+  .nav-brand-badge{
+    width:52px;height:52px;border-radius:14px;
+    background: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 10px 18px rgba(2,6,23,0.10);
+    overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
   }
 
-  .modal-body {
-      padding: 20px;
-      /* Add padding */
+  /* KEY FIX: ensure full logo is visible */
+  .nav-brand-badge img{
+    width:100%;
+    height:100%;
+    object-fit: contain;
+    padding: 6px;
+    display:block;
   }
 
-  .navbar-nav .nav-link {
-      color: #333;
-      /* Text color */
-      font-weight: bold;
-      /* Make links bold */
+  .nav-brand-text{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
   }
 
-
-
-  .list-group-item {
-      border: 1px solid #3cf696;
-      background-color: black;
+  .nav-brand-text .brand-name{
+    font-weight:900;
+    letter-spacing:0.3px;
+    margin:0;
+    font-size:18px;
+    color: rgba(15,23,42,0.95);
   }
 
-  a{
-      color: #3cf696;
-      text-decoration: none;
-      font-weight: bold;
-      text-align: center;
+  .nav-brand-text .brand-tag{
+    margin:0;
+    font-size:12px;
+    color: rgba(15,23,42,0.7);
+    font-weight:700;
   }
 
-  .list-group-flush>.list-group-item {
-      border-width: 3px 2px 3px 2px;
-      border-color: #3cf696;
-      border-style: ridge;
+  .navbar-nav .nav-link{
+    color: rgba(15, 23, 42, 0.92) !important;
+    font-weight:800;
+    letter-spacing:0.2px;
+    border-radius:12px;
+    padding:10px 12px;
+    transition: background 160ms ease, transform 160ms ease;
   }
 
-  </style>
-</head>
+  .navbar-nav .nav-link:hover{
+    background: rgba(255, 255, 255, 0.42);
+    transform: translateY(-1px);
+  }
 
-<nav class="navbar navbar-expand-lg fixed-top navbar">
-  <div class="container" style="height:60px">
-      <a class="navbar-brand custom-logo" href="/home">
-          <img class="navbar-logo" src="/images/NavImg.jpg" style="height:70px;" alt="rmhub">
-      </a>
+  .nav-pill{
+    background: rgba(255, 255, 255, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 14px;
+    padding: 6px;
+    display:flex;
+    align-items:center;
+    box-shadow: 0 10px 18px rgba(2,6,23,0.08);
+  }
 
-      <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#navbarModal">
-          <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
-      </button>
+  .nav-pill .form-control{
+    border:none;
+    border-radius:12px;
+    background: rgba(255,255,255,0.65);
+    height:42px;
+    font-weight:700;
+    color: rgba(15,23,42,0.9);
+  }
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                  <a class="nav-link ml-3" href="/home">Home</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link ml-3" href="/phones">Phones</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link ml-3" href="/wearables">Watches</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link ml-3" href="/tablets">Tablets</a>
-              </li>
-          </ul>
-          <!-- Search form with dropdown and price field -->
-          <form action="/home" method="GET" class="form-inline my-2 my-lg-0"
-              style="border:2px solid #d8f0dd; border-radius: 5px">
-              <div class="input-group">
-                  <input class="form-control mr-sm-0" type="search" placeholder="Search" aria-label="Search"
-                      name="query" style="border-color:#3cf696">
-                  <!-- <input class="form-control ml-0" type="number" placeholder="Price" min="1" aria-label="price"
-                  name="price" style="border-color:#3cf696"> -->
+  .nav-pill .form-control:focus{
+    box-shadow: 0 0 0 4px rgba(60, 246, 150, 0.18);
+  }
 
-                  <!-- Dropdown for sorting -->
-                  <!-- <select class="custom-select" name="sortBy"
-                  style="width:20px;background-color:#d8f0dd;border-color:#3cf696">
-                  <option value="">Sort By</option>
-                  <option value="nameAsc">Name (A-Z)</option>
-                  <option value="nameDesc">Name (Z-A)</option>
-                  <option value="priceAsc">Price (Low to High)</option>
-                  <option value="priceDesc">Price (High to Low)</option>
-              </select> -->
-                  <!-- Price field -->
-                  <div class="input-group-append">
-                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
-                          style="background-color:#3cf696;">
-                          <i class="fas fa-search" style="color:#fff;"></i>
-                      </button>
-                  </div>
-              </div>
-          </form>
+  .nav-pill .btn{
+    height:42px;
+    border-radius:12px;
+    border:none;
+    font-weight:900;
+    color: rgba(15,23,42,0.9);
+    background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+    padding:0 14px;
+  }
 
-          <div class="navbar-nav ml-auto">
-              <a class="nav-link" href="/wishlist/getwishlist" title="Wishlist">
-                  <i class="fas fa-heart navbar-icon" style="color:black;"></i>
-              </a>
-              <a class="nav-link" href="/cart/getcart" title="Cart">
-                  <i class="fas fa-shopping-cart navbar-icon" style="color:black;"></i>
-              </a>
-              <div class="dropdown">
-                  <button class="nav-link dropbtn" style="background: none; border: none; cursor: pointer;">
-                      <i class="fas fa-user navbar-icon" style="color: black;"></i>
-                  </button>
-                  <div class="dropdown-content">
-                      <a href="/profile/getprofile">Profile</a>
-                      <a href="/logout">Logout</a>
-                  </div>
-              </div>
-          </div>
+  .nav-icon-btn{
+    width:44px;height:44px;
+    border-radius:14px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(255,255,255,0.42);
+    border: 1px solid rgba(255,255,255,0.55);
+    color: rgba(15,23,42,0.9);
+    box-shadow: 0 10px 18px rgba(2,6,23,0.08);
+    transition: transform 160ms ease, background 160ms ease;
+  }
+
+  .nav-icon-btn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.55);
+    text-decoration:none;
+    color: rgba(15,23,42,0.95);
+  }
+
+  .navbar-toggler{ border:none; outline:none; padding:0; }
+  .navbar-toggler .toggler-chip{
+    width:46px;height:46px;border-radius:14px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background: rgba(15,23,42,0.12);
+    border: 1px solid rgba(255,255,255,0.55);
+    color: rgba(15,23,42,0.9);
+  }
+
+  /* Mobile modal styling */
+  .modal-content.rmh-modal{
+    border-radius: 22px;
+    border:none;
+    overflow:hidden;
+    box-shadow: var(--rm-shadow);
+    background: rgba(255,255,255,0.92);
+  }
+
+  .modal-header.rmh-modal-header{
+    background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+    border-bottom:none;
+    color: rgba(15,23,42,0.95);
+  }
+
+  .rmh-list .list-group-item{
+    border: 1px solid rgba(15,23,42,0.10);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.82);
+    padding: 12px 14px;
+  }
+
+  .rmh-list .list-group-item a{
+    color: rgba(15,23,42,0.92);
+    font-weight: 900;
+    text-decoration:none;
+  }
+
+  .rmh-list .list-group-item a:hover{
+    color: rgba(34,214,127,1);
+  }
+
+  .dropdown-menu.rmh-dd{
+    border-radius:14px;
+    border:1px solid rgba(15,23,42,0.10);
+    box-shadow: var(--rm-shadow);
+  }
+
+  .dropdown-menu.rmh-dd .dropdown-item{
+    font-weight: 800;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg fixed-top rmh-navbar">
+  <div class="container">
+
+    <a class="navbar-brand" href="/home">
+      <div class="nav-brand-badge">
+        <img src="/images/NavImg.jpg" alt="RMHUB Logo">
       </div>
+      <div class="nav-brand-text d-none d-sm-flex">
+        <p class="brand-name">RMHUB</p>
+        <p class="brand-tag">Technology Simplified</p>
+      </div>
+    </a>
+
+    <!-- Mobile toggler (modal) -->
+    <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#navbarModal" aria-label="Open menu">
+      <span class="toggler-chip"><i class="fas fa-bars"></i></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link ml-lg-2" href="/home">Home</a></li>
+        <li class="nav-item"><a class="nav-link ml-lg-2" href="/phones">Phones</a></li>
+        <li class="nav-item"><a class="nav-link ml-lg-2" href="/wearables">Watches</a></li>
+        <li class="nav-item"><a class="nav-link ml-lg-2" href="/tablets">Tablets</a></li>
+      </ul>
+
+      <!-- Search -->
+      <form action="/home" method="GET" class="my-2 my-lg-0 mr-lg-3">
+        <div class="nav-pill">
+          <input class="form-control" type="search" placeholder="Search products..." aria-label="Search" name="query">
+          <button class="btn" type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+        </div>
+      </form>
+
+      <!-- Icons -->
+      <div class="d-flex align-items-center" style="gap:10px;">
+        <a class="nav-icon-btn" href="/wishlist/getwishlist" title="Wishlist"><i class="fas fa-heart"></i></a>
+        <a class="nav-icon-btn" href="/cart/getcart" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+
+        <div class="dropdown">
+          <a class="nav-icon-btn dropdown-toggle" href="#" role="button" id="profileDropdown" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false" title="Account">
+            <i class="fas fa-user"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right rmh-dd" aria-labelledby="profileDropdown">
+            <a class="dropdown-item" href="/profile/getprofile">Profile</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </nav>
 
-<div class="modal fade" id="navbarModal" tabindex="-1" role="dialog" aria-labelledby="navbarModalLabel"
-aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" style="background-color: #d8f0dd">
-        <div class="modal-header" style="background-color: #3CF696; color: #fff">
-            <h5 class="modal-title" id="navbarModalLabel">Navigation</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body" >
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item" >
-                    <a class="nav-link" href="/home">Home</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/phones">Phones</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/wearables">Watches</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/tablets">Tablets</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/wishlist/getwishlist">Wishlist</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/cart/getcart">Cart</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/profile/getprofile">Profile</a>
-                </li>
-                <li class="list-group-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
-            </ul>
-        </div>
+<!-- MOBILE NAV MODAL -->
+<div class="modal fade" id="navbarModal" tabindex="-1" role="dialog" aria-labelledby="navbarModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content rmh-modal">
+      <div class="modal-header rmh-modal-header">
+        <h5 class="modal-title" id="navbarModalLabel" style="font-weight:900; margin:0;">Menu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="opacity:1;">
+          <span aria-hidden="true" style="font-weight:900;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group rmh-list">
+          <li class="list-group-item"><a href="/home">Home</a></li>
+
+          <li class="list-group-item">
+            <form action="/home" method="GET" class="m-0">
+              <div class="input-group">
+                <input class="form-control" type="search" placeholder="Search products..." name="query"
+                  style="border-radius:14px; font-weight:800; border:1px solid rgba(15,23,42,0.10);">
+                <div class="input-group-append">
+                  <button class="btn" type="submit"
+                    style="border-radius:14px; margin-left:8px; font-weight:900; border:none; background:linear-gradient(135deg,#3cf696,#22d67f);">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </li>
+
+          <li class="list-group-item"><a href="/phones">Phones</a></li>
+          <li class="list-group-item"><a href="/wearables">Watches</a></li>
+          <li class="list-group-item"><a href="/tablets">Tablets</a></li>
+          <li class="list-group-item"><a href="/wishlist/getwishlist">Wishlist</a></li>
+          <li class="list-group-item"><a href="/cart/getcart">Cart</a></li>
+          <li class="list-group-item"><a href="/profile/getprofile">Profile</a></li>
+          <li class="list-group-item"><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
     </div>
+  </div>
 </div>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<script>
-  document.querySelectorAll('.navbar-nav .nav-item a').forEach(item => {
-    let text = item.textContent;
-    let newText = '';
-    for (let i = 0; i < text.length; i++) {
-      newText += '<span>' + text[i] + '</span>';
-    }
-    item.innerHTML = newText;
-  });
-
-</script>
