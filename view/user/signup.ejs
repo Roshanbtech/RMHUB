@@ -80,33 +80,42 @@
       position: relative;
       display: flex;
       align-items: center;
-      gap: 12px;
     }
 
-    .brand-img{
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.25);
+    /* Badge with logo inside (no separate RMHUB text) */
+    .brand-badge{
+      height: 52px;
+      width: 160px;              /* gives room for wide logos */
+      border-radius: 16px;
+      background: rgba(255,255,255,0.22);
       border: 1px solid rgba(255,255,255,0.45);
-      object-fit: cover;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      backdrop-filter: blur(8px);
     }
 
-    .brand-word{
-      font-weight: 900;
-      letter-spacing: 0.8px;
-      font-size: 18px;
-      color: #062012;
-      text-transform: uppercase;
+    .brand-logo{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;       /* key: show full logo without cropping */
+      border-radius: 12px;       /* mild rounding only */
+      display: block;
     }
 
     .brand-mini{
       position: relative;
       margin-top: 14px;
-      color: rgba(6, 32, 18, 0.85);
+      color: rgba(6, 32, 18, 0.88);
       font-size: 13.5px;
       line-height: 1.45;
       max-width: 280px;
+    }
+
+    .brand-mini strong{
+      font-weight: 900;
+      color: rgba(6, 32, 18, 0.95);
     }
 
     .brand-icons{
@@ -279,6 +288,7 @@
     @media (max-width: 767.98px){
       .form-pane{ padding: 22px 18px; }
       .brand-pane{ padding: 22px 18px; }
+      .brand-badge{ width: 150px; height: 50px; }
     }
   </style>
 </head>
@@ -288,19 +298,47 @@
     <div class="auth-card">
       <div class="row no-gutters">
 
-        <!-- LEFT: BRAND / ICONS (minimal) -->
+        <!-- LEFT: BRAND / ICONS -->
         <div class="col-md-5 d-none d-md-block">
           <div class="brand-pane h-100">
             <div class="brand-top">
-              <img src="/images/NavImg.jpg" class="brand-img" alt="RMHUB">
-              <div class="brand-word">RMHUB</div>
+              <div class="brand-badge" title="RMHUB">
+                <!-- Uses your existing asset; keep this path but ensure it's the FULL logo image -->
+                <img src="/images/NavImg.jpg" class="brand-logo" alt="RMHUB Logo">
+              </div>
             </div>
 
             <div class="brand-mini">
-              Faster checkout. Order updates. One account.
+              We sell <strong>eGadgets</strong> — Phones, Watches, Tablets.
             </div>
 
-            <div class="brand-icons" aria-label="Shopping icons">
+            <div class="brand-icons" aria-label="Product categories">
+              <!-- Phone -->
+              <div class="icon-chip" title="Phones" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
+                  <path d="M10 18.5h4"></path>
+                </svg>
+              </div>
+
+              <!-- Watch -->
+              <div class="icon-chip" title="Watches" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M10 2h4l1 4h-6l1-4z"></path>
+                  <path d="M10 22h4l1-4h-6l1 4z"></path>
+                  <path d="M12 12l2-1"></path>
+                </svg>
+              </div>
+
+              <!-- Tablet -->
+              <div class="icon-chip" title="Tablets" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+                  <path d="M12 18h.01"></path>
+                </svg>
+              </div>
+
               <!-- Cart -->
               <div class="icon-chip" title="Cart" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -310,27 +348,9 @@
                   <circle cx="18" cy="20" r="1.5"></circle>
                 </svg>
               </div>
-
-              <!-- Bag -->
-              <div class="icon-chip" title="Bag" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M6 8h12l-1 14H7L6 8z"></path>
-                  <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
-                </svg>
-              </div>
-
-              <!-- Delivery -->
-              <div class="icon-chip" title="Delivery" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M3 7h11v10H3z"></path>
-                  <path d="M14 10h4l3 3v4h-7z"></path>
-                  <circle cx="7" cy="19" r="1.5"></circle>
-                  <circle cx="18" cy="19" r="1.5"></circle>
-                </svg>
-              </div>
             </div>
 
-            <!-- Watermark hero -->
+            <!-- Watermark hero (shopping bag) -->
             <svg class="brand-hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
               <path d="M6 8h12l-1 14H7L6 8z"></path>
               <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
@@ -397,12 +417,10 @@
                         aria-label="Show password"
                         aria-pressed="false"
                       >
-                        <!-- eye -->
                         <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
                           <circle cx="12" cy="12" r="3"></circle>
                         </svg>
-                        <!-- eye-off -->
                         <svg class="eye-closed d-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <path d="M2 12s3.5-7 10-7c2.3 0 4.2.8 5.7 1.8"></path>
                           <path d="M22 12s-3.5 7-10 7c-2.3 0-4.2-.8-5.7-1.8"></path>
@@ -531,7 +549,6 @@
         }
       }
 
-      // First Name
       if (!firstName.match(/^[a-zA-Z]+$/)) {
         document.getElementById("firstNameError").innerHTML = "*Please enter a valid first name";
         setBorder("firstName", false);
@@ -541,7 +558,6 @@
         setBorder("firstName", true);
       }
 
-      // Last Name
       if (!lastName.match(/^[a-zA-Z]+$/)) {
         document.getElementById("lastNameError").innerHTML = "*Please enter a valid last name";
         setBorder("lastName", false);
@@ -551,7 +567,6 @@
         setBorder("lastName", true);
       }
 
-      // Mobile
       if (!mobileNumber.match(/^\d{10}$/)) {
         document.getElementById("mobileNumberError").innerHTML = "*Please enter a 10-digit mobile number";
         setBorder("mobileNumber", false);
@@ -561,7 +576,6 @@
         setBorder("mobileNumber", true);
       }
 
-      // Email
       if (!email.match(/\S+@\S+\.\S+/)) {
         document.getElementById("emailError").innerHTML = "*Please enter a valid email address";
         setBorder("email", false);
@@ -571,7 +585,6 @@
         setBorder("email", true);
       }
 
-      // Password (same rule you used)
       if (!password.match(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/)) {
         document.getElementById("passwordError").innerHTML =
           "*Password must contain at least one uppercase letter, one digit, one special character, and be at least 6 characters long";
@@ -582,7 +595,6 @@
         setBorder("password", true);
       }
 
-      // Confirm Password
       if (password !== confirmPassword) {
         document.getElementById("confirmPasswordError").innerHTML = "*Passwords do not match";
         setBorder("confirmPassword", false);
@@ -592,7 +604,6 @@
         setBorder("confirmPassword", true);
       }
 
-      // Referral Code is optional (no validation)
       return isValid;
     }
   </script>

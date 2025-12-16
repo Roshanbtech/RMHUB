@@ -1,271 +1,560 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Login | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg" />
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css" />
 
-        .navbar {
-            background-color: #3cf696;
-            height: 60px;
-        }
+  <!-- Font (optional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
-        .navbar img {
-            height: 100%;
-        }
+  <style>
+    :root{
+      --primary: #3cf696;
+      --primary-2: #22d67f;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: rgba(15, 23, 42, 0.10);
+      --card: #ffffff;
+      --bg: #f6f8fb;
+      --danger: #ef4444;
+      --radius: 18px;
+    }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    html, body { height: 100%; }
 
-        .form-container {
-            width: 400px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0px 0px 20px #3cf696;
-            animation: slideIn 1s ease;
-        }
+    body{
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(900px 500px at 20% 10%, rgba(60, 246, 150, 0.18), transparent 60%),
+                  radial-gradient(800px 450px at 80% 20%, rgba(34, 214, 127, 0.12), transparent 55%),
+                  var(--bg);
+      color: var(--ink);
+    }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
+    .auth-shell{
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 14px;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .auth-card{
+      width: 100%;
+      max-width: 980px;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(2, 8, 23, 0.10);
+    }
 
-        .logo-small {
-            width: 50px;
-            height: 50px;
-            border: 2px solid #3cf696;
-            border-radius: 50%;
-            background-color: #e5e6de;
-            margin: auto;
-            margin-bottom: 20px;
-        }
+    /* FORM (LEFT) */
+    .form-pane{
+      padding: 32px 28px;
+    }
 
-        .btn-success {
-            background-color: #3cf696;
-            border-color: #3cf696;
-            color: #fff;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+    .form-header{
+      margin-bottom: 16px;
+      text-align: left;
+    }
 
-        .btn-success:hover {
-            background-color: #36e687;
-            border-color: #36e687;
-        }
+    .form-header h1{
+      font-size: 22px;
+      margin: 0 0 6px;
+      font-weight: 900;
+    }
 
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+    .form-header p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
 
-        .btn-link {
-            color: #3cf696;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+    .inline-alert{
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.20);
+      color: #991b1b;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin: 12px 0 0;
+    }
 
-        .btn-link:hover {
-            text-decoration: underline;
-            color: #36e687;
-        }
+    .form-label{
+      font-size: 12.5px;
+      font-weight: 800;
+      color: rgba(15,23,42,0.80);
+      margin-bottom: 6px;
+    }
 
-        .login-title {
-            background-color: #3cf696;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-align: center;
-        }
+    .form-control{
+      height: 46px;
+      border-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.14);
+      background: #fff;
+      padding: 10px 12px;
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
 
-        /* Form styles */
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .form-control:focus{
+      border-color: rgba(60, 246, 150, 0.9);
+      box-shadow: 0 0 0 4px rgba(60, 246, 150, 0.18);
+    }
 
-        .form-label {
-            font-weight: bold;
-            color: black;
-        }
+    .error{
+      color: var(--danger);
+      font-size: 12.5px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
 
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #3cf696;
-            padding: 10px;
-            width: 100%;
-            background-color: #ffffff;
-        }
+    /* Password eye toggle */
+    .pw-group .form-control{
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
 
-        .btn-primary {
-            background-color: #3cf696;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: #fff;
-            cursor: pointer;
+    .pw-toggle{
+      height: 46px;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.14);
+      border-left: 0;
+      background: #fff;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
 
-        }
+    .pw-toggle:focus{
+      outline: none;
+      border-color: rgba(60, 246, 150, 0.9);
+      box-shadow: 0 0 0 4px rgba(60, 246, 150, 0.12);
+    }
 
-        .btn-primary:hover {
-            background-color: #32c084;
-        }
+    .pw-toggle svg{
+      width: 18px;
+      height: 18px;
+      opacity: 0.75;
+      color: rgba(15,23,42,0.9);
+    }
 
+    .btn-primary-rm{
+      height: 46px;
+      border-radius: 12px;
+      border: none;
+      width: 100%;
+      font-weight: 900;
+      color: #06301b;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    }
 
-        .forgot-password {
-            margin-right: auto;
-            /* Pushes the login button to the right */
-        }
+    .btn-primary-rm:hover{
+      filter: brightness(0.98);
+      box-shadow: 0 14px 28px rgba(34, 214, 127, 0.20);
+      transform: translateY(-1px);
+    }
 
-        .login-button {
-            margin-left: auto;
-            /* Pushes the login button to the right */
-        }
-    </style>
+    .muted-link{
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    .muted-link a{
+      color: rgba(34, 214, 127, 1);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .muted-link a:hover{
+      text-decoration: underline;
+    }
+
+    .small-actions{
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .small-actions a{
+      font-size: 13px;
+      font-weight: 800;
+      color: rgba(34, 214, 127, 1);
+      text-decoration: none;
+    }
+
+    .small-actions a:hover{ text-decoration: underline; }
+
+    /* BRAND (RIGHT) */
+    .brand-pane{
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      padding: 28px;
+      position: relative;
+      min-height: 100%;
+    }
+
+    .brand-pane:before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width: 240px;
+      height: 240px;
+      background: rgba(255,255,255,0.22);
+      border-radius: 999px;
+      filter: blur(2px);
+      pointer-events: none;
+    }
+
+    .brand-top{
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Logo inside badge (no extra RMHUB text) */
+    .brand-badge{
+      height: 52px;
+      width: 160px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.45);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand-logo{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .brand-mini{
+      position: relative;
+      margin-top: 14px;
+      color: rgba(6, 32, 18, 0.88);
+      font-size: 13.5px;
+      line-height: 1.45;
+      max-width: 280px;
+    }
+
+    .brand-mini strong{
+      font-weight: 900;
+      color: rgba(6, 32, 18, 0.95);
+    }
+
+    .brand-icons{
+      position: relative;
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .icon-chip{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.45);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .icon-chip svg{
+      width: 20px;
+      height: 20px;
+      opacity: 0.92;
+      color: rgba(6, 32, 18, 0.92);
+    }
+
+    .brand-hero{
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      width: 210px;
+      height: 210px;
+      opacity: 0.16;
+      pointer-events: none;
+      color: rgba(6, 32, 18, 0.92);
+      filter: drop-shadow(0 12px 18px rgba(2, 8, 23, 0.10));
+    }
+
+    @media (max-width: 767.98px){
+      .form-pane{ padding: 22px 18px; }
+      .brand-pane{ padding: 22px 18px; }
+      .brand-badge{ width: 150px; height: 50px; }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="row no-gutters">
 
-    <!-- <div class="navbar">
-        <img src="/images/NavImg.jpg" alt="Logo">
-    </div> -->
+        <!-- LEFT: FORM -->
+        <div class="col-md-7">
+          <div class="form-pane">
+            <div class="form-header">
+              <h1>Login</h1>
+              <p>Access your cart, orders, and saved details.</p>
 
-    <div class="container">
-        <div class="form-container">
-            <div class="login-title">😍Get Ready to Dive In!...</div>
-            <% if(locals.message) { %>
-                <div class="error" style="text-align: center;">
-                    <%= message %>
+              <% if (locals.message) { %>
+                <div class="inline-alert"><%= message %></div>
+              <% } %>
+            </div>
+
+            <form action="/login" method="post" onsubmit="return validateForm()">
+              <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter Email"
+                  name="email"
+                  id="email"
+                  autocomplete="email"
+                />
+                <div class="error" id="emailError"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+
+                <div class="input-group pw-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Enter Password"
+                    name="password"
+                    id="password"
+                    autocomplete="current-password"
+                  />
+                  <div class="input-group-append">
+                    <button
+                      type="button"
+                      class="pw-toggle"
+                      data-toggle="pw"
+                      data-target="password"
+                      aria-label="Show password"
+                      aria-pressed="false"
+                    >
+                      <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                      <svg class="eye-closed d-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 12s3.5-7 10-7c2.3 0 4.2.8 5.7 1.8"></path>
+                        <path d="M22 12s-3.5 7-10 7c-2.3 0-4.2-.8-5.7-1.8"></path>
+                        <path d="M3 3l18 18"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-                <% } %>
-                    <!-- <div class="text-center">
-                <img src="/images/user-authentication-svgrepo-com.svg" alt="Logo" class="logo-small">
-            </div> -->
-                    <form action="/login" method="post" onsubmit="return validateForm()">
-                        <div class="form-group">
-                            <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email">
-                            <div class="error" id="emailError"></div>
-                        </div>
 
-                        <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Enter Password" name="password"
-                                id="password">
-                            <div class="error" id="passwordError"></div>
-                        </div>
+                <div class="error" id="passwordError"></div>
 
-                        <div class="form-group text-center">
-                            <a href="/forpasmail" class="btn-link">Forgot Password?</a>
-                        </div>
+                <div class="small-actions">
+                  <a href="/forpasmail">Forgot Password?</a>
+                </div>
+              </div>
 
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </div>
+              <div class="form-group mb-2">
+                <button type="submit" class="btn btn-primary-rm">Login</button>
+              </div>
 
-                        <p style="text-align: center;">New here? <a href="/signup" class="btn-link">Sign Up</a></p>
-                    </form>
+              <p class="muted-link mb-0">
+                New here? <a href="/signup">Sign Up</a>
+              </p>
+            </form>
+          </div>
         </div>
+
+        <!-- RIGHT: BRAND / COPY / ICONS -->
+        <div class="col-md-5 d-none d-md-block">
+          <div class="brand-pane h-100">
+            <div class="brand-top">
+              <div class="brand-badge" title="RMHUB">
+                <img src="/images/NavImg.jpg" class="brand-logo" alt="RMHUB Logo">
+              </div>
+            </div>
+
+            <div class="brand-mini">
+              Phones. Watches. Tablets. <strong>eGadgets</strong> built for daily use.
+            </div>
+
+            <div class="brand-icons" aria-label="Product categories">
+              <!-- Phone -->
+              <div class="icon-chip" title="Phones" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
+                  <path d="M10 18.5h4"></path>
+                </svg>
+              </div>
+
+              <!-- Watch -->
+              <div class="icon-chip" title="Watches" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M10 2h4l1 4h-6l1-4z"></path>
+                  <path d="M10 22h4l1-4h-6l1 4z"></path>
+                  <path d="M12 12l2-1"></path>
+                </svg>
+              </div>
+
+              <!-- Tablet -->
+              <div class="icon-chip" title="Tablets" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+                  <path d="M12 18h.01"></path>
+                </svg>
+              </div>
+
+              <!-- Cart -->
+              <div class="icon-chip" title="Cart" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 6h15l-1.5 9h-12z"></path>
+                  <path d="M6 6l-2-3H1"></path>
+                  <circle cx="9" cy="20" r="1.5"></circle>
+                  <circle cx="18" cy="20" r="1.5"></circle>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Watermark hero (shopping bag) -->
+            <svg class="brand-hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M6 8h12l-1 14H7L6 8z"></path>
+              <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+              <path d="M7 12h10"></path>
+            </svg>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 
-    <!-- JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <script>
-        function validateForm() {
-            var email = document.getElementById("email").value.trim();
-            var password = document.getElementById("password").value.trim();
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" id="sweetalert2"></script>
 
-            var isValid = true;
+  <script>
+    // Password visibility toggle (eye icon)
+    (function () {
+      var btns = document.querySelectorAll('[data-toggle="pw"]');
+      btns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var targetId = btn.getAttribute('data-target');
+          var input = document.getElementById(targetId);
+          if (!input) return;
 
-            // Validate Email
-            if (email === "") {
-                document.getElementById("emailError").innerHTML = "*Please enter your email";
-                document.getElementById("email").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("emailError").innerHTML = "";
-                document.getElementById("email").style.borderColor = "#3cf696";
-            }
+          var isHidden = input.type === 'password';
+          input.type = isHidden ? 'text' : 'password';
 
-            // Validate Password
-            if (password === "") {
-                document.getElementById("passwordError").innerHTML = "*Please enter your password";
-                document.getElementById("password").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("passwordError").innerHTML = "";
-                document.getElementById("password").style.borderColor = "#3cf696";
-            }
+          var openEye = btn.querySelector('.eye-open');
+          var closedEye = btn.querySelector('.eye-closed');
 
-            return isValid;
+          if (isHidden) {
+            openEye.classList.add('d-none');
+            closedEye.classList.remove('d-none');
+            btn.setAttribute('aria-label', 'Hide password');
+            btn.setAttribute('aria-pressed', 'true');
+          } else {
+            openEye.classList.remove('d-none');
+            closedEye.classList.add('d-none');
+            btn.setAttribute('aria-label', 'Show password');
+            btn.setAttribute('aria-pressed', 'false');
+          }
+        });
+      });
+    })();
+
+    // Validation (same behavior: required fields)
+    function validateForm() {
+      var email = document.getElementById("email").value.trim();
+      var password = document.getElementById("password").value.trim();
+      var isValid = true;
+
+      function setBorder(id, ok) {
+        var el = document.getElementById(id);
+        if (!el) return;
+
+        el.style.borderColor = ok ? "" : "red";
+
+        var group = el.closest('.pw-group');
+        if (group) {
+          var toggle = group.querySelector('.pw-toggle');
+          if (toggle) toggle.style.borderColor = ok ? "" : "red";
         }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" id="sweetalert2"></script>
-    <script>
+      }
 
+      if (email === "") {
+        document.getElementById("emailError").innerHTML = "*Please enter your email";
+        setBorder("email", false);
+        isValid = false;
+      } else {
+        document.getElementById("emailError").innerHTML = "";
+        setBorder("email", true);
+      }
 
-        // Parse URL query parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const message = urlParams.get('message');
+      if (password === "") {
+        document.getElementById("passwordError").innerHTML = "*Please enter your password";
+        setBorder("password", false);
+        isValid = false;
+      } else {
+        document.getElementById("passwordError").innerHTML = "";
+        setBorder("password", true);
+      }
 
-        // If message is present, show SweetAlert
-        if (message) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: message,
-                timer: 5000,
-                position: 'top-end',
-                confirmButtonColor: '#3cf696',
-                confirmButtonText: 'Ok',
-                innerHeight: 200,
-                innerWidth: 200,
-                background: '#fff',
-                backdrop: `
-              rgba(0,0,0,0.4)
-            `,
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/login';
-                }
+      return isValid;
+    }
 
+    // SweetAlert via ?message= (kept from your current flow)
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
 
-            });
+    if (message) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: message,
+        timer: 5000,
+        position: 'top-end',
+        confirmButtonColor: '#3cf696',
+        confirmButtonText: 'Ok',
+        background: '#fff',
+        backdrop: `rgba(0,0,0,0.4)`
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/login';
         }
-    </script>
-
-
+      });
+    }
+  </script>
 </body>
-
 </html>
