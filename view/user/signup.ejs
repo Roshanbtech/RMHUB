@@ -1,344 +1,471 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <!-- CSS only -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <meta charset="UTF-8" />
+  <title>RMHUB</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+  <!-- Optional: nicer font (safe fallback included) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-        .navbar {
-            background-color: #3cf696;
-            height: 60px;
-        }
+  <style>
+    :root{
+      --primary: #3cf696;  /* same as your existing theme :contentReference[oaicite:1]{index=1} */
+      --primary-2: #22d67f;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: rgba(15, 23, 42, 0.10);
+      --card: #ffffff;
+      --bg: #f6f8fb;
+      --danger: #ef4444;
+      --radius: 18px;
+    }
 
-        .navbar img {
-            height: 100%;
-        }
+    html, body { height: 100%; }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            /* Changed height to min-height */
-        }
+    body{
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(900px 500px at 20% 10%, rgba(60, 246, 150, 0.20), transparent 60%),
+                  radial-gradient(800px 450px at 80% 20%, rgba(34, 214, 127, 0.14), transparent 55%),
+                  var(--bg);
+      color: var(--ink);
+    }
 
-        .form-container {
-            width: 100%; /* CHANGED */
-            max-width: 400px; /* CHANGED */
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0px 0px 20px #3cf696;
-            animation: slideIn 1s ease;
-        }
-        
+    /* IMPORTANT: do NOT override Bootstrap .container globally (your old code did) :contentReference[oaicite:2]{index=2} */
+    .auth-shell{
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 14px;
+    }
 
-        @media (max-width: 576px) {
-            .form-container {
-                padding: 10px; /* CHANGED */
-            }
-        
-            .signup-title {
-                font-size: 20px; /* CHANGED */
-                padding: 8px 16px; /* CHANGED */
-            }
-        
-            .form-control {
-                padding: 8px; /* CHANGED */
-            }
-        
-            .btn {
-                padding: 8px 16px; /* CHANGED */
-            }
-        }
-        
+    .auth-card{
+      width: 100%;
+      max-width: 980px;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(2, 8, 23, 0.10);
+    }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
+    .brand-pane{
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #052012;
+      padding: 32px 28px;
+      position: relative;
+      min-height: 100%;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .brand-pane:before{
+      content:"";
+      position:absolute;
+      inset:-40px -40px auto auto;
+      width: 220px;
+      height: 220px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 999px;
+      filter: blur(2px);
+    }
 
-        .logo-small {
-            width: 50px;
-            height: 50px;
-            border: 2px solid #3cf696;
-            border-radius: 50%;
-            background-color: #e5e6de;
-            margin: auto;
-            margin-bottom: 20px;
-        }
+    .brand-logo{
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.45);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
 
-        .btn-success {
-            background-color: #3cf696;
-            border-color: #3cf696;
-            color: #fff;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+    .brand-title{
+      font-size: 26px;
+      font-weight: 800;
+      margin: 14px 0 6px;
+      color: #062012;
+    }
 
-        .btn-success:hover {
-            background-color: #36e687;
-            border-color: #36e687;
-        }
+    .brand-sub{
+      color: rgba(6, 32, 18, 0.82);
+      font-size: 14px;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
 
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-            /* Adjusted margin */
-        }
+    .brand-list{
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(6, 32, 18, 0.88);
+      font-size: 14px;
+      line-height: 1.75;
+    }
 
-        .btn-link {
-            color: #3cf696;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+    .brand-badge{
+      margin-top: 18px;
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      background: rgba(255,255,255,0.28);
+      border: 1px solid rgba(255,255,255,0.45);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: rgba(6, 32, 18, 0.90);
+    }
 
-        .btn-link:hover {
-            text-decoration: underline;
-            color: #36e687;
-        }
+    .form-pane{
+      padding: 34px 28px;
+    }
 
-        .signup-title {
-            background-color: #3cf696;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-align: center;
-        }
+    .form-header{
+      margin-bottom: 18px;
+      text-align: left; /* left aligned for ecommerce feel */
+    }
 
-        /* Form styles */
-        .form-group {
-            margin-bottom: 15px;
-            /* Adjusted margin */
-        }
+    .form-header h1{
+      font-size: 22px;
+      margin: 0 0 6px;
+      font-weight: 800;
+    }
 
-        .form-label {
-            font-weight: bold;
-            color: black;
-        }
+    .form-header p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
 
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #3CF696;
-            padding: 10px;
-            width: 100%;
-            background-color: #ffffff;
-            /* Set background color to white */
-        }
+    .inline-alert{
+      background: rgba(239, 68, 68, 0.06);
+      border: 1px solid rgba(239, 68, 68, 0.20);
+      color: #991b1b;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin: 12px 0 0;
+    }
 
-        .btn-primary {
-            background-color: #3CF696;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: #fff;
-            cursor: pointer;
-        }
+    .form-label{
+      font-size: 12.5px;
+      font-weight: 700;
+      color: rgba(15,23,42,0.80);
+      margin-bottom: 6px;
+    }
 
-        .btn-primary:hover {
-            background-color: #32c084;
-        }
+    .form-control{
+      height: 46px;
+      border-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.14);
+      background: #fff;
+      padding: 10px 12px;
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
 
-        /* Style for Referral Code Field */
-        #referalCode {
-            border-radius: 10px;
-            border: 1px solid #3CF696;
-            padding: 10px;
-            width: 100%;
-            background-color: #ffffff;
-        }
+    .form-control:focus{
+      border-color: rgba(60, 246, 150, 0.9);
+      box-shadow: 0 0 0 4px rgba(60, 246, 150, 0.18);
+    }
 
-        #referalCode:focus {
-            outline: none;
-            border-color: #32c084;
-            /* Change border color on focus */
-        }
+    .error{
+      color: var(--danger);
+      font-size: 12.5px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
 
-        /* Error message style for Referral Code Field */
-        #errorReferalCode {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-    </style>
+    .btn-primary-rm{
+      height: 46px;
+      border-radius: 12px;
+      border: none;
+      width: 100%;
+      font-weight: 800;
+      color: #06301b;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    }
+
+    .btn-primary-rm:hover{
+      filter: brightness(0.98);
+      box-shadow: 0 14px 28px rgba(34, 214, 127, 0.20);
+      transform: translateY(-1px);
+    }
+
+    .muted-link{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .muted-link a{
+      color: rgba(34, 214, 127, 1);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .muted-link a:hover{
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 767.98px){
+      .form-pane{ padding: 22px 18px; }
+      .brand-pane{ padding: 22px 18px; }
+      .brand-title{ font-size: 22px; }
+    }
+  </style>
 </head>
 
 <body>
-
-    <!-- <div class="navbar">
-        <img src="/images/NavImg.jpg" alt="Logo">
-    </div> -->
-
-    <div class="container">
-        <div class="form-container">
-            <div class="header">
-                <div class="signup-title">🙂Join Us Today!...</div>
-                <div>
-                </div>
-                <%if(locals.exists){%>
-                    <div class="error" style="text-align: center;">
-                        <%=exists%>
-                    </div>
-                    <%}%>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="row no-gutters">
+        <!-- LEFT BRAND PANEL (desktop) -->
+        <div class="col-md-5 d-none d-md-block">
+          <div class="brand-pane h-100">
+            <div class="brand-logo">RM</div>
+            <div class="brand-title">Welcome to RMHUB</div>
+            <div class="brand-sub">
+              Create your account to unlock a faster checkout, order tracking, and exclusive offers.
             </div>
-            <!-- <div class="text-center">
-                <img src="/images/user-authentication-svgrepo-com.svg" alt="Logo" class="logo-small">
-            </div> -->
-            <form action="/signup" method="post" onsubmit="return validateForm()">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Enter First Name" name="firstName"
-                        id="firstName">
-                    <div class="error" id="firstNameError"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Enter Last Name" name="lastName" id="lastName">
-                    <div class="error" id="lastNameError"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="tel" class="form-control" placeholder="Enter Mobile No." name="mobileNumber"
-                        id="mobileNumber">
-                    <div class="error" id="mobileNumberError"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="email" class="form-control" placeholder="Enter Email" name="email" id="email">
-                    <div class="error" id="emailError"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Enter Password" name="password"
-                        id="password">
-                    <div class="error" id="passwordError"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword"
-                        id="confirmPassword">
-                    <div class="error" id="confirmPasswordError"></div>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Enter Referral Code (optional)"
-                        name="referalCode" id="referalCode" >
-                    <div class="error" id="referalCodeError"></div>
-                </div>
-
-                <div class="form-group text-center">
-                    <button type="submit" class="btn btn-success">Register</button>
-                </div>
-                <p style="text-align: center;">Already a member? <a href="/login" class="btn-link">Login</a></p>
-            </form>
+            <ul class="brand-list">
+              <li>Quick checkout experience</li>
+              <li>Order history and tracking</li>
+              <li>Member-only discounts</li>
+              <li>Secure account protection</li>
+            </ul>
+            <div class="brand-badge">
+              <span style="font-weight:800;">Secure</span>
+              <span style="opacity:0.85;">Protected by platform-grade validation</span>
+            </div>
+          </div>
         </div>
+
+        <!-- RIGHT FORM PANEL -->
+        <div class="col-md-7">
+          <div class="form-pane">
+            <div class="form-header">
+              <h1>Create your account</h1>
+              <p>Join RMHUB to save your details and manage orders efficiently.</p>
+
+              <% if (locals.exists) { %>
+                <div class="inline-alert">
+                  <%= exists %>
+                </div>
+              <% } %>
+            </div>
+
+            <form action="/signup" method="post" onsubmit="return validateForm()">
+              <!-- If you use CSRF middleware, place hidden token here -->
+              <!-- <input type="hidden" name="_csrf" value="<%= csrfToken %>"> -->
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="firstName" class="form-label">First name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter first name"
+                    name="firstName"
+                    id="firstName"
+                    autocomplete="given-name"
+                  />
+                  <div class="error" id="firstNameError"></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="lastName" class="form-label">Last name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter last name"
+                    name="lastName"
+                    id="lastName"
+                    autocomplete="family-name"
+                  />
+                  <div class="error" id="lastNameError"></div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="mobileNumber" class="form-label">Mobile number</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    placeholder="07XXXXXXXX"
+                    name="mobileNumber"
+                    id="mobileNumber"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                  />
+                  <div class="error" id="mobileNumberError"></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    placeholder="name@example.com"
+                    name="email"
+                    id="email"
+                    autocomplete="email"
+                  />
+                  <div class="error" id="emailError"></div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="password" class="form-label">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Create a strong password"
+                    name="password"
+                    id="password"
+                    autocomplete="new-password"
+                  />
+                  <div class="error" id="passwordError"></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="confirmPassword" class="form-label">Confirm password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Re-enter password"
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    autocomplete="new-password"
+                  />
+                  <div class="error" id="confirmPasswordError"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="referalCode" class="form-label">Referral code (optional)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter referral code"
+                  name="referalCode"
+                  id="referalCode"
+                  autocomplete="off"
+                />
+                <div class="error" id="referalCodeError"></div>
+              </div>
+
+              <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary-rm">
+                  Create Account
+                </button>
+              </div>
+
+              <p class="muted-link mb-0">
+                Already have an account?
+                <a href="/login">Login</a>
+              </p>
+            </form>
+
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <script>
-        function validateForm() {
-            var firstName = document.getElementById("firstName").value.trim();
-            var lastName = document.getElementById("lastName").value.trim();
-            var mobileNumber = document.getElementById("mobileNumber").value;
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-            var confirmPassword = document.getElementById("confirmPassword").value;
-            var referralCode = document.getElementById("referalCode").value;
+  <script>
+    function validateForm() {
+      var firstName = document.getElementById("firstName").value.trim();
+      var lastName = document.getElementById("lastName").value.trim();
+      var mobileNumber = document.getElementById("mobileNumber").value;
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+      var confirmPassword = document.getElementById("confirmPassword").value;
+      var referralCode = document.getElementById("referalCode").value;
 
-            var isValid = true;
+      var isValid = true;
 
-            // Validate First Name
-            if (!firstName.match(/^[a-zA-Z]+$/)) {
-                document.getElementById("firstNameError").innerHTML = "*Please enter a valid first name";
-                document.getElementById("firstName").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("firstNameError").innerHTML = "";
-                document.getElementById("firstName").style.borderColor = "";
-            }
+      // Validate First Name
+      if (!firstName.match(/^[a-zA-Z]+$/)) {
+        document.getElementById("firstNameError").innerHTML = "*Please enter a valid first name";
+        document.getElementById("firstName").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("firstNameError").innerHTML = "";
+        document.getElementById("firstName").style.borderColor = "";
+      }
 
-            // Validate Last Name
-            if (!lastName.match(/^[a-zA-Z]+$/)) {
-                document.getElementById("lastNameError").innerHTML = "*Please enter a valid last name";
-                document.getElementById("lastName").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("lastNameError").innerHTML = "";
-                document.getElementById("lastName").style.borderColor = "";
-            }
+      // Validate Last Name
+      if (!lastName.match(/^[a-zA-Z]+$/)) {
+        document.getElementById("lastNameError").innerHTML = "*Please enter a valid last name";
+        document.getElementById("lastName").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("lastNameError").innerHTML = "";
+        document.getElementById("lastName").style.borderColor = "";
+      }
 
-            // Validate Mobile Number
-            if (!mobileNumber.match(/^\d{10}$/)) {
-                document.getElementById("mobileNumberError").innerHTML = "*Please enter a 10-digit mobile number";
-                document.getElementById("mobileNumber").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("mobileNumberError").innerHTML = "";
-                document.getElementById("mobileNumber").style.borderColor = "";
-            }
+      // Validate Mobile Number
+      if (!mobileNumber.match(/^\d{10}$/)) {
+        document.getElementById("mobileNumberError").innerHTML = "*Please enter a 10-digit mobile number";
+        document.getElementById("mobileNumber").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("mobileNumberError").innerHTML = "";
+        document.getElementById("mobileNumber").style.borderColor = "";
+      }
 
-            // Validate Email
-            if (!email.match(/\S+@\S+\.\S+/)) {
-                document.getElementById("emailError").innerHTML = "*Please enter a valid email address";
-                document.getElementById("email").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("emailError").innerHTML = "";
-                document.getElementById("email").style.borderColor = "";
-            }
+      // Validate Email
+      if (!email.match(/\S+@\S+\.\S+/)) {
+        document.getElementById("emailError").innerHTML = "*Please enter a valid email address";
+        document.getElementById("email").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("emailError").innerHTML = "";
+        document.getElementById("email").style.borderColor = "";
+      }
 
-            // Validate Password
-            if (!password.match(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/)) {
-                document.getElementById("passwordError").innerHTML = "*Password must contain at least one uppercase letter, one digit, one special character, and be at least 6 characters long"
-                document.getElementById("password").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("passwordError").innerHTML = "";
-                document.getElementById("password").style.borderColor = "";
-            }
+      // Validate Password
+      if (!password.match(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}$/)) {
+        document.getElementById("passwordError").innerHTML =
+          "*Password must contain at least one uppercase letter, one digit, one special character, and be at least 6 characters long";
+        document.getElementById("password").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("passwordError").innerHTML = "";
+        document.getElementById("password").style.borderColor = "";
+      }
 
-            // Validate Confirm Password
-            if (password !== confirmPassword) {
-                document.getElementById("confirmPasswordError").innerHTML = "*Passwords do not match";
-                document.getElementById("confirmPassword").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("confirmPasswordError").innerHTML = "";
-                document.getElementById("confirmPassword").style.borderColor = "";
-            }
+      // Validate Confirm Password
+      if (password !== confirmPassword) {
+        document.getElementById("confirmPasswordError").innerHTML = "*Passwords do not match";
+        document.getElementById("confirmPassword").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("confirmPasswordError").innerHTML = "";
+        document.getElementById("confirmPassword").style.borderColor = "";
+      }
 
-            // Validate Referral Code
+      // Referral Code: optional (no validation)
 
-
-            return isValid;
-        }
-    </script>
-
+      return isValid;
+    }
+  </script>
 </body>
-
 </html>
