@@ -1,168 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP Page</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Verify OTP | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg" />
 
-        .navbar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #3CF696;
-            height: 60px;
-            padding: 0 20px;
-        }
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
 
-        .logo {
-            height: 50px;
-        }
+  <!-- Font (optional) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 60px);
-            background: #fff;
-        }
+  <style>
+    :root{
+      --primary:#3cf696; --primary2:#22d67f; --ink:#0f172a; --muted:#64748b;
+      --line:rgba(15,23,42,0.10); --card:#fff; --bg:#f6f8fb; --danger:#ef4444; --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: radial-gradient(900px 500px at 20% 10%, rgba(60,246,150,.18), transparent 60%),
+                  radial-gradient(800px 450px at 80% 20%, rgba(34,214,127,.12), transparent 55%),
+                  var(--bg);
+      color:var(--ink);
+    }
+    .auth-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 14px}
+    .auth-card{
+      width:100%;max-width:980px;background:var(--card);
+      border-radius:var(--radius);border:1px solid var(--line);
+      overflow:hidden;box-shadow:0 18px 50px rgba(2,8,23,.10);
+    }
 
-        .otp-container {
-            background: #e5e6de;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
+    /* LEFT FORM */
+    .form-pane{padding:32px 28px}
+    .form-header{margin-bottom:16px;text-align:left}
+    .form-header h1{font-size:22px;margin:0 0 6px;font-weight:900}
+    .form-header p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5}
+    .inline-alert{
+      background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.20);
+      color:#991b1b;padding:10px 12px;border-radius:12px;font-size:13px;margin:12px 0 0;
+    }
 
-        h1 {
-            margin-bottom: 20px;
-            font-family: 'Zen Dots', sans-serif;
-            color: #000;
-        }
+    .otp-row{display:flex;gap:10px;align-items:center;margin-top:12px}
+    .otp-input{
+      width:52px;height:52px;border-radius:14px;
+      border:1px solid rgba(15,23,42,.14);
+      text-align:center;font-size:18px;font-weight:800;
+      transition:box-shadow 180ms ease,border-color 180ms ease;
+    }
+    .otp-input:focus{
+      outline:none;
+      border-color:rgba(60,246,150,.9);
+      box-shadow:0 0 0 4px rgba(60,246,150,.18);
+    }
 
-        .userInput {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+    .timer{
+      margin-top:12px;
+      font-size:13px;
+      color:rgba(15,23,42,.75);
+      font-weight:700;
+    }
 
-        input[type="text"] {
-            margin: 0 5px;
-            width: 40px;
-            height: 40px;
-            border: 2px solid #3CF696;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 1.2rem;
-        }
+    .resendOtp{
+      margin-top:10px;
+      font-size:13px;
+      font-weight:800;
+    }
+    .resendOtp a{
+      color:rgba(34,214,127,1);
+      text-decoration:none;
+    }
+    .resendOtp a:hover{ text-decoration:underline; }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            background: #3CF696;
-            color: black;
-            cursor: pointer;
-        }
+    .btn-primary-rm{
+      margin-top:14px;
+      height:46px;border-radius:12px;border:none;width:100%;
+      font-weight:900;color:#06301b;background:linear-gradient(135deg,var(--primary),var(--primary2));
+      transition:transform 120ms ease,box-shadow 120ms ease,filter 120ms ease;
+    }
+    .btn-primary-rm:hover{filter:brightness(.98);box-shadow:0 14px 28px rgba(34,214,127,.20);transform:translateY(-1px)}
+    .muted-link{color:var(--muted);font-size:13px;margin-top:10px}
+    .muted-link a{color:rgba(34,214,127,1);font-weight:900;text-decoration:none}
+    .muted-link a:hover{text-decoration:underline}
 
-        .resendOtp {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #3CF696;
-        }
+    /* RIGHT BRAND */
+    .brand-pane{background:linear-gradient(135deg,var(--primary),var(--primary2));padding:28px;position:relative;min-height:100%}
+    .brand-pane:before{
+      content:"";position:absolute;inset:-60px -60px auto auto;width:240px;height:240px;
+      background:rgba(255,255,255,.22);border-radius:999px;filter:blur(2px);pointer-events:none;
+    }
+    .brand-top{position:relative;display:flex;align-items:center}
+    .brand-badge{
+      height:52px;width:160px;border-radius:16px;background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.45);display:inline-flex;align-items:center;justify-content:center;
+      padding:8px 10px;backdrop-filter:blur(8px);
+    }
+    .brand-logo{width:100%;height:100%;object-fit:contain;border-radius:12px;display:block}
+    .brand-mini{position:relative;margin-top:14px;color:rgba(6,32,18,.88);font-size:13.5px;line-height:1.45;max-width:300px}
+    .brand-mini strong{font-weight:900;color:rgba(6,32,18,.95)}
+    .brand-icons{position:relative;margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+    .icon-chip{
+      width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.45);display:inline-flex;align-items:center;justify-content:center;
+      backdrop-filter:blur(6px);
+    }
+    .icon-chip svg{width:20px;height:20px;opacity:.92;color:rgba(6,32,18,.92)}
+    .brand-hero{
+      position:absolute;right:14px;bottom:14px;width:210px;height:210px;opacity:.16;pointer-events:none;
+      color:rgba(6,32,18,.92);filter:drop-shadow(0 12px 18px rgba(2,8,23,.10));
+    }
 
-        .timer {
-            font-size: 0.9rem;
-            color: black;
-        }
-    </style>
+    @media (max-width:767.98px){
+      .form-pane{padding:22px 18px}
+      .brand-pane{padding:22px 18px}
+      .brand-badge{width:150px;height:50px}
+      .otp-input{width:48px;height:48px}
+    }
+  </style>
 </head>
 
 <body>
-    <div class="navbar">
-        <img class="logo" src="/images/NavImg.jpg" alt="Logo">
-    </div>
+  <div class="auth-shell">
+    <div class="auth-card">
+      <div class="row no-gutters">
 
-    <div class="container">
-        <div class="otp-container">
+        <!-- LEFT: FORM -->
+        <div class="col-md-7">
+          <div class="form-pane">
+            <div class="form-header">
+              <h1>Verify OTP</h1>
+              <p>Enter the 4-digit code sent to your email.</p>
+
+              <% if (locals && (locals.message || locals.error)) { %>
+                <div class="inline-alert"><%= (locals.message || locals.error) %></div>
+              <% } %>
+            </div>
+
             <form action="/forpasotp" method="post">
-                <h1>ENTER OTP</h1>
-                <div class="userInput">
-                    <input type="text" id='ist1' name='otp1' maxlength="1" onkeyup="clickEvent(this,'ist2')">
-                    <input type="text" id="ist2" name='otp2' maxlength="1" onkeyup="clickEvent(this,'ist3')">
-                    <input type="text" id="ist3" name='otp3' maxlength="1" onkeyup="clickEvent(this,'ist4')">
-                    <input type="text" id="ist4" name='otp4' maxlength="1">
-                </div>
-                <div class="timer" id="timer">Time remaining: 30 seconds</div>
-                <button id="confirmButton" type="submit">Confirm</button>
-                <div class="resendOtp" id="resendOtp" style="display: none;"><a href="/resOtp">Resend OTP</a></div>
+              <div class="otp-row" aria-label="OTP Inputs">
+                <input class="otp-input" type="text" id="ist1" name="otp1" maxlength="1" inputmode="numeric" onkeyup="clickEvent(this,'ist2')" />
+                <input class="otp-input" type="text" id="ist2" name="otp2" maxlength="1" inputmode="numeric" onkeyup="clickEvent(this,'ist3')" />
+                <input class="otp-input" type="text" id="ist3" name="otp3" maxlength="1" inputmode="numeric" onkeyup="clickEvent(this,'ist4')" />
+                <input class="otp-input" type="text" id="ist4" name="otp4" maxlength="1" inputmode="numeric" />
+              </div>
+
+              <div class="timer" id="timer">Time remaining: 30 seconds</div>
+
+              <button id="confirmButton" type="submit" class="btn btn-primary-rm">Confirm</button>
+
+              <div class="resendOtp" id="resendOtp" style="display:none;">
+                <a href="/resOtp">Resend OTP</a>
+              </div>
+
+              <p class="muted-link mb-0">
+                Back to <a href="/login">Login</a>
+              </p>
             </form>
+          </div>
         </div>
+
+        <!-- RIGHT: BRAND -->
+        <div class="col-md-5 d-none d-md-block">
+          <div class="brand-pane h-100">
+            <div class="brand-top">
+              <div class="brand-badge" title="RMHUB">
+                <img src="/images/NavImg.jpg" class="brand-logo" alt="RMHUB Logo" />
+              </div>
+            </div>
+
+            <div class="brand-mini">
+              Quick access to your cart and orders across <strong>Phones</strong>, <strong>Watches</strong>, and <strong>Tablets</strong>.
+            </div>
+
+            <div class="brand-icons" aria-label="Product categories">
+              <!-- Shield -->
+              <div class="icon-chip" title="Secure" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"></path>
+                  <path d="M9 12l2 2 4-4"></path>
+                </svg>
+              </div>
+              <!-- Phone -->
+              <div class="icon-chip" title="Phones" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="7" y="2.5" width="10" height="19" rx="2"></rect>
+                  <path d="M10 18.5h4"></path>
+                </svg>
+              </div>
+              <!-- Watch -->
+              <div class="icon-chip" title="Watches" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M10 2h4l1 4h-6l1-4z"></path>
+                  <path d="M10 22h4l1-4h-6l1 4z"></path>
+                </svg>
+              </div>
+              <!-- Tablet -->
+              <div class="icon-chip" title="Tablets" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+                  <path d="M12 18h.01"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Watermark lock -->
+            <svg class="brand-hero" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+              <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+            </svg>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 
-    <script>
-        function clickEvent(first, last) {
-            if (first.value.length === 1) {
-                document.getElementById(last).focus();
-            }
+  <script>
+    function clickEvent(first, last) {
+      if (first.value.length === 1) {
+        document.getElementById(last).focus();
+      }
+    }
+
+    document.getElementById('confirmButton').addEventListener('click', function () {
+      var otp = '';
+      for (var i = 1; i <= 4; i++) {
+        otp += document.getElementById('ist' + i).value;
+      }
+
+      fetch('/valOtp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ otp: otp }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          console.log('OTP verification successful');
+        } else {
+          console.log('Invalid OTP');
         }
+      })
+      .catch((error) => { console.error('Error:', error); });
+    });
 
-        document.getElementById('confirmButton').addEventListener('click', function () {
-            var otp = '';
-            for (var i = 1; i <= 4; i++) {
-                otp += document.getElementById('ist' + i).value;
-            }
-            // Send the OTP to your server to verify it
-            fetch('/valOtp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ otp: otp }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // OTP verification was successful
-                        console.log('OTP verification successful');
-                    } else {
-                        // OTP verification failed
-                        console.log('Invalid OTP');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        });
+    // Timer for OTP expiry
+    let timeLeft = 30;
+    const timer = document.getElementById('timer');
+    const resendOtp = document.getElementById('resendOtp');
+    const confirmButton = document.getElementById('confirmButton');
 
-        // Timer for OTP expiry
-        let timeLeft = 30;
-        const timer = document.getElementById('timer');
-        const resendOtp = document.getElementById('resendOtp');
-        const confirmButton = document.getElementById('confirmButton');
-
-        const countdown = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
-                timer.textContent = 'Time expired';
-                resendOtp.style.display = 'block';
-                confirmButton.disabled = true;
-            } else {
-                timer.textContent = `Time remaining: ${timeLeft} seconds`;
-            }
-            timeLeft -= 1;
-        }, 1000);
-    </script>
-
+    const countdown = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        timer.textContent = 'Time expired';
+        resendOtp.style.display = 'block';
+        confirmButton.disabled = true;
+      } else {
+        timer.textContent = `Time remaining: ${timeLeft} seconds`;
+      }
+      timeLeft -= 1;
+    }, 1000);
+  </script>
 </body>
-
 </html>
