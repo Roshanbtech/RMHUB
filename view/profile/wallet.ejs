@@ -1,273 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Wallet</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Font Awesome for icons -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Wallet | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
-            margin: 0;
-            padding: 0;
-        }
+  <!-- Bootstrap 4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
+  <!-- DataTables (Bootstrap 4 skin) -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
 
-        h1,
-        h2 {
-            color: #3cf696;
-            text-align: center;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius: 18px;
+      --rm-radius-lg: 22px;
+      --rm-danger:#e11d48;
+    }
 
-        .balance-container,
-        .add-amount-container,
-        .transaction-history-container {
-            margin-bottom: 20px;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        .balance-container,
-        .add-amount-container {
-            background-color: #d8f0dd;
-            padding: 20px;
-            border-radius: 10px;
-        }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
 
-        .transaction-history-container {
-            background-color: #d8f0dd;
-            border-radius: 10px;
-            overflow-x: auto;
-        }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+    }
 
-        form {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .card-head{
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-        input[type="number"] {
-            width: calc(100% - 90px);
-            padding: 10px;
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            outline: none;
-        }
+    .title{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 20px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
 
-        button[type="submit"] {
-            background-color: #3cf696;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            outline: none;
-        }
+    .sub{
+      margin: 6px 0 0 0;
+      color: var(--rm-muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-        button[type="submit"]:hover {
-            background-color: #31b382;
-        }
+    .section-pad{ padding: 16px 18px 18px 18px; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+    .btn-rm{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .btn-rm:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
 
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 12px;
-            text-align: left;
-        }
+    .btn-soft{
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.92);
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform 160ms ease, background 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-soft:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.95);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
 
-        th {
-            background-color: #3cf696;
-            color: #fff;
-        }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media(max-width: 991.98px){
+      .grid{ grid-template-columns: 1fr; }
+    }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+    .info-box{
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: 0 10px 18px rgba(2,6,23,0.06);
+    }
 
-        .credit {
-            color: green;
-        }
+    .k{
+      font-weight: 900;
+      letter-spacing: 0.4px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: rgba(15,23,42,0.65);
+      margin-bottom: 6px;
+    }
 
-        .debit {
-            color: red;
-        }
+    .balance{
+      font-weight: 900;
+      font-size: 26px;
+      margin: 0;
+      display:flex;
+      align-items:baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: transparent;
-            border: none;
-            font-size: 16px;
-            color: #3cf696;
-            cursor: pointer;
-        }
+    .balance small{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.08);
+      border: 1px solid rgba(15,23,42,0.10);
+      color: rgba(15,23,42,0.80);
+    }
 
-        .back-btn i {
-            margin-right: 5px;
-        }
+    .credit{ color: #16a34a; font-weight: 900; }
+    .debit{ color: var(--rm-danger); font-weight: 900; }
 
-        @media screen and (max-width: 600px) {
-            .container {
-                max-width: 90%;
-                margin: 20px auto;
-                padding: 10px;
-            }
+    .field{
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.85);
+      font-weight: 800;
+      padding: 10px 12px;
+      outline: none;
+      height: 44px;
+    }
 
-            h1,
-            h2 {
-                font-size: 24px;
-            }
+    .hint{
+      margin-top: 8px;
+      font-weight: 800;
+      color: rgba(15,23,42,0.65);
+      font-size: 12px;
+      line-height: 1.4;
+    }
 
-            input[type="number"] {
-                width: calc(100% - 80px);
-            }
+    /* DataTables theme alignment */
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select{
+      border-radius: 14px !important;
+      border: 1px solid rgba(15,23,42,0.12) !important;
+      background: rgba(255,255,255,0.85) !important;
+      font-weight: 800;
+      height: 42px;
+      padding: 8px 12px;
+      box-shadow: none !important;
+    }
 
-            button[type="submit"] {
-                padding: 8px 16px;
-            }
-        }
-    </style>
+    .dataTables_wrapper .pagination .page-link{
+      border-radius: 12px !important;
+      margin: 0 4px;
+      border: 1px solid rgba(15,23,42,0.10) !important;
+      font-weight: 900;
+      color: rgba(15,23,42,0.85) !important;
+    }
 
+    .dataTables_wrapper .pagination .page-item.active .page-link{
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2)) !important;
+      border: none !important;
+      color: rgba(15,23,42,0.95) !important;
+    }
 
+    table.dataTable{
+      border-collapse: separate !important;
+      border-spacing: 0 10px !important;
+    }
+
+    table.dataTable thead th{
+      border:none !important;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2)) !important;
+      color: rgba(15,23,42,0.95) !important;
+      font-weight: 900 !important;
+      padding: 14px !important;
+      white-space: nowrap;
+    }
+
+    table.dataTable tbody td{
+      background: rgba(255,255,255,0.88) !important;
+      border-top: 1px solid rgba(15,23,42,0.08) !important;
+      border-bottom: 1px solid rgba(15,23,42,0.08) !important;
+      padding: 14px !important;
+      vertical-align: middle !important;
+      font-weight: 800;
+    }
+
+    table.dataTable tbody td:first-child{
+      border-left: 1px solid rgba(15,23,42,0.08) !important;
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+      white-space: nowrap;
+    }
+
+    table.dataTable tbody td:last-child{
+      border-right: 1px solid rgba(15,23,42,0.08) !important;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+  </style>
 </head>
 
 <body>
-    <button type="button" class="back-btn" onclick="location.href ='/profile/getprofile'"><i
-            class="fas fa-arrow-left"></i> Back To Profile</button>
-    <div class="container">
-        <h1>My Wallet</h1>
+  <!-- wallet is in view/user/, so include locally -->
+  <%- include("nav") %>
 
-        <!-- Wallet Balance -->
-        <div class="balance-container">
+  <div class="container page-wrap">
+    <div class="glass-card">
+
+      <div class="card-head">
+        <div>
+          <h1 class="title"><i class="fas fa-wallet"></i> My Wallet</h1>
+          <p class="sub">Top up via PayPal and track your wallet transactions securely.</p>
+        </div>
+
+        <div class="d-flex" style="gap:10px; flex-wrap:wrap;">
+          <a class="btn-soft" href="/profile/getprofile"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+          <a class="btn-rm" href="/home"><i class="fas fa-store"></i> Continue Shopping</a>
+        </div>
+      </div>
+
+      <div class="section-pad">
+
+        <div class="grid">
+
+          <!-- BALANCE -->
+          <div class="info-box">
+            <div class="k">Wallet Balance</div>
+
             <% if (user && user.wallet) { %>
-                <h2>Wallet Balance</h2>
-                <% if (user.wallet.balance> 0) { %>
-                    <p style="text-align: center"><strong>₹<%= Number(user.wallet.balance).toLocaleString('en-IN') %></strong></p>
-                    <% } else { %>
-                        <p style="text-align: center"><strong class="debit">-₹<%= Math.abs(user.wallet.balance) %>
-                                    </strong></p>
-                        <% } %>
-                            <% } %>
-        </div>
+              <% if (user.wallet.balance > 0) { %>
+                <p class="balance">
+                  ₹<%= Number(user.wallet.balance).toLocaleString('en-IN') %>
+                  <small><i class="fas fa-arrow-up"></i> Positive</small>
+                </p>
+              <% } else { %>
+                <p class="balance">
+                  <span class="debit">-₹<%= Number(Math.abs(user.wallet.balance)).toLocaleString('en-IN') %></span>
+                  <small><i class="fas fa-arrow-down"></i> Negative</small>
+                </p>
+              <% } %>
+            <% } else { %>
+              <p class="balance">₹0 <small>Unavailable</small></p>
+            <% } %>
 
-        <!-- Add Amount to Wallet -->
-        <div class="add-amount-container">
-            <h2>Add Amount to Wallet</h2>
-            <form id="addAmountForm">
-                <input type="number" id="amount" name="amount" min="1" required>
-                <button type="submit">Add</button>
+            <div class="hint">
+              Wallet credits can come from refunds or manual top-ups. Wallet debits occur for purchases.
+            </div>
+          </div>
+
+          <!-- ADD AMOUNT -->
+          <div class="info-box">
+            <div class="k">Add Amount</div>
+
+            <form id="addAmountForm" style="margin:0;">
+              <div class="d-flex" style="gap:10px; align-items:center; flex-wrap:wrap;">
+                <input class="field" type="number" id="amount" name="amount" min="1" required placeholder="Enter amount (₹)">
+                <button class="btn-rm" type="submit">
+                  <i class="fab fa-paypal"></i> Add via PayPal
+                </button>
+              </div>
+              <div class="hint">
+                You will be redirected to PayPal to complete the payment securely.
+              </div>
             </form>
+          </div>
+
         </div>
 
-        <!-- Transaction History -->
-        <div class="transaction-history-container">
-            <h2>Transaction History</h2>
-            <table id="transactionHistoryTable">
-                <thead>
+        <!-- TRANSACTION HISTORY -->
+        <div class="info-box" style="margin-top:12px;">
+          <div class="d-flex" style="justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
+            <div class="k" style="margin:0;">Transaction History</div>
+            <div class="hint" style="margin:0;">
+              Search, paginate, and review wallet activity.
+            </div>
+          </div>
+
+          <div class="table-responsive" style="margin-top:10px;">
+            <table id="transactionHistoryTable" class="table table-borderless" style="width:100%; margin:0;">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (user && user.wallet && user.wallet.transactions) { %>
+                  <% user.wallet.transactions.forEach(transaction=> { %>
                     <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Description</th>
+                      <td><%= new Date(transaction.date).toLocaleString() %></td>
+
+                      <td>
+                        <% if (transaction.amount > 0) { %>
+                          <% if (transaction.description === 'Item Purchased' || transaction.description === 'Order Placed') { %>
+                            <span class="debit">-₹<%= Number(transaction.amount).toLocaleString('en-IN') %></span>
+                          <% } else { %>
+                            <span class="credit">+₹<%= Number(transaction.amount).toLocaleString('en-IN') %></span>
+                          <% } %>
+                        <% } else { %>
+                          <span class="debit">-₹<%= Number(Math.abs(transaction.amount)).toLocaleString('en-IN') %></span>
+                        <% } %>
+                      </td>
+
+                      <td style="font-weight:900;"><%= transaction.description %></td>
                     </tr>
-                </thead>
-                <tbody>
-
-                    <% user.wallet.transactions.forEach(transaction=> { %>
-                        <tr>
-                            <td>
-                                <%= new Date(transaction.date).toLocaleString() %>
-                            </td>
-                            <td>
-                                <% if (transaction.amount> 0) { %>
-                                    <% if (transaction.description==='Item Purchased' || transaction.description==='Order Placed' ) { %>
-                                        <span class="debit">-₹<%= Number(transaction.amount).toLocaleString('en-IN') %></span>
-                                        <% } else { %>
-                                            <span class="credit">+₹<%= Number(transaction.amount).toLocaleString('en-IN') %></span>
-                                            <% } %>
-                                                <% } else { %>
-                                                    <span class="debit">-₹<%= Number(Math.abs(transaction.amount)).toLocaleString('en-IN') %></span>
-                                                    <% } %>
-                            </td>
-                            <td>
-                                <%= transaction.description %>
-                            </td>
-                        </tr>
-                        <% }); %>
-                </tbody>
+                  <% }); %>
+                <% } %>
+              </tbody>
             </table>
+          </div>
         </div>
+
+      </div>
     </div>
+  </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-    <script>
-        const addAmountForm = document.getElementById('addAmountForm');
-        addAmountForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            initiatePaypalPayment();
-        })
-        function initiatePaypalPayment() {
-            let amount = document.getElementById('amount').value;
-            // Send a POST request to the backend endpoint to initiate PayPal payment
-            fetch('/payment/addtowallet', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    amount: amount,
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Redirect the user to the PayPal payment page
-                    window.location.href = data.approvalUrl;
-                })
-                .catch(error => {
-                    console.error('Error initiating PayPal payment:', error);
-                    // Handle error, display error message to the user, etc.
-                });
-            console.log('Payment initiated');
+  <%- include("footer") %>
+
+  <!-- Scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    const addAmountForm = document.getElementById('addAmountForm');
+    addAmountForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      initiatePaypalPayment();
+    });
+
+    function initiatePaypalPayment() {
+      const amount = document.getElementById('amount').value;
+
+      fetch('/payment/addtowallet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      })
+      .then(response => response.json())
+      .then(data => {
+        window.location.href = data.approvalUrl;
+      })
+      .catch(error => {
+        console.error('Error initiating PayPal payment:', error);
+        alert('Payment initiation failed. Please try again.');
+      });
+    }
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#transactionHistoryTable').DataTable({
+        pageLength: 8,
+        lengthMenu: [5, 8, 15, 25],
+        pagingType: "simple_numbers",
+        autoWidth: false,
+        order: [],
+        language: {
+          search: "",
+          searchPlaceholder: "Search transactions...",
+          lengthMenu: "Show _MENU_",
+          info: "Showing _START_ to _END_ of _TOTAL_",
+          infoEmpty: "No transactions",
+          zeroRecords: "No matching records"
         }
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#transactionHistoryTable').DataTable({
-                "rowCallback": function (row, data, index) {
-                    if (index % 2 === 0) {
-                        $(row).css("background-color", "#d8f0dd");
-                    } else {
-                        $(row).css("background-color", "#e5e6de");
-                    }
-                }
-            });
-        });
-    </script>
-
+      });
+    });
+  </script>
 </body>
-
 </html>

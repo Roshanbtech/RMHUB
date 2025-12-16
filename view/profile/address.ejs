@@ -1,274 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Address | RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Address | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696; --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a; --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius-lg: 22px;
+    }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+      margin:0;
+    }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow:hidden;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .card-head{
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    .title{
+      margin:0; font-weight:900; font-size:20px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .sub{ margin:6px 0 0 0; color: var(--rm-muted); font-weight:700; font-size:13px; }
 
-        .navbar {
-            background-color: #3cf696;
-            height: 60px;
-        }
+    .section-pad{ padding: 16px 18px 18px 18px; }
 
-        .navbar img {
-            height: 100%;
-        }
+    .field, .select{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.85);
+      font-weight: 800;
+      padding: 10px 12px;
+      outline:none;
+      height: 46px;
+    }
+    textarea.field{ height: auto; }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    .err{ font-weight:800; margin-top:6px; font-size:12px; color:#e11d48; }
 
-        .form-container {
-            width: 400px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-            animation: slideIn 1s ease;
-        }
+    .exists{
+      font-weight: 900;
+      color: #e11d48;
+      background: rgba(225,29,72,0.08);
+      border: 1px solid rgba(225,29,72,0.18);
+      border-radius: 14px;
+      padding: 10px 12px;
+      text-align:center;
+      margin-bottom: 12px;
+    }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
+    .btn-rm{
+      border:none; border-radius:14px; font-weight:900;
+      padding:11px 16px; color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      display:inline-flex; align-items:center; gap:10px; white-space:nowrap;
+      transition: transform 160ms ease, filter 160ms ease;
+    }
+    .btn-rm:hover{ transform: translateY(-1px); filter: brightness(0.98); text-decoration:none; color: rgba(15,23,42,0.95); }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-title {
-            background-color: #3cf696;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-align: center;
-        }
-
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        /* Form styles */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            font-weight: bold;
-            color: black;
-        }
-
-        .form-control {
-            border-radius: 10px;
-            border: 1px solid #3cf696;
-            padding: 10px;
-            width: 100%;
-            background-color: #ffffff;
-        }
-
-        .btn-primary {
-            background-color: #3cf696;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            background-color: #32c084;
-        }
-    </style>
+    .btn-soft{
+      border:1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      border-radius:14px; font-weight:900;
+      padding:11px 16px; color: rgba(15,23,42,0.92);
+      display:inline-flex; align-items:center; gap:10px; white-space:nowrap;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+    .btn-soft:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.95); text-decoration:none; color: rgba(15,23,42,0.95); }
+  </style>
 </head>
 
 <body>
+  <%- include("../user/nav") %>
 
-    <!-- <div class="navbar" >
-        <img src="/images/NavImg.jpg" alt="Logo" >
-    </div> -->
-
-    <div class="container">
-        <div class="form-container">
-            <button class="close-btn" style="float:right; border-radius:50px"
-                onclick="window.history.back()">&times;</button>
-
-            <div class="login-title">Add Address</div>
-
-            <form action="/profile/addAddress" method="POST" onsubmit="return validateForm()">
-                <%if(locals.exists){%>
-                    <div class="error" style="text-align:center;font-size:large;">
-                        <%= exists %>
-                    </div>
-                    <%}%>
-                        <div class="form-group">
-                            <!-- <label for="addressLineOne" class="form-label">Address Line 1:</label> -->
-                            <input type="text" id="addressLineOne" placeholder="Address Line 1" name="addressLineOne"
-                                class="form-control">
-                            <div class="error" id="addressLineOneError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <!-- <label for="addressLineTwo" class="form-label">Address Line 2:</label> -->
-                            <input type="text" id="addressLineTwo" placeholder="Address Line 2" name="addressLineTwo"
-                                class="form-control">
-                            <div class="error" id="addressLineTwoError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <!-- <label for="city" class="form-label">City:</label> -->
-                            <input type="text" id="city" placeholder="City" name="city" class="form-control">
-                            <div class="error" id="cityError"></div>
-
-                        </div>
-
-                        <div class="form-group">
-                            <!-- <label for="state" class="form-label">State:</label> -->
-                            <input type="text" id="state" placeholder="State" name="state" class="form-control">
-                            <div class="error" id="stateError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <!-- <label for="pincode" class="form-label">Pincode:</label> -->
-                            <input type="text" id="pincode" placeholder="Pincode" name="pincode" class="form-control">
-                            <div class="error" id="pincodeError"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <!-- <label for="addressType" class="form-label">Address Type:</label> -->
-                            <select id="addressType" name="addressType" class="form-control"
-                                style="background-color:#d8f0dd">
-                                <option value="Home">Home</option>
-                                <option value="Work">Work</option>
-                            </select>
-                            <div class="error" id="addressTypeError"></div>
-                        </div>
-
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Add Address</button>
-                        </div>
-            </form>
+  <div class="container page-wrap">
+    <div class="glass-card">
+      <div class="card-head">
+        <div>
+          <h1 class="title"><i class="fas fa-map-marker-alt"></i> Add Address</h1>
+          <p class="sub">Save delivery details to speed up checkout.</p>
         </div>
+        <div class="d-flex" style="gap:10px; flex-wrap:wrap;">
+          <a class="btn-soft" href="/profile/getprofile"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+      </div>
+
+      <div class="section-pad">
+        <form action="/profile/addAddress" method="POST" onsubmit="return validateForm()">
+          <% if(locals.exists){ %>
+            <div class="exists"><%= exists %></div>
+          <% } %>
+
+          <div class="form-group">
+            <label style="font-weight:900;">Address Line 1</label>
+            <input type="text" id="addressLineOne" name="addressLineOne" placeholder="House no / Street"
+                   class="field">
+            <div class="err" id="addressLineOneError"></div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight:900;">Address Line 2</label>
+            <input type="text" id="addressLineTwo" name="addressLineTwo" placeholder="Area / Landmark"
+                   class="field">
+            <div class="err" id="addressLineTwoError"></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label style="font-weight:900;">City</label>
+              <input type="text" id="city" name="city" placeholder="City" class="field">
+              <div class="err" id="cityError"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label style="font-weight:900;">State</label>
+              <input type="text" id="state" name="state" placeholder="State" class="field">
+              <div class="err" id="stateError"></div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label style="font-weight:900;">Pincode</label>
+              <input type="text" id="pincode" name="pincode" placeholder="6-digit pincode" class="field">
+              <div class="err" id="pincodeError"></div>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label style="font-weight:900;">Address Type</label>
+              <select id="addressType" name="addressType" class="select">
+                <option value="Home">Home</option>
+                <option value="Work">Work</option>
+              </select>
+              <div class="err" id="addressTypeError"></div>
+            </div>
+          </div>
+
+          <div class="d-flex" style="gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button type="submit" class="btn-rm"><i class="fas fa-plus"></i> Add Address</button>
+            <a class="btn-soft" href="/profile/getprofile"><i class="fas fa-times"></i> Cancel</a>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <!-- JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script>
-        // Function to validate form fields
-        function validateForm() {
-            var addressLineOne = document.getElementById("addressLineOne").value.trim();
-            var addressLineTwo = document.getElementById("addressLineTwo").value.trim();
-            var city = document.getElementById("city").value.trim();
-            var state = document.getElementById("state").value.trim();
-            var pincode = document.getElementById("pincode").value.trim();
+  <%- include("../user/footer") %>
 
-            // Validate addressLineOne
-            if (addressLineOne == "") {
-                document.getElementById("addressLineOneError").innerHTML = "*Please enter address line 1";
-                document.getElementById("addressLineOne").style.borderColor = "red";
-                return false;
-            } else {
-                document.getElementById("addressLineOneError").innerHTML = "";
-                document.getElementById("addressLineOne").style.borderColor = "";
-            }
+  <script>
+    function validateForm() {
+      var addressLineOne = document.getElementById("addressLineOne").value.trim();
+      var addressLineTwo = document.getElementById("addressLineTwo").value.trim();
+      var city = document.getElementById("city").value.trim();
+      var state = document.getElementById("state").value.trim();
+      var pincode = document.getElementById("pincode").value.trim();
 
-            // Validate addressLineTwo
-            if (addressLineTwo == "") {
-                document.getElementById("addressLineTwoError").innerHTML = "*Please enter address line 2";
-                document.getElementById("addressLineTwo").style.borderColor = "red";
-                return false;
-            } else {
-                document.getElementById("addressLineTwoError").innerHTML = "";
-                document.getElementById("addressLineTwo").style.borderColor = "";
-            }
+      if (addressLineOne == "") { document.getElementById("addressLineOneError").innerHTML = "*Please enter address line 1"; document.getElementById("addressLineOne").style.borderColor = "red"; return false; }
+      else { document.getElementById("addressLineOneError").innerHTML = ""; document.getElementById("addressLineOne").style.borderColor = ""; }
 
-            // Validate city
-            if (city == "") {
-                document.getElementById("cityError").innerHTML = "*Please enter city";
-                document.getElementById("city").style.borderColor = "red";
-                return false;
-            } else {
-                document.getElementById("cityError").innerHTML = "";
-                document.getElementById("city").style.borderColor = "";
-            }
+      if (addressLineTwo == "") { document.getElementById("addressLineTwoError").innerHTML = "*Please enter address line 2"; document.getElementById("addressLineTwo").style.borderColor = "red"; return false; }
+      else { document.getElementById("addressLineTwoError").innerHTML = ""; document.getElementById("addressLineTwo").style.borderColor = ""; }
 
-            // Validate state
-            if (state == "") {
-                document.getElementById("stateError").innerHTML = "*Please enter state";
-                document.getElementById("state").style.borderColor = "red";
-                return false;
-            } else {
-                document.getElementById("stateError").innerHTML = "";
-                document.getElementById("state").style.borderColor = "";
-            }
+      if (city == "") { document.getElementById("cityError").innerHTML = "*Please enter city"; document.getElementById("city").style.borderColor = "red"; return false; }
+      else { document.getElementById("cityError").innerHTML = ""; document.getElementById("city").style.borderColor = ""; }
 
-            // Validate pincode
-            if (pincode == "" || !(/^\d{6}$/.test(pincode))) {
-                document.getElementById("pincodeError").innerHTML = "*Please enter a valid pincode";
-                document.getElementById("pincode").style.borderColor = "red";
-                return false;
-            } else {
-                document.getElementById("pincodeError").innerHTML = "";
-                document.getElementById("pincode").style.borderColor = "";
-            }
+      if (state == "") { document.getElementById("stateError").innerHTML = "*Please enter state"; document.getElementById("state").style.borderColor = "red"; return false; }
+      else { document.getElementById("stateError").innerHTML = ""; document.getElementById("state").style.borderColor = ""; }
 
-            // All inputs are valid
-            return true;
-        }
+      if (pincode == "" || !(/^\d{6}$/.test(pincode))) { document.getElementById("pincodeError").innerHTML = "*Please enter a valid pincode"; document.getElementById("pincode").style.borderColor = "red"; return false; }
+      else { document.getElementById("pincodeError").innerHTML = ""; document.getElementById("pincode").style.borderColor = ""; }
 
-        // Function to clear error messages when input fields are focused
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('focus', function () {
-                var errorId = this.id + 'Error';
-                document.getElementById(errorId).innerHTML = "";
-                this.style.borderColor = "";
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        // Function to get the query parameter value by name
-        function getQueryParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-    
-        // Check for 'error' parameter in the URL
-        const error = getQueryParameter('error');
-    
-        // If 'error' parameter exists, display it using Swal
-        if (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: error.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
-            });
-        }
-    </script>
-    
+      return true;
+    }
 
+    document.querySelectorAll('input, select').forEach(input => {
+      input.addEventListener('focus', function () {
+        var errorId = this.id + 'Error';
+        var el = document.getElementById(errorId);
+        if (el) el.innerHTML = "";
+        this.style.borderColor = "";
+      });
+    });
+
+    // Keep your existing query param Swal logic (from your old addaddress) :contentReference[oaicite:4]{index=4}
+    (function(){
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get('error');
+      if (error) {
+        Swal.fire({ icon: 'error', title: 'Error', text: decodeURIComponent(error.replace(/\+/g,' ')) });
+      }
+    })();
+  </script>
 </body>
-
 </html>

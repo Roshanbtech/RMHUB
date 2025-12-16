@@ -1,158 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-        .nav {
-            background-color: #3cf696;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+  <!-- Bootstrap 4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-        .nav img {
-            height: 50px;
-            width: auto;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius-lg: 22px;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            margin-top: 70px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+      margin: 0;
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            background-color: #3cf696;
-            color: #fff;
-            padding: 15px;
-            border-radius: 20px;
-            font-size: 28px;
-        }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
 
-        form {
-            margin-bottom: 20px;
-        }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+      max-width: 680px;
+      margin: 0 auto;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: black;
-        }
+    .card-head{
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #3CF696;
-            border-radius: 10px;
-            box-sizing: border-box;
-        }
+    .title{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 20px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
 
-        input[type="submit"] {
-            background-color: #3CF696;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-        }
+    .sub{
+      margin: 6px 0 0 0;
+      color: var(--rm-muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-        input[type="submit"]:hover {
-            background-color: #36e687;
-        }
+    .section-pad{ padding: 16px 18px 18px 18px; }
 
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
+    .field{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.85);
+      font-weight: 800;
+      padding: 10px 12px;
+      outline:none;
+      height: 46px;
+    }
 
-        .in-exs {
-            color: red;
-            text-align: center;
-            font-size: large;
-            margin-bottom: 20px;
-        }
-    </style>
+    .err{
+      font-weight: 800;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #e11d48;
+    }
+
+    .exists{
+      font-weight: 900;
+      color: #e11d48;
+      background: rgba(225,29,72,0.08);
+      border: 1px solid rgba(225,29,72,0.18);
+      border-radius: 14px;
+      padding: 10px 12px;
+      text-align:center;
+      margin-bottom: 12px;
+    }
+
+    .btn-rm{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .btn-rm:hover{ transform: translateY(-1px); filter: brightness(0.98); text-decoration:none; color: rgba(15,23,42,0.95); }
+
+    .btn-soft{
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.92);
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform 160ms ease, background 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-soft:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.95); text-decoration:none; color: rgba(15,23,42,0.95); }
+  </style>
 </head>
 
 <body>
-    <div class="nav">
-        <img src="/images/NavImg.jpg" alt="Logo">
-    </div>
-    <div class="container">
-        <h2>Edit Profile</h2>
-        <form id="profileForm" action="/profile/editprofile/<%= user._id %>" method="POST"
-            onsubmit="return validateForm()">
-            <div>
-                <% if(locals.exists) { %>
-                    <div class="in-exs">
-                        <%= exists %>
-                    </div>
-                    <% } %>
-            </div>
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" placeholder="Enter your first name" value="<%= user.firstName %>"
-                name="firstName">
-            <div class="error" id="firstNameError"></div>
+  <%- include("../user/nav") %>
 
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" placeholder="Enter your last name" name="lastName"
-                value="<%= user.lastName %>">
-            <div class="error" id="lastNameError"></div>
+  <div class="container page-wrap">
+    <div class="glass-card">
+      <div class="card-head">
+        <div>
+          <h1 class="title"><i class="fas fa-user-edit"></i> Edit Profile</h1>
+          <p class="sub">Keep your name up to date for orders, invoices, and account details.</p>
+        </div>
 
-            <input type="submit" value="Save Changes">
+        <div class="d-flex" style="gap:10px; flex-wrap:wrap;">
+          <a class="btn-soft" href="/profile/getprofile"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+      </div>
+
+      <div class="section-pad">
+        <form id="profileForm" action="/profile/editprofile/<%= user._id %>" method="POST" onsubmit="return validateForm()">
+          <% if (locals.exists) { %>
+            <div class="exists"><%= exists %></div>
+          <% } %>
+
+          <div class="form-group">
+            <label style="font-weight:900;">First Name</label>
+            <input class="field" type="text" id="firstName" name="firstName"
+                   placeholder="Enter your first name" value="<%= user.firstName %>">
+            <div class="err" id="firstNameError"></div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-weight:900;">Last Name</label>
+            <input class="field" type="text" id="lastName" name="lastName"
+                   placeholder="Enter your last name" value="<%= user.lastName %>">
+            <div class="err" id="lastNameError"></div>
+          </div>
+
+          <div class="d-flex" style="gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button type="submit" class="btn-rm"><i class="fas fa-save"></i> Save Changes</button>
+            <a class="btn-soft" href="/profile/getprofile"><i class="fas fa-times"></i> Cancel</a>
+          </div>
         </form>
+      </div>
     </div>
+  </div>
 
-    <script>
-        function validateForm() {
-            var firstName = document.getElementById("firstName").value.trim();
-            var lastName = document.getElementById("lastName").value.trim();
+  <%- include("../user/footer") %>
 
-            isValid = true;
+  <script>
+    function validateForm() {
+      var firstName = document.getElementById("firstName").value.trim();
+      var lastName = document.getElementById("lastName").value.trim();
 
-            if (firstName === "") {
-                document.getElementById("firstNameError").innerHTML = "*Please enter your first name.";
-                document.getElementById("firstName").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("firstNameError").innerHTML = "";
-            }
-            if (lastName === "") {
-                document.getElementById("lastNameError").innerHTML = "*Please enter your last name.";
-                document.getElementById("lastName").style.borderColor = "red";
-                isValid = false;
-            } else {
-                document.getElementById("lastNameError").innerHTML = "";
-            }
-            return isValid;
+      var isValid = true;
 
-        }
-    </script>
+      if (firstName === "") {
+        document.getElementById("firstNameError").innerHTML = "*Please enter your first name.";
+        document.getElementById("firstName").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("firstNameError").innerHTML = "";
+        document.getElementById("firstName").style.borderColor = "";
+      }
+
+      if (lastName === "") {
+        document.getElementById("lastNameError").innerHTML = "*Please enter your last name.";
+        document.getElementById("lastName").style.borderColor = "red";
+        isValid = false;
+      } else {
+        document.getElementById("lastNameError").innerHTML = "";
+        document.getElementById("lastName").style.borderColor = "";
+      }
+
+      return isValid;
+    }
+  </script>
 </body>
-
 </html>
