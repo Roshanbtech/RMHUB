@@ -2,293 +2,347 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB - Invoice</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice | RMHUB</title>
     <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
-        integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+    <!-- Bootstrap 5 (invoice only, isolated) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <style>
+        :root {
+            --rm-primary: #3cf696;
+            --rm-primary-2: #22d67f;
+            --rm-ink: #0f172a;
+            --rm-muted: rgba(15, 23, 42, 0.65);
+            --rm-border: rgba(15, 23, 42, 0.12);
+            --rm-shadow: 0 20px 45px rgba(2, 6, 23, 0.12);
+            --rm-radius: 22px;
+        }
+
+        body {
+            background:
+                radial-gradient(1000px 500px at 10% 5%, rgba(60, 246, 150, 0.25), transparent 55%),
+                #f8f9fa;
+            color: var(--rm-ink);
+            font-family: Arial, sans-serif;
+        }
+
+        .invoice-wrap {
+            max-width: 960px;
+            margin: 40px auto;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: var(--rm-radius);
+            box-shadow: var(--rm-shadow);
+            overflow: hidden;
+        }
+
+        .inv-head {
+            padding: 22px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--rm-border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand img {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            object-fit: contain;
+            background: #fff;
+            padding: 6px;
+            border: 1px solid var(--rm-border);
+        }
+
+        .brand h4 {
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+        }
+
+        .status-badge {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+            color: #0f172a;
+            white-space: nowrap;
+        }
+
+        .inv-body {
+            padding: 26px;
+        }
+
+        .inv-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 26px;
+        }
+
+        .meta-box {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--rm-border);
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .meta-box h6 {
+            margin-bottom: 8px;
+            font-weight: 900;
+        }
+
+        .meta-box p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--rm-muted);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 10px;
+        }
+
+        thead th {
+            background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+            color: #0f172a;
+            font-weight: 900;
+            padding: 14px;
+            border: none;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            background: #fff;
+            border-top: 1px solid var(--rm-border);
+            border-bottom: 1px solid var(--rm-border);
+            padding: 14px;
+            vertical-align: middle;
+            font-weight: 700;
+        }
+
+        tbody td:first-child {
+            border-left: 1px solid var(--rm-border);
+            border-radius: 14px 0 0 14px;
+            font-weight: 900;
+        }
+
+        tbody td:last-child {
+            border-right: 1px solid var(--rm-border);
+            border-radius: 0 14px 14px 0;
+            text-align: right;
+        }
+
+        .prod-name {
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .prod-desc {
+            font-size: 12px;
+            color: var(--rm-muted);
+        }
+
+        .summary {
+            max-width: 420px;
+            margin-left: auto;
+            margin-top: 20px;
+        }
+
+        .sum-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--rm-border);
+            background: rgba(255, 255, 255, 0.85);
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+
+        .sum-total {
+            background: rgba(60, 246, 150, 0.22);
+            border-color: rgba(60, 246, 150, 0.35);
+            font-size: 16px;
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-rm {
+            border: none;
+            border-radius: 14px;
+            padding: 10px 18px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+            color: #0f172a;
+        }
+
         @media print {
-            @page {
-                size: A4;
-                margin: 5mm;
-                /* Minimal margins */
-            }
-
             body {
-                background-color: #fff;
-                font-size: 12pt;
-                margin: 0;
-                padding: 0;
+                background: #fff;
             }
 
-            .card {
+            .actions {
+                display: none;
+            }
+
+            .glass {
                 box-shadow: none;
                 border: 1px solid #ccc;
             }
 
-            .container {
-                width: auto;
-                padding: 10mm;
+            @page {
+                size: A4;
+                margin: 8mm;
             }
-
-            .table {
-                width: 100%;
-                margin-bottom: 20mm;
-            }
-
-            .table th,
-            .table td {
-                padding: 5mm;
-                border: 1px solid #000;
-                word-wrap: break-word;
-                max-width: 30mm;
-                font-size: 10pt;
-            }
-
-            .d-print-none {
-                display: none !important;
-            }
-
-            .invoice-title {
-                margin-bottom: 10mm;
-            }
-
-            .table-responsive {
-                overflow: visible !important;
-            }
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .card {
-            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
-            background-color: #e5e6de;
-            border-radius: 1rem;
-        }
-
-        .invoice-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .invoice-title h4 {
-            margin: 0;
-        }
-
-        .text-end {
-            text-align: end;
-        }
-
-        .fw-semibold {
-            font-weight: 100;
-        }
-
-        .table-responsive {
-            margin-top: 20px;
-        }
-
-        #color {
-            background-color: #3cf696;
-            color: white;
-            border: 1px solid white;
-        }
-
-        .badge {
-            font-size: 0.75rem;
-        }
-
-        .container {
-            padding: 2rem;
-        }
-
-        .table th,
-        .table td {
-            padding: 1rem;
-            border: 1px solid #e5e6de;
-        }
-
-        .text-muted {
-            color: black !important;
-        }
-
-        .rmhub-logo {
-            max-width: 100px;
-        }
-
-        h2,
-        h5 {
-            margin: 0;
-        }
-
-        .float-end a {
-            margin-right: 0.5rem;
-        }
-
-        .table .text-truncate {
-            font-size: 10pt;
-        }
-
-        .table .text-muted {
-            font-size: 8pt;
-        }
-
-        @media (max-width: 767.98px) {
-            .text-sm-end {
-                text-align: end !important;
-            }
-        }
-        .back-btn {
-            position: absolute;
-            top: 10px;
-            left: 40px;
-            background-color: transparent;
-            border: none;
-            font-size: 16px;
-            color: #3cf696;
-            cursor: pointer;
-        }
-
-        .back-btn i {
-            margin-right: 5px;
         }
     </style>
 </head>
 
 <body>
-    <!-- <button type="button" class="back-btn" onclick="location.href ='/cart/orderhistory'">
-        <i class="fas fa-arrow-left"></i> Back To Orders
-    </button>    -->
-     <div class="container my-5">
-        <div class="card">
-            <div class="card-body">
-                <div class="invoice-title">
-                    <div class="mb-4">
-                        <img src="/images/NavImg.jpg" alt="RMHUB Logo" class="rmhub-logo">
+
+    <div class="invoice-wrap">
+        <div class="glass">
+
+            <!-- HEADER -->
+            <div class="inv-head">
+                <div class="brand">
+                    <img src="/images/NavImg.jpg" alt="RMHUB">
+                    <h4>RMHUB</h4>
+                </div>
+                <span class="status-badge"><%- order.orderStatus %></span>
+            </div>
+
+            <!-- BODY -->
+            <div class="inv-body">
+
+                <!-- META -->
+                <div class="inv-meta">
+                    <div class="meta-box">
+                        <h6>Billed To</h6>
+                        <p><%- order.shippingAddress %></p>
                     </div>
-                    <h4>
-                        <span class="badge bg-success font-size-12 ms-2"><%- order.orderStatus %></span>
-                    </h4>
+                    <div class="meta-box text-end">
+                        <p><strong>Invoice #</strong>
+                            <%= invoiceId %>
+                        </p>
+                        <p><strong>Order #</strong>
+                            <%= order._id.toString().slice(-7).toUpperCase() %>
+                        </p>
+                        <p><strong>Date</strong>
+                            <%= new Date().toDateString() %>
+                        </p>
+                    </div>
                 </div>
 
-                <div class="text-muted mb-4">
-                    <p class="mb-1">777 E-Gadgets Plazza Pathananmthitta, PA 20218</p>
-                    <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i> e-gadplazza987@gmail.com</p>
-                    <p><i class="uil uil-phone me-1"></i> +91-6238820218</p>
+                <!-- TABLE -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.orderItems.forEach((item, i)=>{ %>
+                            <tr>
+                                <td>
+                                    <%= i+1 %>
+                                </td>
+                                <td>
+                                    <div class="prod-name"><%- item.product_name %></div>
+                                    <div class="prod-desc"><%- item.description %></div>
+                                </td>
+                                <td>₹<%= Number(item.price).toLocaleString('en-IN') %>
+                                </td>
+                                <td>
+                                    <%= item.quantity %>
+                                </td>
+                                <td>₹<%= (item.price * item.quantity).toFixed(2) %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+
+                <!-- SUMMARY -->
+                <div class="summary">
+                    <div class="sum-row">
+                        <span>Subtotal</span>
+                        <span>₹<%= order.orderItems.reduce((a,i)=>a+i.price*i.quantity,0).toFixed(2) %></span>
+                    </div>
+
+                    <div class="sum-row">
+                        <span>Discount</span>
+                        <span>-₹<%= order.discountValue ? order.discountValue.toFixed(2) : '0.00' %></span>
+                    </div>
+
+                    <div class="sum-row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+
+                    <div class="sum-row sum-total">
+                        <span>Total</span>
+                        <span>₹<%= Number(order.totalPrice).toLocaleString('en-IN') %></span>
+                    </div>
                 </div>
 
-                <hr class="my-4">
-
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="text-muted">
-                            <h5 class="font-size-16 mb-3">Shipped To:</h5>
-                            <h5 class="font-size-15 mb-2"><%- order.shippingAddress %></h5>
+                <!-- THANK YOU -->
+                <div style="
+  margin-top:22px;
+  padding:16px;
+  border-radius:16px;
+  background: rgba(60,246,150,0.18);
+  border: 1px solid rgba(60,246,150,0.30);
+">
+                    <div
+                        style="display:flex; gap:12px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;">
+                        <div>
+                            <div style="font-weight:900; font-size:15px; margin-bottom:4px;">
+                                Thank you for shopping with RMHUB.
+                            </div>
+                            <div style="font-weight:700; color: rgba(15,23,42,0.72); font-size:13px;">
+                                We appreciate your trust. Visit again for the latest phones, wearables, and tablets.
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="text-muted text-sm-end">
-                            <div>
-                                <h5 class="font-size-15 mb-1">Invoice No:</h5>
-                                <p>#<%- invoiceId %></p>
-                            </div>
-                            <div class="mt-4">
-                                <h5 class="font-size-15 mb-1">Invoice Date:</h5>
-                                <p>
-                                    <%= new Date().toDateString() %>
-                                </p>
-                            </div>
-                            <div class="mt-4">
-                                <h5 class="font-size-15 mb-1">Order No:</h5>
-                                <p>#<%- order._id.toString().slice(-7).toUpperCase() %></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="py-2">
-                    <h5 class="font-size-15">Order Summary</h5>
-                    <div class="table-responsive">
-                        <table class="table align-middle table-nowrap table-centered mb-0">
-                            <thead>
-                                <tr>
-                                    <th style="width: 70px;" id="color">No.</th>
-                                    <th id="color">Item</th>
-                                    <th id="color">Price</th>
-                                    <th id="color">Quantity</th>
-                                    <th class="text-end" id="color" style="width: 120px;">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% order.orderItems.forEach((item, index)=> { %>
-                                    <tr>
-                                        <th scope="row">
-                                            <%= index + 1 %>
-                                        </th>
-                                        <td>
-                                            <div>
-                                                <h5 class="text-truncate font-size-14 mb-1"><%- item.product_name %>
-                                                </h5>
-                                                <p class="text-muted mb-0"><%- item.description %></p>
-                                            </div>
-                                        </td>
-                                        <td>₹<%- Number(item.price).toLocaleString('en-IN') %></td>
-                                        <td><%- item.quantity %></td>
-                                        <td class="text-end">₹<%- (item.price * item.quantity).toFixed(2) %></td>
-                                    </tr>
-                                    <% }) %>
-                                        <tr>
-                                            <th scope="row" colspan="4" class="text-end">Sub Total</th>
-                                            <td class="text-end">₹<%- order.orderItems.reduce((acc, item)=> acc +
-                                                    item.price * item.quantity, 0).toFixed(2) %></td>
-                                        </tr>
-                                        <% if (order.appliedCoupon) { %>
-                                            <tr>
-                                                <th scope="row" colspan="4" class="border-0 text-end">Discount:</th>
-                                                <td class="border-0 text-end">
-                                                    -₹<%- order.discountValue.toFixed(2) %>
-                                                </td>
-                                            </tr>
-                                            <% } else { %>
-                                                <tr>
-                                                    <th scope="row" colspan="4" class="border-0 text-end">Discount:</th>
-                                                    <td class="border-0 text-end">₹0.00</td>
-                                                </tr>
-                                                <% } %>
-                                                    <tr>
-                                                        <th scope="row" colspan="4" class="border-0 text-end">Shipping
-                                                            Charge :</th>
-                                                        <td class="border-0 text-end">Free</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" colspan="4" class="border-0 text-end">Total:</th>
-                                                        <td class="border-0 text-end" style="font-weight: 700;">
-                                                            ₹<%- Number(order.totalPrice.toFixed(2)).toLocaleString('en-IN') %>
-                                                        </td>
-                                                    </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="d-print-none mt-4">
-                        <div class="float-end">
-                            <a href="javascript:window.print()" class="btn btn-success me-1"><i
-                                    class="fa fa-print"></i></a>
+                        <div style="font-weight:900; color: rgba(15,23,42,0.85); font-size:13px; white-space:nowrap;">
+                            <i class="fas fa-shopping-bag"></i> Come again
                         </div>
                     </div>
                 </div>
+
+                <!-- ACTIONS -->
+                <div class="actions">
+                    <button class="btn-rm" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print Invoice
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>

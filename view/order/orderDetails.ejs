@@ -1,397 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: #444;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Details | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-        .container {
-            max-width: 60rem;
-            margin: 0 auto;
-            background-color: #e5e6de;
-            padding: 20px;
-            margin-top: 60px;
-            border-radius: 20px;
-        }
+  <!-- Bootstrap 4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        .page-header {
-            border-bottom: 2px solid #444;
-            margin: 0.5rem auto;
-            padding-bottom: 0.5rem;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius: 18px;
+      --rm-radius-lg: 22px;
+    }
 
-        .page-header h1 {
-            letter-spacing: 2px;
-            margin: 0;
-            font-weight: 900;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        .order-details {
-            margin: 1rem 0;
-            padding: 1rem;
-            background-color: #f8f9fa;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
 
-        table {
-            width: -webkit-fill-available;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+    }
 
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #fff;
-            text-align: left;
-            background-color: #e5e6de;
-        }
+    .card-head{
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-        th {
-            background-color: #3cf696;
-        }
+    .title{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 20px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
 
-        td:hover {
-            background-color: #d8f0dd;
-        }
+    .sub{
+      margin: 6px 0 0 0;
+      color: var(--rm-muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-        .product img {
-            max-width: 100px;
-            max-height: 100px;
-        }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.10);
+      border: 1px solid rgba(15,23,42,0.12);
+      font-weight: 900;
+      white-space: nowrap;
+    }
 
-        .cancel-btn,
-        .return-btn,
-        .invoice-btn,
-        .shopping-btn {
-            background-color: #ffd166;
-            color: black;
-            font-weight: bold;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+    .pill-green{
+      background: rgba(60,246,150,0.18);
+      border-color: rgba(60,246,150,0.30);
+    }
 
-        .cancel-btn {
-            background-color: #ff0000;
-            color: black;
-            font-weight: bold;
-        }
+    .section-pad{ padding: 16px 18px 18px 18px; }
 
-        .return-btn {
-            background-color: #3CF696;
-        }
+    .meta-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media(max-width: 767.98px){
+      .meta-grid{ grid-template-columns: 1fr; }
+    }
 
-        .invoice-btn {
-            background-color: #3CF696;
-        }
+    .meta-box{
+      background: rgba(255,255,255,0.80);
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .meta-box .k{
+      font-weight: 900;
+      color: rgba(15,23,42,0.82);
+      margin-bottom: 4px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .meta-box .v{
+      font-weight: 900;
+      color: rgba(15,23,42,0.95);
+    }
+    .meta-box .s{
+      font-weight: 700;
+      color: rgba(15,23,42,0.65);
+      font-size: 13px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            /* Hide the modal by default */
-            position: fixed;
-            /* Position the modal overlay */
-            z-index: 1;
-            /* Set the z-index to ensure it appears on top of other elements */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            /* Enable scrolling if needed */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black background with transparency */
-        }
+    /* Items table (card-like rows) */
+    .table-wrap{ overflow-x:auto; margin-top: 12px; }
 
-        /* Modal content styles */
-        .modal-content {
-            background-color: #fefefe;
-            /* White background */
-            margin: 10% auto;
-            /* Center the modal vertically and horizontally */
-            padding: 20px;
-            border: 1px solid #3CF696;
-            /* Green border */
-            border-radius: 10px;
-            max-width: 600px;
-            /* Set maximum width of the modal */
-            position: relative;
-            /* Ensure proper positioning of the close button */
-        }
+    table.order-table{
+      width:100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin: 0;
+    }
+    table.order-table thead th{
+      border:none;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      color: rgba(15,23,42,0.95);
+      font-weight: 900;
+      padding: 14px;
+      white-space: nowrap;
+    }
+    table.order-table tbody td{
+      background: rgba(255,255,255,0.88);
+      border-top: 1px solid rgba(15,23,42,0.08);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      padding: 14px;
+      vertical-align: middle;
+      font-weight: 800;
+    }
+    table.order-table tbody td:first-child{
+      border-left: 1px solid rgba(15,23,42,0.08);
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+    }
+    table.order-table tbody td:last-child{
+      border-right: 1px solid rgba(15,23,42,0.08);
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+      white-space: nowrap;
+    }
 
-        /* Close button styles */
-        .close {
-            color: #3CF696;
-            /* Green color for close button */
-            position: absolute;
-            /* Position close button relative to modal content */
-            top: 10px;
-            right: 10px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 50px;
-        }
+    .prod{
+      display:flex;
+      align-items:flex-start;
+      gap: 12px;
+      min-width: 260px;
+    }
+    .prod-img{
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background:#fff;
+      border: 1px solid rgba(15,23,42,0.10);
+      box-shadow: 0 10px 16px rgba(2,6,23,0.06);
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .prod-img img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      padding: 8px;
+      display:block;
+    }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            /* Change color on hover/focus */
-            text-decoration: none;
-        }
+    .btn-rm{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .btn-rm:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
 
-        .btn-retry-payment {
-            background-color: #3cf696;
-            /* Bootstrap primary color */
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            margin: 4px 2px;
-            transition-duration: 0.4s;
-        }
+    .btn-soft{
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.92);
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform 160ms ease, background 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-soft:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.95);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
 
-        .btn-retry-payment:hover {
-            background-color: white;
-            color: #3cf696;
-            border: 2px solid #3cf696;
-        }
-    </style>
+    .btn-danger-rm{
+      border: none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      background: #e11d48;
+      color: #fff;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform 160ms ease, filter 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-danger-rm:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: #fff;
+      text-decoration:none;
+    }
+
+    .actions-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    /* Modal polish */
+    .modal-content{
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--rm-shadow);
+    }
+    .modal-header{
+      border-bottom:none;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      color: rgba(15,23,42,0.95);
+    }
+    .modal-title{
+      font-weight: 900;
+    }
+    .field{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.85);
+      font-weight: 800;
+      padding: 10px 12px;
+      outline:none;
+    }
+    .err{
+      font-weight: 800;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #e11d48;
+      display:none;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="page-header">
-            <h1>Order Details</h1>
-            <button class="shopping-btn" onclick="location.href='/cart/orderhistory'">Back to My Orders</button>
+  <%- include("../user/nav") %>
+
+  <div class="container page-wrap">
+    <div class="glass-card">
+
+      <div class="card-head">
+        <div>
+          <h1 class="title"><i class="fas fa-receipt"></i> Order Details</h1>
+          <p class="sub">Track your order status, payment state, and item breakdown.</p>
         </div>
 
-        <div class="order-details">
-            <table>
-                <tr>
-                    <th>Order ID</th>
-                    <td>#<strong>
-                            <%= order._id.toString().slice(-7).toUpperCase() %>
-                        </strong></td>
-                </tr>
-                <tr>
-                    <th>Order Date</th>
-                    <td>
-                        <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' ,
-                            weekday: 'long' , day: 'numeric' , month: 'long' , year: 'numeric' }) %>
-                            <%= new Date(order.orderDate).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata' ,
-                                hour12: true }) %>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Order Total</th>
-                    <td>₹<%= Number(order.totalPrice).toLocaleString('en-IN') %>
-                    </td>
-                </tr>
-                <tr>
-                    <% if (order.appliedCoupon){ %>
-                        <th>Coupon</th>
-                        <% } %>
-                            <% if (order.appliedCoupon) { %>
-                                <td><%- order.appliedCoupon.code %> <span
-                                            style="background-color: black; color:#3cf696">₹<%-Number(order.couponDiscount).toLocaleString('en-IN')%>
-                                                OFF!...</span>
-                                </td>
-                                <% } %>
-                </tr>
-                <tr>
-                    <th>Payment Method</th>
-                    <td>
-                        <%= order.paymentMethod %>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Address</th>
-                    <td>
-                        <%= order.shippingAddress %>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Order Status</th>
-                    <td>
-                        <%= order.orderStatus %>
-                    </td>
-                </tr>
-                <tr>
-                    <% if (order.paymentMethod==='PayPal' ) { %>
-                        <th>Payment Status</th>
-                        <% } %>
-                            <% if (order.paymentMethod==='PayPal' ) { %>
-                                <td>
-                                    <%= order.paymentStatus %>
-                                </td>
-                                <% } %>
-                </tr>
+        <div class="d-flex" style="gap:10px; flex-wrap:wrap;">
+          <span class="pill pill-green">
+            <i class="fas fa-hashtag"></i>
+            <span>#<%= order._id.toString().slice(-7).toUpperCase() %></span>
+          </span>
+          <a class="btn-soft" href="/cart/orderhistory"><i class="fas fa-arrow-left"></i> Back to My Orders</a>
+        </div>
+      </div>
 
-            </table>
+      <div class="section-pad">
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Name</th>
-                        <th>Quantity</th>
-                        <th>Actual Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% order.orderItems.forEach(item=> { %>
-                        <tr>
-                            <td><img src="<%= item.productId.image[0] %>" style="max-width:50px;max-height:50px"
-                                    alt="<%= item.productId.model %>"></td>
-                            <td>
-                                <%= item.productId.model %>
-                            </td>
-                            <td>
-                                <%= item.quantity %>
-                            </td>
-                            <td>₹<%= Number(item.price * item.quantity).toLocaleString('en-IN') %>
-                            </td>
-                        </tr>
-                        <% }); %>
-                </tbody>
-            </table>
-
-            <div class="order-actions">
-                <% if (order.orderStatus !=='cancelled' && order.orderStatus !=='delivered' && order.orderStatus
-                    !=='returned' ) { %>
-                    <button class="cancel-btn" onclick="location.href='/cart/cancelorder/<%= order._id %>'">Cancel
-                        Order</button>
-                    <% } %>
-                        <% if (order.orderStatus==='delivered' && !order.returnRequested) { %>
-                            <button class="return-btn" style=" background-color: #3CF696;"
-                                onclick="openReturnModal('<%= order._id %>')">Return Order</button>
-                            <button class="invoice-btn" style="background-color: #3CF696;"
-                                onclick="location.href='/cart/invoice/<%= order._id %>'">Invoice</button>
-                            <% } %>
-                                <% if (order.paymentStatus==='failed' ) { %>
-                                    <form action="/payment/paymentretry" method="POST" style="display:inline;">
-                                        <input type="hidden" name="orderId" value="<%= order._id %>">
-                                        <button type="submit" class="btn-retry-payment">Retry Payment</button>
-                                    </form>
-                                    <% } %>
-
+        <div class="meta-grid">
+          <div class="meta-box">
+            <div class="k">Order Date</div>
+            <div class="v">
+              <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) %>
+              <span style="font-weight:800; color: rgba(15,23,42,0.70);">
+                • <%= new Date(order.orderDate).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: true }) %>
+              </span>
             </div>
-        </div>
-    </div>
+            <div class="s">Payment Method: <strong><%= order.paymentMethod %></strong></div>
+          </div>
 
-    <!-- Modal for canceling order -->
-    <div id="cancel-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Cancel Order</h2>
-            <p>Are you sure you want to cancel this order?</p>
-            <% if (order.orderStatus !=='cancelled' && order.orderStatus !=='delivered' && order.orderStatus
-                !=='returned' ) { %>
-                <button class="cancel-btn" onclick="location.href='/cart/cancelorder/<%= order._id %>'">Cancel
-                    Order</button>
-                <% } %>
-        </div>
-    </div>
+          <div class="meta-box">
+            <div class="k">Order Total</div>
+            <div class="v">₹<%= Number(order.totalPrice).toLocaleString('en-IN') %></div>
 
-    <!-- Return Modal -->
-    <div id="returnModal" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 style="color: #3CF696; margin-bottom: 20px;">Return Order</h2>
-            <form id="returnForm" method="POST" onsubmit="return validateForm()">
-                <div style="margin-bottom: 10px;">
-                    <label for="reason" style="color: #3CF696;">Reason for Return:</label><br>
-                    <textarea id="reason" name="reason" rows="4"
-                        style="border-radius: 5px; border: 1px solid #3CF696; width: 100%;"></textarea>
-                    <div id="reasonError" class="error"></div>
-                </div>
-                <button type="submit"
-                    style="background-color: #3CF696; color: white; border: none; border-radius: 5px; padding: 10px 20px; cursor: pointer;">Submit
-                    Return Request</button>
+            <% if (order.appliedCoupon) { %>
+              <div class="s">
+                Coupon: <strong><%- order.appliedCoupon.code %></strong>
+                <span style="margin-left:8px; font-weight:900; color:#0f172a; background: rgba(60,246,150,0.20); border:1px solid rgba(60,246,150,0.30); padding:4px 8px; border-radius:999px;">
+                  ₹<%- Number(order.couponDiscount).toLocaleString('en-IN') %> OFF
+                </span>
+              </div>
+            <% } %>
+
+            <div class="s">Order Status: <strong><%= order.orderStatus %></strong></div>
+
+            <% if (order.paymentMethod === 'PayPal') { %>
+              <div class="s">Payment Status: <strong><%= order.paymentStatus %></strong></div>
+            <% } %>
+          </div>
+
+          <div class="meta-box" style="grid-column: 1 / -1;">
+            <div class="k">Shipping Address</div>
+            <div class="v" style="font-weight:800;"><%= order.shippingAddress %></div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="order-table">
+            <thead>
+              <tr>
+                <th style="width:48%;">Product</th>
+                <th style="width:22%;">Name</th>
+                <th style="width:12%;">Quantity</th>
+                <th style="width:18%;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% order.orderItems.forEach(item => { %>
+                <tr>
+                  <td>
+                    <div class="prod">
+                      <div class="prod-img">
+                        <img src="<%= item.productId.image[0] %>" alt="<%= item.productId.model %>">
+                      </div>
+                      <div>
+                        <div style="font-weight:900;"><%= item.productId.model %></div>
+                        <div style="font-weight:700; color: rgba(15,23,42,0.65); font-size:12px;">
+                          <%= item.productId.description %>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="font-weight:900;"><%= item.productId.model %></td>
+                  <td style="font-weight:900;"><%= item.quantity %></td>
+                  <td style="font-weight:900;">₹<%= Number(item.price * item.quantity).toLocaleString('en-IN') %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ACTIONS (same rules you had, just styled) -->
+        <div class="actions-row">
+
+          <% if (order.orderStatus !== 'cancelled' && order.orderStatus !== 'delivered' && order.orderStatus !== 'returned') { %>
+            <a class="btn-danger-rm" href="/cart/cancelorder/<%= order._id %>">
+              <i class="fas fa-times-circle"></i> Cancel Order
+            </a>
+          <% } %>
+
+          <% if (order.orderStatus === 'delivered' && !order.returnRequested) { %>
+            <button class="btn-rm" type="button" onclick="openReturnModal('<%= order._id %>')">
+              <i class="fas fa-undo"></i> Return Order
+            </button>
+
+            <a class="btn-soft" href="/cart/invoice/<%= order._id %>">
+              <i class="fas fa-file-invoice"></i> Invoice
+            </a>
+          <% } %>
+
+          <% if (order.paymentStatus === 'failed') { %>
+            <form action="/payment/paymentretry" method="POST" style="display:inline;">
+              <input type="hidden" name="orderId" value="<%= order._id %>">
+              <button type="submit" class="btn-rm">
+                <i class="fas fa-redo"></i> Retry Payment
+              </button>
             </form>
+          <% } %>
+
         </div>
+
+      </div>
     </div>
+  </div>
+
+  <!-- Return Modal (Bootstrap) -->
+  <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-undo mr-2"></i>Return Order</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="opacity:1;">
+            <span aria-hidden="true" style="font-weight:900;">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="returnForm" method="POST" onsubmit="return validateReturnReason()">
+            <label style="font-weight:900; margin-bottom:8px;">Reason</label>
+            <textarea id="reason" name="reason" rows="4" class="field" placeholder="Tell us why you want to return this order..."></textarea>
+            <div id="reasonError" class="err">Please enter a valid reason.</div>
+
+            <div class="d-flex" style="gap:10px; margin-top:14px; flex-wrap:wrap;">
+              <button type="submit" class="btn-rm"><i class="fas fa-paper-plane"></i> Submit Request</button>
+              <button type="button" class="btn-soft" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 
+  <%- include("../user/footer") %>
 
-    <script>
-        // Define the modal variable outside of the function
-        var modal = document.getElementById("returnModal");
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-        function openReturnModal(orderId) {
-            modal.style.display = "block";
-            var form = document.getElementById("returnForm");
-            form.action = "/cart/return/" + orderId; // Set the action URL dynamically
-        }
+  <script>
+    function openReturnModal(orderId) {
+      var form = document.getElementById("returnForm");
+      form.action = "/cart/return/" + orderId;
+      $('#returnModal').modal('show');
+    }
 
-        // Get the close button
-        var closeBtn = modal.querySelector('.close');
+    function validateReturnReason() {
+      var reason = document.getElementById("reason").value || "";
+      var err = document.getElementById("reasonError");
 
-        // Close the modal when the close button is clicked
-        closeBtn.addEventListener('click', function () {
-            modal.style.display = 'none';
-        });
+      if (reason.trim() === "") {
+        err.style.display = "block";
+        return false;
+      }
+      err.style.display = "none";
+      return true;
+    }
 
-        //validate reason field
-        function validateForm() {
+    // Query param toast: /orderdetails?message=...
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const msg = params.get('message');
+      if (!msg) return;
 
-            var reason = document.getElementById("reason").value;
-            var reasonError = document.getElementById("reasonError");
-
-            if (reason.trim() === "") {
-                reasonError.innerHTML = "*Please enter a valid reason for returning your order";
-                reasonError.style.color = "red";
-                reasonError.style.borderColor = "red";
-                return false;
-            } else {
-                reasonError.innerHTML = "";
-                reasonError.style.borderColor = "#3CF696";
-
-                return true;
-            }
-        }
-    </script>
-    <script>
-        function getQueryParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        // Check for 'error' parameter in the URL
-        const error = getQueryParameter('message');
-
-        // If 'error' parameter exists, display it using Swal
-        if (error) {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'error',
-                background: '#fff',
-                text: success.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
-                showConfirmButton: false,
-
-            });
-        }
-    </script>
-    
-
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        background: '#fff',
+        text: decodeURIComponent(msg.replace(/\+/g,' ')),
+        showConfirmButton: false,
+        timer: 3000
+      });
+    })();
+  </script>
 </body>
-
 </html>

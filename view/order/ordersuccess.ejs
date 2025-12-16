@@ -1,115 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link rel="stylesheet" href="/styles.css">
-    <!-- Assuming your site's CSS file is named styles.css and located in the public directory -->
-    <style>
-        /* Additional styles specific to the success page */
-        .container {
-            max-width: 700px;
-            max-height: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #e5e6de;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-top: 60px;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Success | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-        }
+  <!-- Bootstrap 4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-        h1 {
-            color: #3cf696;
-            margin-bottom: 20px;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius-lg: 22px;
+    }
 
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        .order-details {
-            background-color: #f4f4f4;
-            padding: 20px;
-            border: 2px solid #3cf696;
-            border-radius: 5px;
-            margin-top: 30px;
-            text-align: left;
-        }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
 
-        .order-summary-btn {
-            background-color: #3cf696;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 20px;
-            display: inline-block;
-        }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+      max-width: 720px;
+      margin: 0 auto;
+    }
 
-        .nav {
-            background-color: #3cf696;
-            position: fixed;
-            top: 0;
-            left: 0;
-            /* Add this line */
-            right: 0;
-            /* Add this line */
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+    .head{
+      padding: 18px;
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      text-align:center;
+    }
 
-        .nav img {
-            height: 50px;
-            width: auto;
-            /* Add this to maintain aspect ratio */
-        }
-    </style>
+    .tick{
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      margin: 6px auto 10px auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      color: rgba(15,23,42,0.95);
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .title{
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 22px;
+    }
+
+    .sub{
+      margin: 8px 0 0 0;
+      color: var(--rm-muted);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .body{
+      padding: 18px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(60,246,150,0.18);
+      border: 1px solid rgba(60,246,150,0.30);
+      font-weight: 900;
+      color: rgba(15,23,42,0.92);
+      white-space: nowrap;
+    }
+
+    .info{
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.80);
+      border: 1px solid rgba(15,23,42,0.10);
+      text-align:center;
+    }
+
+    .btn-rm{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .btn-rm:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
+
+    .btn-soft{
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.92);
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform 160ms ease, background 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-soft:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.95);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
+
+    .cta-row{
+      margin-top: 14px;
+      display:flex;
+      justify-content:center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
 
 <body>
+  <%- include("../user/nav") %>
 
-    <div class="nav">
-        <img src="/images/NavImg.jpg" alt="Logo">
-    </div>
+  <div class="container page-wrap">
+    <div class="glass-card">
 
-    <div class="container">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50" fill="#e5e6de"
-            style="background-color:#3cf696; border-radius:50%">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
-        </svg>
-        <h1>Order Placed Successfully</h1>
-        <p>Your order has been successfully placed. Thank you for shopping with us!</p>
+      <div class="head">
+        <div class="tick"><i class="fas fa-check"></i></div>
+        <h1 class="title">Order Placed Successfully</h1>
+        <p class="sub">Thank you for shopping with RMHUB. We’ll keep you posted on updates.</p>
+      </div>
 
-        <!-- Display order details if needed -->
+      <div class="body">
         <% if (order) { %>
-            <div class="order-details">
-                <h2 style="text-align: center">Order Details</h2>
-
-                <p style="text-align: center"><strong>User:</strong>
-                    <%= user.firstName+" "+user.lastName %></p>
-                <p style=" text-align: center"><strong>Order ID:</strong>
-                        <%= order._id %>
-                </p>
-
-
-
-                <!-- Display other order details as needed -->
+          <div class="info">
+            <div class="d-flex justify-content-center" style="gap:10px; flex-wrap:wrap;">
+              <span class="pill"><i class="fas fa-user"></i> <%= user.firstName + " " + user.lastName %></span>
+              <span class="pill"><i class="fas fa-hashtag"></i> <%= order._id.toString().slice(-7).toUpperCase() %></span>
             </div>
-            <% } %>
 
-                <a href="/cart/orderhistory" class="order-summary-btn">View Order History</a>
-                <!-- Assuming this is the link to the order summary page -->
+            <div style="margin-top:10px; font-weight:800; color: rgba(15,23,42,0.70);">
+              You can review order details, download invoice after delivery, or track status from your order history.
+            </div>
+          </div>
+        <% } %>
+
+        <div class="cta-row">
+          <a class="btn-rm" href="/cart/orderhistory"><i class="fas fa-box"></i> View Order History</a>
+          <a class="btn-soft" href="/home"><i class="fas fa-store"></i> Continue Shopping</a>
+        </div>
+
+        <div style="margin-top:14px; text-align:center; font-weight:800; color: rgba(15,23,42,0.62); font-size:13px;">
+          Come again — phones, wearables, and tablets updated regularly on RMHUB.
+        </div>
+      </div>
+
     </div>
-</body>
+  </div>
 
+  <%- include("../user/footer") %>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
