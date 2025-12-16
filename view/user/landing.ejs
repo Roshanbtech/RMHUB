@@ -1,613 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RMHUB - Technology Simplified</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RMHUB - Technology Simplified</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-    <!-- Custom CSS -->
-    <link href="/css/style.css" rel="stylesheet">
-    <style>
-        .navbar {
-            background-color: #3cf696;}
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-        /* Dropdown container */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+  <!-- Your site CSS (footer classes + shared styling) -->
+  <link rel="stylesheet" href="/css/style.css">
 
-        /* Dropdown content (hidden by default) */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #e5e6de;
-            min-width: 120px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
+  <!-- Font Awesome (nav already includes it, but safe for standalone static) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
-        /* Links inside the dropdown */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius: 22px;
+    }
 
-        /* Change color of dropdown links on hover */
-        .dropdown-content a:hover {
-            background-color: #3CF696;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
+    /* Hero / Carousel polish */
+    .hero-wrap{ margin-top: 8px; }
+    .carousel{
+      border-radius: var(--rm-radius);
+      overflow: hidden;
+      box-shadow: var(--rm-shadow);
+      border: 1px solid rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.65);
+    }
+    .carousel-item img{
+      width:100%;
+      height: 420px;
+      object-fit: cover;
+    }
+    @media (max-width: 767.98px){
+      .carousel-item img{ height: 260px; }
+    }
 
-        .navbar-nav .nav-item a {
-            display: inline-block;
-            position: relative;
-        }
+    /* Section heading chip */
+    .title-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(60,246,150,0.18);
+      border: 1px solid rgba(60,246,150,0.28);
+      font-weight: 900;
+      color: rgba(15,23,42,0.90);
+      box-shadow: 0 12px 22px rgba(2,6,23,0.06);
+    }
 
-        .navbar-nav .nav-item a span {
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
+    /* Featured tiles */
+    .feat-tile{
+      position: relative;
+      border-radius: var(--rm-radius);
+      overflow:hidden;
+      box-shadow: var(--rm-shadow);
+      border: 1px solid rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.70);
+      min-height: 320px;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .feat-tile:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 44px rgba(2, 6, 23, 0.14);
+    }
+    .feat-tile img{
+      width:100%;
+      height: 320px;
+      object-fit: cover;
+      transition: transform 220ms ease;
+    }
+    .feat-tile:hover img{ transform: scale(1.05); }
 
-        .navbar-nav .nav-item a:hover span {
-            animation: jump 0.5s ease-in-out forwards;
-        }
+    .feat-overlay{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.0), rgba(2,6,23,0.70));
+      color:#fff;
+    }
+    .feat-overlay h3{ margin:0; font-weight: 900; }
+    .feat-overlay p{ margin:6px 0 12px 0; font-weight: 700; opacity: 0.95; }
 
-        @keyframes jump {
+    .btn-rm{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .btn-rm:hover{ transform: translateY(-1px); filter: brightness(0.98); color: rgba(15,23,42,0.95); text-decoration:none; }
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+    /* Category cards */
+    .cat-card{
+      border-radius: var(--rm-radius);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(15,23,42,0.08);
+      box-shadow: 0 14px 28px rgba(2,6,23,0.08);
+      padding: 18px;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      height: 100%;
+    }
+    .cat-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 44px rgba(2,6,23,0.12);
+      border-color: rgba(60,246,150,0.30);
+    }
+    .cat-icon{
+      width: 140px; height: 140px;
+      border-radius: 999px;
+      border: 2px solid rgba(60,246,150,0.55);
+      background: rgba(255,255,255,0.85);
+      padding: 10px;
+      object-fit: cover;
+    }
+    .cat-card h4{ margin-top: 12px; font-weight: 900; }
+    .cat-card p{ margin: 6px 0 0 0; color: var(--rm-muted); font-weight: 700; }
 
-            25% {
-                transform: translateY(-5px);
-            }
-
-            50% {
-                transform: translateY(0);
-            }
-
-            75% {
-                transform: translateY(-2px);
-            }
-        }
-
-
-        /* Adjustments for better alignment and appearance */
-        .carousel-item img {
-            width: 100%;
-            height: auto;
-        }
-
-        .carousel-control-prev,
-        .carousel-control-next {
-            width: 5%;
-        }
-
-        .mycontainer {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
-        }
-
-        .mycontainer img {
-            width: 100%;
-            height: auto;
-        }
-
-        .c1 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-        }
-
-        .b {
-            padding: 10px 20px;
-            border-radius: 20px;
-            background-color: #3CF696;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .b:hover {
-            background-color: #33bb88;
-        }
-
-        .discover img {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 20px;
-        }
-
-        .img-small {
-            width: 150px;
-            /* Adjust the size of the category images */
-            height: 150px;
-            /* Adjust the size of the category images */
-        }
-
-        .carousel-item img.img {
-            max-height: 400px;
-            /* Adjust the height of the secondary carousel images */
-        }
-
-        #carouselExampleIndicators {
-            margin-top: 70px;
-        }
-
-        .snake-btn {
-            position: relative;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
-            background-color: #3CF696;
-            color: #ffffff;
-            font-size: 16px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: background-color 0.4s, color 0.4s;
-            display: flex;
-            justify-content: center;
-        }
-
-        .col-sm {
-            margin-bottom: 20px;
-            /* Add margin between each column */
-        }
-
-        h5 {
-            text-align: center;
-        }
-
-        p {
-            text-align: center;
-        }
-
-        .snake-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            width: calc(100% + 4px);
-            height: calc(100% + 4px);
-            border: 2px solid transparent;
-            border-radius: 20px;
-            animation: snake 3s infinite linear;
-        }
-
-        @keyframes snake {
-            0% {
-                transform: translateX(-100%);
-                border-color: rgba(0, 0, 0, 0);
-            }
-
-            50% {
-                transform: translateX(100%);
-                border-color: rgba(0, 0, 0, 0.6);
-            }
-
-            100% {
-                transform: translateX(200%);
-                border-color: rgba(0, 0, 0, 0);
-            }
-        }
-
-        .snake-btn:hover {
-            background-color: #3CF696;
-            color: black;
-            border: 2px solid black;
-            font-weight: bold;
-        }
-
-        .card:hover {
-            box-shadow: 0 0 20px #2a2a29;
-            /* Updated box-shadow on hover */
-            overflow: hidden
-        }
-
-        .card img {
-            object-fit: cover;
-            transition: transform 0.3s ease;
-            z-index: 1;
-        }
-
-        .card img:hover {
-            box-shadow: 0 0 20px #2a2a29;
-            transform: scale(1.1);
-            background-color: #d8f0dd;
-            overflow: hidden
-        }
-
-        .title-bg {
-            background-color: #3CF696;
-            /* Background color for the title */
-            padding: 10px 20px;
-            /* Padding around the title */
-            border-radius: 10px;
-            /* Rounded corners for the background */
-            display: inline-block;
-            /* Ensures the background only wraps around the title */
-
-        }
-
-        .title-bg h2 {
-            margin: 0;
-            /* Remove default margin for the title */
-        }
-
-        .navbar-toggler-icon {
-            color: #fff;
-            background-color: black;
-            border-radius: 5px;
-            padding: 5px;
-        }
-
-        /* Custom CSS for the modal */
-        .modal-content {
-            background-color: #f8f9fa;
-            /* Background color */
-            border-radius: 20px;
-            /* Rounded corners */
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-            /* Box shadow */
-        }
-
-        .modal-header {
-            border-bottom: none;
-            /* Remove bottom border */
-        }
-
-        .modal-title {
-            font-weight: bold;
-            /* Make title bold */
-        }
-
-        .modal-body {
-            padding: 20px;
-            /* Add padding */
-        }
-
-        .navbar-nav .nav-link {
-            color: #333;
-            /* Text color */
-            font-weight: bold;
-            /* Make links bold */
-        }
-
-      
-
-        .list-group-item {
-            border: 1px solid #3cf696;
-            background-color: black;
-        }
-      
-        a{
-            color: #3cf696;
-            text-decoration: none;
-            font-weight: bold;
-            text-align: center;
-        }
-      
-        .list-group-flush>.list-group-item {
-            border-width: 3px 2px 3px 2px;
-            border-color: #3cf696;
-            border-style: ridge;
-        }
-
-        
-    </style>
+    /* Secondary carousel */
+    .mini-carousel .carousel-item img{
+      height: 360px;
+      object-fit: cover;
+    }
+    @media (max-width: 767.98px){
+      .mini-carousel .carousel-item img{ height: 240px; }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top navbar">
-        <div class="container" style="height:60px">
-            <a class="navbar-brand custom-logo" href="/signup">
-                <img class="navbar-logo" src="/images/NavImg.jpg" style="height:70px;" alt="rmhub">
-            </a>
+  <!-- Use the same nav as main implementation -->
+  <%- include("nav") %>
 
-            <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#navbarModal">
-                <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
-            </button>
+  <div class="container">
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link ml-3" href="/signup">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ml-3" href="/signup">Phones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ml-3" href="/signup">Watches</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link ml-3" href="/signup">Tablets</a>
-                    </li>
-                </ul>
-                <!-- Search form with dropdown and price field -->
-                <form action="/signup" method="GET" class="form-inline my-2 my-lg-0"
-                    style="border:2px solid #d8f0dd; border-radius: 5px">
-                    <div class="input-group">
-                        <input class="form-control mr-sm-0" type="search" placeholder="Search" aria-label="Search"
-                            name="query" style="border-color:#3cf696">
-                        <!-- <input class="form-control ml-0" type="number" placeholder="Price" min="1" aria-label="price"
-                        name="price" style="border-color:#3cf696"> -->
-
-                        <!-- Dropdown for sorting -->
-                        <!-- <select class="custom-select" name="sortBy"
-                        style="width:20px;background-color:#d8f0dd;border-color:#3cf696">
-                        <option value="">Sort By</option>
-                        <option value="nameAsc">Name (A-Z)</option>
-                        <option value="nameDesc">Name (Z-A)</option>
-                        <option value="priceAsc">Price (Low to High)</option>
-                        <option value="priceDesc">Price (High to Low)</option>
-                    </select> -->
-                        <!-- Price field -->
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
-                                style="background-color:#3cf696;">
-                                <i class="fas fa-search" style="color:#fff;"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="navbar-nav ml-auto">
-                    <a class="nav-link" href="/signup" title="Wishlist">
-                        <i class="fas fa-heart navbar-icon" style="color:black;"></i>
-                    </a>
-                    <a class="nav-link" href="/signup" title="Cart">
-                        <i class="fas fa-shopping-cart navbar-icon" style="color:black;"></i>
-                    </a>
-                    <div class="dropdown">
-                        <button class="nav-link dropbtn" style="background: none; border: none; cursor: pointer;" onclick="location.href='/signup'"> 
-                            <i class="fas fa-user navbar-icon" style="color: black;"></i>
-                        </button>
-                        <!-- <div class="dropdown-content">
-                            <a href="/p">Profile</a>
-                            <a href="/logout">Logout</a>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
-    <!-- Carousel -->
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <!-- HERO Carousel -->
+    <div class="hero-wrap">
+      <div id="carouselHero" class="carousel slide" data-ride="carousel" data-interval="4500">
         <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+          <li data-target="#carouselHero" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselHero" data-slide-to="1"></li>
+          <li data-target="#carouselHero" data-slide-to="2"></li>
         </ol>
+
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="d-block w-100 img" src="/images/Slide1.png" alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100 img" src="/images/Slide2.webp" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100 img" src="/images/Slide3.jpg" alt="Third slide">
-            </div>
+          <div class="carousel-item active">
+            <img src="/images/Slide1.png" alt="RMHUB Slide 1">
+          </div>
+          <div class="carousel-item">
+            <img src="/images/Slide2.webp" alt="RMHUB Slide 2">
+          </div>
+          <div class="carousel-item">
+            <img src="/images/Slide3.jpg" alt="RMHUB Slide 3">
+          </div>
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
+
+        <a class="carousel-control-prev" href="#carouselHero" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
         </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
+        <a class="carousel-control-next" href="#carouselHero" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
         </a>
+      </div>
     </div>
 
-    <!-- Featured Products -->
-    <div class="container">
-        <div class="row mt-5">
-            <div class="col-sm">
-                <div class="mycontainer">
-                    <img src="/images/below1.png" alt="Image 1">
-                    <div class="c1 container text-left">
-                        <h3>HONOR 90 5G</h3>
-                        <p>Share Your Vibe</p>
-                        <button class="b" onclick="window.location.href='/signup'">Shop Now</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm">
-                <div class="mycontainer">
-                    <img src="/images/below2.jpg" alt="Image 2">
-                    <div class="c1 container text-right">
-                        <h3>realme C53</h3>
-                        <p>108MP Camera Under 10K</p>
-                        <button class="b" onclick="window.location.href='/signup'">Shop Now</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Featured -->
+    <div class="mt-5 d-flex align-items-center justify-content-between flex-wrap" style="gap:10px;">
+      <div class="title-chip"><i class="fas fa-star"></i> Featured Picks</div>
+      <a class="btn-rm" href="/signup"><i class="fas fa-bolt"></i> Explore Collection</a>
     </div>
 
+    <div class="row mt-3">
+      <div class="col-lg-6 mb-4">
+        <div class="feat-tile">
+          <img src="/images/below1.png" alt="Featured 1">
+          <div class="feat-overlay">
+            <h3>HONOR 90 5G</h3>
+            <p>Share Your Vibe</p>
+            <a class="btn-rm" href="/signup"><i class="fas fa-shopping-bag"></i> Shop Now</a>
+          </div>
+        </div>
+      </div>
 
+      <div class="col-lg-6 mb-4">
+        <div class="feat-tile">
+          <img src="/images/below2.jpg" alt="Featured 2">
+          <div class="feat-overlay text-right">
+            <h3>realme C53</h3>
+            <p>108MP Camera Under 10K</p>
+            <a class="btn-rm" href="/signup"><i class="fas fa-shopping-bag"></i> Shop Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Categories -->
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-sm-4 text-center">
-                <a href="/signup"><img src="/images/phone.gif" style="border:2px solid #3cf696"
-                        class="img-fluid rounded-circle category-icon" alt="Phones"></a>
-                <h4 class="mt-3">Phones</h4>
+    <div class="mt-4">
+      <div class="title-chip"><i class="fas fa-th-large"></i> Shop by Category</div>
+
+      <div class="row mt-3">
+        <div class="col-md-4 mb-3">
+          <a href="/signup" style="text-decoration:none;">
+            <div class="cat-card text-center">
+              <img class="cat-icon" src="/images/phone.gif" alt="Phones">
+              <h4>Phones</h4>
+              <p>Latest Android phones with premium performance.</p>
             </div>
-            <div class="col-sm-4 text-center">
-                <a href="/signup"><img src="/images/watches.gif" style="border: 2px solid #3cf696"
-                        class="img-fluid rounded-circle category-icon" alt="Watches"></a>
-                <h4 class="mt-3">Watches</h4>
-            </div>
-            <div class="col-sm-4 text-center">
-                <a href="/signup"><img src="/images/tablet.gif" style="border: 2px solid #3cf696"
-                        class="img-fluid rounded-circle category-icon" alt="Tablets"></a>
-                <h4 class="mt-3">Tablets</h4>
-            </div>
+          </a>
         </div>
+
+        <div class="col-md-4 mb-3">
+          <a href="/signup" style="text-decoration:none;">
+            <div class="cat-card text-center">
+              <img class="cat-icon" src="/images/watches.gif" alt="Watches">
+              <h4>Watches</h4>
+              <p>Smart wearables that fit your lifestyle.</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <a href="/signup" style="text-decoration:none;">
+            <div class="cat-card text-center">
+              <img class="cat-icon" src="/images/tablet.gif" alt="Tablets">
+              <h4>Tablets</h4>
+              <p>Work, study, and play — bigger and better.</p>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
-
-    
-
 
     <!-- Secondary Carousel -->
-    <div id="carouselExampleIndicators2" class="carousel slide mt-5" data-ride="carousel" data-interval="5000">
+    <div class="mt-5">
+      <div class="title-chip"><i class="fas fa-fire"></i> Trending Now</div>
+
+      <div id="carouselSecondary" class="carousel slide mini-carousel mt-3" data-ride="carousel" data-interval="4500">
         <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators2" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators2" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators2" data-slide-to="2"></li>
+          <li data-target="#carouselSecondary" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselSecondary" data-slide-to="1"></li>
+          <li data-target="#carouselSecondary" data-slide-to="2"></li>
         </ol>
+
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="d-block w-100 img" src="/images/mobc.png" alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100 img" src="/images/watc.png" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100 img" src="/images/tabc.jpg" alt="Third slide">
-            </div>
+          <div class="carousel-item active">
+            <img class="d-block w-100" src="/images/mobc.png" alt="Phones Banner">
+          </div>
+          <div class="carousel-item">
+            <img class="d-block w-100" src="/images/watc.png" alt="Watches Banner">
+          </div>
+          <div class="carousel-item">
+            <img class="d-block w-100" src="/images/tabc.jpg" alt="Tablets Banner">
+          </div>
         </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
+
+        <a class="carousel-control-prev" href="#carouselSecondary" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
         </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
+        <a class="carousel-control-next" href="#carouselSecondary" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
         </a>
+      </div>
     </div>
 
+  </div>
 
+  <!-- Footer: include ONLY from shared footer file -->
+  <%- include("footer") %>
 
-    <!-- Footer -->
-    <footer class="site-footer mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <h6>About</h6>
-                    <p class="text-justify">R.M.HUB - <i>TECHNOLOGY SIMPLIFIED</i> is an initiative to redefine your
-                        gadget experience. Our focus is on providing the latest and most sophisticated Android phones,
-                        watches, and tablets. We believe in delivering not just products, but experiences that enhance
-                        and simplify your digital life. Thank you for choosing R.M.HUB as your trusted partner in your
-                        technology journey. We look forward to serving you!</p>
-                </div>
-                <div class="col-xs-6 col-md-3">
-                    <h6>Get Help</h6>
-                    <ul class="footer-links">
-                        <li><a href="#">Order Status</a></li>
-                        <li><a href="#">Delivery</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Track Your Order</a></li>
-                        <li><a href="#">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class="col-xs-6 col-md-3">
-                    <h6>Quick Links</h6>
-                    <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Contribute</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Sitemap</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="container" style="background-color: #3CF696; height:50px">
-            <div class="row">
-                <div class="col-md-8 col-sm-6 col-xs-12" style="padding-top:10px">
-                    <p class="copyright-text" style="float:left">Copyright &copy; 2020-24 All Rights Reserved by
-                        <a href="/home">R.M.HUB</a>.
-                    </p>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <ul class="social-icons" style="padding-top:4px">
-                        <li><a class="facebook" href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a class="twitter" href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a class="linkedin" href="#"><i class="fab fa-instagram"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-   
-    <div class="modal fade" id="navbarModal" tabindex="-1" role="dialog" aria-labelledby="navbarModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content" style="background-color: #d8f0dd">
-            <div class="modal-header" style="background-color: #3CF696; color: #fff">
-                <h5 class="modal-title" id="navbarModalLabel">Navigation</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" >
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item" >
-                        <a class="nav-link" href="/signup">Home</a>
-                    </li>
-                    
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Phones</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Watches</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Tablets</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Wishlist</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Cart</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Profile</a>
-                    </li>
-                    <!-- <li class="list-group-item">
-                        <a class="nav-link" href="/signup">Logout</a>
-                    </li> -->
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
