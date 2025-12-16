@@ -1,564 +1,577 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order History</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            color: #444;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Orders | RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
 
-        .container {
-            max-width: 60rem;
-            margin: 0 auto;
-            background-color: #e5e6de;
-            /* Set container background color */
-            padding: 20px;
-            /* Add some padding */
-            margin-top: 60px;
-            border-radius: 20px;
-        }
+  <!-- Bootstrap 4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-        .page-header {
-            border-bottom: 2px solid #444;
-            margin: 0.5rem auto;
-            padding-bottom: 0.5rem;
-        }
+  <!-- DataTables (Bootstrap 4 skin) -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
 
-        .page-header h1 {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            letter-spacing: 2px;
-            margin: 0;
-            font-weight: 900;
-        }
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        .page-header small {
-            font-size: 1rem;
-            letter-spacing: initial;
-        }
+  <style>
+    :root{
+      --rm-primary:#3cf696;
+      --rm-primary-2:#22d67f;
+      --rm-ink:#0f172a;
+      --rm-muted: rgba(15, 23, 42, 0.65);
+      --rm-border: rgba(15, 23, 42, 0.10);
+      --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+      --rm-radius: 18px;
+      --rm-radius-lg: 22px;
+    }
 
-        /* Pagination styles */
-        .pagination {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      color: var(--rm-ink);
+      background:
+        radial-gradient(1100px 600px at 15% 10%, rgba(60, 246, 150, 0.22), transparent 55%),
+        radial-gradient(900px 500px at 90% 25%, rgba(60, 246, 150, 0.14), transparent 55%),
+        #f8f9fa;
+    }
 
-        .page-link {
-            padding: 5px 10px;
-            margin: 0 5px;
-            background-color: #3cf696;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-        }
+    .page-wrap{ margin-top: 18px; margin-bottom: 48px; }
 
-        /* Hover effect for pagination links */
-        .page-link:hover {
-            background-color: #1cc061;
-        }
+    .glass-card{
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.60);
+      border-radius: var(--rm-radius-lg);
+      box-shadow: var(--rm-shadow);
+      overflow: hidden;
+    }
 
-        .flex-col {
-            display: flex;
-            flex-flow: column nowrap;
-        }
+    .card-head{
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.75);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      display:flex;
+      justify-content: space-between;
+      align-items:flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-        .flex-row {
-            display: flex;
-            align-items: center;
-            height: 3rem;
-        }
+    .title{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 20px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
 
-        .flex-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            flex: 0 1 25%;
-        }
+    .sub{
+      margin: 6px 0 0 0;
+      color: var(--rm-muted);
+      font-weight: 700;
+      font-size: 13px;
+    }
 
-        .flex-item:nth-child(n+2) {
-            justify-content: flex-end;
-        }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.10);
+      border: 1px solid rgba(15,23,42,0.12);
+      font-weight: 900;
+      white-space: nowrap;
+    }
 
-        .flex-end-cap {
-            display: flex;
-            flex-flow: column nowrap;
-            justify-content: center;
-            align-items: center;
-            flex: 0 0 3rem;
-            height: 3rem;
-            margin-left: 1rem;
-            background: #aaa;
-            font-weight: 700;
-            text-align: center;
-        }
+    .pill-green{
+      background: rgba(60,246,150,0.18);
+      border-color: rgba(60,246,150,0.30);
+    }
 
-        .order-container {
-            padding: 0 1rem 0 2rem;
-            margin: 2px 2px 0 2px;
-            border-bottom: 2px solid #aaa;
-        }
+    .btn-rm{
+      border:none;
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.95);
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      box-shadow: 0 18px 30px rgba(34,214,127,0.18);
+      transition: transform 160ms ease, filter 160ms ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .btn-rm:hover{
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
 
-        .order-details {
-            box-sizing: border-box;
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
+    .btn-soft{
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.80);
+      border-radius: 14px;
+      font-weight: 900;
+      padding: 11px 16px;
+      color: rgba(15,23,42,0.92);
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform 160ms ease, background 160ms ease;
+      white-space: nowrap;
+    }
+    .btn-soft:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.95);
+      color: rgba(15,23,42,0.95);
+      text-decoration:none;
+    }
 
-        .order-details .flex-end-cap {
-            background: transparent;
-            color: transparent;
-        }
+    .section-pad{ padding: 16px 18px 18px 18px; }
 
-        .product-details {
-            padding-left: 1rem;
-        }
+    /* Order card list */
+    .order-list{
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-        .product {
-            box-sizing: border-box;
-            position: relative;
-            padding-left: 1rem;
-            border: 2px solid #aaa;
-            border-radius: 0.5rem;
-            margin: 0.5rem 0;
-            font-weight: 700;
-            color: #aaa;
-            overflow: hidden;
-        }
+    .order-card{
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(15,23,42,0.10);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: 0 10px 18px rgba(2,6,23,0.06);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .order-card:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 16px 26px rgba(2,6,23,0.10);
+    }
 
-        .product:hover {
-            border-color: black;
-            background-color: #d8f0dd;
-            color: #444;
-            cursor: pointer;
-        }
+    .order-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(15,23,42,0.08);
+      margin-bottom: 10px;
+    }
 
-        .product .flex-end-cap {
-            color: #fff;
-        }
+    .order-id{
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+    .order-meta{
+      font-weight: 800;
+      color: rgba(15,23,42,0.72);
+      font-size: 13px;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
 
-        @media (max-width: 576px) {
-            .order-container {
-                padding-left: 1rem;
-            }
+    .badge-soft{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.08);
+      border: 1px solid rgba(15,23,42,0.10);
+      font-weight: 900;
+      white-space: nowrap;
+      font-size: 12px;
+    }
 
-            .product {
-                padding-left: 0.5rem;
-            }
-        }
+    .badge-green{
+      background: rgba(60,246,150,0.18);
+      border-color: rgba(60,246,150,0.30);
+    }
 
-        @media (max-width: 320px) {
-            html {
-                font-size: 10px;
-            }
-        }
+    .items{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-        /* Button styles */
-        .continue-shopping-btn,
-        .cancel-btn {
-            background-color: #ffd166;
-            /* Button background color */
-            color: black;
-            /* Button text color */
-            font-weight: bold;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+    .item-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.80);
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+    .item-row:hover{
+      background: rgba(60,246,150,0.10);
+      border-color: rgba(60,246,150,0.25);
+      transform: translateY(-1px);
+      cursor: pointer;
+    }
 
-        .cancel-btn {
-            background-color: #ff0000;
-            /* Cancel button background color */
-            color: black;
-            font-weight: bold;
-        }
+    .prod{
+      display:flex;
+      align-items:flex-start;
+      gap: 12px;
+      min-width: 260px;
+    }
+    .prod-img{
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      background:#fff;
+      border: 1px solid rgba(15,23,42,0.10);
+      box-shadow: 0 10px 16px rgba(2,6,23,0.06);
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex: 0 0 auto;
+    }
+    .prod-img img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      padding: 7px;
+      display:block;
+    }
 
-        .nav {
-            background-color: #3cf696;
-            position: fixed;
-            top: 0;
-            left: 0;
-            /* Add this line */
-            right: 0;
-            /* Add this line */
-            z-index: 1;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+    .prod-title{
+      margin:0;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.2;
+    }
 
-        .nav img {
-            height: 50px;
-            width: auto;
-            /* Add this to maintain aspect ratio */
-        }
+    .prod-sub{
+      margin-top: 4px;
+      font-weight: 800;
+      color: rgba(15,23,42,0.65);
+      font-size: 12px;
+    }
 
+    .item-right{
+      text-align:right;
+      min-width: 180px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .item-right .muted{
+      display:block;
+      font-weight: 800;
+      color: rgba(15,23,42,0.65);
+      font-size: 12px;
+      margin-top: 4px;
+    }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            /* Hide the modal by default */
-            position: fixed;
-            /* Position the modal overlay */
-            z-index: 1;
-            /* Set the z-index to ensure it appears on top of other elements */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            /* Enable scrolling if needed */
-            background-color: rgba(0, 0, 0, 0.4);
-            /* Black background with transparency */
-        }
+    /* Pagination */
+    .pager{
+      margin-top: 16px;
+      display:flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        /* Modal content styles */
-        .modal-content {
-            background-color: #fefefe;
-            /* White background */
-            margin: 10% auto;
-            /* Center the modal vertically and horizontally */
-            padding: 20px;
-            border: 1px solid #3CF696;
-            /* Green border */
-            border-radius: 10px;
-            max-width: 600px;
-            /* Set maximum width of the modal */
-            position: relative;
-            /* Ensure proper positioning of the close button */
-        }
+    /* Modal polish */
+    .modal-content{
+      border: none;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--rm-shadow);
+    }
+    .modal-header{
+      border-bottom:none;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+      color: rgba(15,23,42,0.95);
+    }
+    .modal-title{ font-weight: 900; }
 
-        /* Close button styles */
-        .close {
-            color: #3CF696;
-            /* Green color for close button */
-            position: absolute;
-            /* Position close button relative to modal content */
-            top: 10px;
-            right: 10px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 50px;
-        }
+    /* DataTables theme alignment */
+    .dataTables_wrapper .dataTables_filter input,
+    .dataTables_wrapper .dataTables_length select{
+      border-radius: 14px !important;
+      border: 1px solid rgba(15,23,42,0.12) !important;
+      background: rgba(255,255,255,0.85) !important;
+      font-weight: 800;
+      height: 42px;
+      padding: 8px 12px;
+      box-shadow: none !important;
+    }
+    .dataTables_wrapper .pagination .page-link{
+      border-radius: 12px !important;
+      margin: 0 4px;
+      border: 1px solid rgba(15,23,42,0.10) !important;
+      font-weight: 900;
+      color: rgba(15,23,42,0.85) !important;
+    }
+    .dataTables_wrapper .pagination .page-item.active .page-link{
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2)) !important;
+      border: none !important;
+      color: rgba(15,23,42,0.95) !important;
+    }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            /* Change color on hover/focus */
-            text-decoration: none;
-        }
-
-        #cancelledOrderTable {
-            width: 100%;
-            /* Set table width to 100% */
-            max-width: 100%;
-            /* Set maximum width to 100% */
-            margin: auto;
-            /* Center the table */
-        }
-
-        #cancelledOrderTable thead th {
-            position: sticky;
-            /* Stick the header */
-            top: 0;
-            /* Stick to the top */
-            z-index: 1;
-            /* Ensure it's above other elements */
-            background-color: #3cf696;
-            /* Set background color for header */
-            color: #fff;
-            /* Set text color for header */
-        }
-
-        #cancelledOrderTable td {
-            padding: 10px;
-            /* Add padding to table cells */
-            border: 1px solid#fff;
-        }
-
-        #cancelledOrderTable img {
-            max-width: 30px;
-            /* Reduce image size */
-            max-height: 30px;
-            margin-right: 5px;
-            /* Add margin between images and text */
-        }
-
-        #cancelledOrderTable div {
-            margin-bottom: 5px;
-            /* Add margin between rows */
-        }
-
-        td:hover {
-            cursor: pointer;
-            background-color: #fff;
-        }
-    </style>
-    <!-- DataTable CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-
-    <!-- DataTable JavaScript -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-
-
+    table.dataTable{
+      border-collapse: separate !important;
+      border-spacing: 0 10px !important;
+    }
+    table.dataTable thead th{
+      border:none !important;
+      background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2)) !important;
+      color: rgba(15,23,42,0.95) !important;
+      font-weight: 900 !important;
+      padding: 14px !important;
+      white-space: nowrap;
+    }
+    table.dataTable tbody td{
+      background: rgba(255,255,255,0.88) !important;
+      border-top: 1px solid rgba(15,23,42,0.08) !important;
+      border-bottom: 1px solid rgba(15,23,42,0.08) !important;
+      padding: 14px !important;
+      vertical-align: middle !important;
+      font-weight: 800;
+    }
+    table.dataTable tbody td:first-child{
+      border-left: 1px solid rgba(15,23,42,0.08) !important;
+      border-top-left-radius: 16px;
+      border-bottom-left-radius: 16px;
+    }
+    table.dataTable tbody td:last-child{
+      border-right: 1px solid rgba(15,23,42,0.08) !important;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="nav">
-        <img src="/images/NavImg.jpg" alt="Logo">
-    </div>
+  <%- include("../user/nav") %>
 
+  <div class="container page-wrap">
+    <div class="glass-card">
 
-    <div class="container">
-
-        <button type="button" class="btn btn-primary" style=" background-color: #3cf696; border-radius: 10px;"
-            data-toggle="modal" data-target="#cancelledOrderModal">
-            Cancelled Orders
-        </button>
-
-
-        <div class="page-header">
-            <h1> MY ORDERS <small>TOTAL ORDERS: <%= orderDetails.length %></small></h1>
-
-            <!-- Pagination controls -->
-            <div class="pagination">
-                <% if (currentPage> 1) { %>
-                    <a href="/cart/orderhistory?page=<%= currentPage - 1 %>" class="page-link">&laquo; Previous</a>
-                    <% } %>
-                        <% if (currentPage < totalPages) { %>
-                            <a href="/cart/orderhistory?page=<%= currentPage + 1 %>" class="page-link">Next &raquo;</a>
-                            <% } %>
-            </div>
-            <!-- End of pagination controls -->
-            <button class="continue-shopping-btn" onclick="location.href='/home'">Continue Shopping</button>
-
+      <div class="card-head">
+        <div>
+          <h1 class="title"><i class="fas fa-box"></i> My Orders</h1>
+          <p class="sub">Track all purchases, review items, and open detailed order view when needed.</p>
         </div>
 
-        <% orderDetails.forEach((order,index)=> { %>
-            <div class="order-container">
-                <div class="order-details">
-                    <div class="order-info">
-                        <div>Order ID : #<%= order._id.toString().slice(-7).toUpperCase() %>
-                        </div>
-                        <div>
-                            Order Date: <%= new Date(order.orderDate).toLocaleDateString('en-IN', {
-                                timeZone: 'Asia/Kolkata' , weekday: 'long' }) %>
-                                <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' ,
-                                    day: 'numeric' , month: 'long' , year: 'numeric' }) %>
-                                    <%= new Date(order.orderDate).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata'
-                                        , hour12: true }) %>
-                                        <div>Order Total: ₹<%= Number(order.totalPrice).toLocaleString('en-IN') %>
-                                        </div>                            
-                        </div>
-                    </div>
-                    <div class="product-details">
-                      
-                        <% if (order.orderItems && order.orderItems.length> 0) { %>
-                            <% order.orderItems.forEach(item=> { %>
-                                <div class="product">
-                                    <div style="margin: 10px 10px 0 0; float:right; width:fit-content; border: 2px solid #3cf696">
-                                        <% if (order.appliedCoupon) { %>
-                                          <span style="background-color:#3cf696; color:#000">Coupon Applied</span>
+        <div class="d-flex" style="gap:10px; flex-wrap:wrap;">
+          <span class="pill pill-green"><i class="fas fa-layer-group"></i> Total: <%= orderDetails.length %></span>
 
-                                        <% } %>
-                                     </div> 
-                                    <img src="<%= item.productId.image[0]%>" style="max-width:100px; max-height:100px"
-                                        alt="<%= item.productId.model %>">
-                                    <div class="product-info">
-                                        <div>Name: <%= item.productId.model %>
-                                        </div>
-                                        <div>Quantity: <%= item.quantity %>
-                                        </div>
-                                        <div>Actual Price: ₹<%= Number(item.price * item.quantity).toLocaleString('en-IN') %>
-                                        </div>
-                                        <!-- <div>Payment Method: <%= order.paymentMethod %>
-                                        </div>
-                                        <div>Order Status: <%= order.orderStatus %>
-                                        </div>
-                                        <% if (order.paymentMethod === 'PayPal') { %>
-                                            <div>Payment Status: <%= order.paymentStatus %></div>
-                                        <% } %> -->
-                                    </div>
-                                </div>
-                                <% }); %>
-                                    <% } else { %>
-                                        <div>No items in this order</div>
-                                        <% } %>
-                    </div>
-                    <a href="/cart/orderdetails/<%= order._id %>" style="text-decoration:none">View Details</a>
-                </div>
-                <div class="order-actions">
-                    <!-- Add buttons for order actions -->
-                    <!-- <% if (order.orderStatus !=='cancelled' && order.orderStatus !=='delivered' && order.orderStatus
-                        !=='returned' ) { %>
-                        <button class="cancel-btn" onclick="location.href='/cart/cancelorder/<%= order._id %>'">Cancel
-                            Order</button>
-                        <% } %> -->
+          <button type="button" class="btn-soft" data-toggle="modal" data-target="#cancelledOrderModal">
+            <i class="fas fa-ban"></i> Cancelled Orders
+          </button>
 
-                            <!-- <% if (order.orderStatus==='delivered' && order.orderStatus !=='returned' ) { %>
-                                <button class="return-btn" style=" background-color: #3CF696;"
-                                    onclick="openReturnModal('<%= order._id %>')">Return Order</button>
-                                <button class="invoice-btn" style="background-color: #3CF696;" 
-                                    onclick="location.href='/cart/invoice/<%= order._id %>'">Invoice</button>
-                                <% } %> -->
-
-                          
-                            
-
-
-                </div>
-            </div>
-
-            <% }); %>
-
-
-              
-
-    <!-- Modal for cancelled order details -->
-    <div class="modal fade" id="cancelledOrderModal" tabindex="-1" role="dialog"
-        aria-labelledby="cancelledOrderModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="cancelledOrderModalLabel" style="color: #3cf696; text-align:center">
-                        Cancelled Orders</h1>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table id="cancelledOrderTable" class="table table-bordered">
-                            <thead style="background-color: #3cf696">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Order Details</th>
-                                    <th>Product Details</th>
-                                </tr>
-                            </thead>
-                            <tbody style="background-color: #e5e6de">
-                                <% cancelledOrders.forEach((order, index)=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= new Date(order.orderDate).toLocaleDateString('en-US', {
-                                                timeZone: 'Asia/Kolkata' , hour12: true }) %>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <strong>ID:</strong>
-                                                <%= order._id.toString().slice(-7).toUpperCase() %>
-                                            </div>
-                                            <div>
-                                                <strong>Amount:</strong> ₹<%= order.totalPrice %>
-                                            </div>
-                                            
-                                        </td>
-                                        <td>
-                                            <% order.orderItems.forEach(item=> { %>
-                                                <div>
-                                                    <img src="<%= item.productId.image[0] %>"
-                                                        alt="<%= item.productId.model %>"
-                                                        style="max-width: 50px; max-height: 50px;">
-                                                    <br>
-                                                    <%= item.productId.model %> (Qty: <%= item.quantity %>)
-                                                </div>
-                                                <% }); %>
-                                        </td>
-                                    </tr>
-                                    <% }); %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+          <a class="btn-rm" href="/home"><i class="fas fa-store"></i> Continue Shopping</a>
         </div>
-    </div>
+      </div>
 
+      <div class="section-pad">
 
+        <% if (orderDetails && orderDetails.length > 0) { %>
+          <div class="order-list">
+            <% orderDetails.forEach((order)=> { %>
+              <div class="order-card">
 
+                <div class="order-top">
+                  <div>
+                    <div class="order-id">
+                      Order ID: #<%= order._id.toString().slice(-7).toUpperCase() %>
+                    </div>
+                    <div class="order-meta">
+                      <div>
+                        <i class="far fa-calendar-alt"></i>
+                        <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long' }) %>
+                        <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' }) %>
+                        • <%= new Date(order.orderDate).toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour12: true }) %>
+                      </div>
+                      <div><i class="fas fa-receipt"></i> Total: ₹<%= Number(order.totalPrice).toLocaleString('en-IN') %></div>
+                    </div>
+                  </div>
 
-    <!-- Pagination controls -->
-    <div class="pagination">
-        <% if (currentPage> 1) { %>
-            <a href="/cart/orderhistory?page=<%= currentPage - 1 %>" class="page-link">&laquo; Previous</a>
-            <% } %>
-                <% if (currentPage < totalPages) { %>
-                    <a href="/cart/orderhistory?page=<%= currentPage + 1 %>" class="page-link">Next &raquo;</a>
+                  <div class="d-flex" style="gap:10px; flex-wrap:wrap; align-items:center;">
+                    <% if (order.appliedCoupon) { %>
+                      <span class="badge-soft badge-green"><i class="fas fa-ticket-alt"></i> Coupon Applied</span>
                     <% } %>
+                    <a class="btn-soft" href="/cart/orderdetails/<%= order._id %>">
+                      <i class="fas fa-eye"></i> View Details
+                    </a>
+                  </div>
+                </div>
+
+                <div class="items">
+                  <% if (order.orderItems && order.orderItems.length > 0) { %>
+                    <% order.orderItems.forEach(item=> { %>
+                      <div class="item-row" onclick="location.href='/cart/orderdetails/<%= order._id %>'">
+                        <div class="prod">
+                          <div class="prod-img">
+                            <img src="<%= item.productId.image[0] %>" alt="<%= item.productId.model %>">
+                          </div>
+                          <div>
+                            <p class="prod-title"><%= item.productId.model %></p>
+                            <div class="prod-sub">Qty: <%= item.quantity %></div>
+                          </div>
+                        </div>
+
+                        <div class="item-right">
+                          ₹<%= Number(item.price * item.quantity).toLocaleString('en-IN') %>
+                          <span class="muted">Line total</span>
+                        </div>
+                      </div>
+                    <% }) %>
+                  <% } else { %>
+                    <div class="pill"><i class="fas fa-info-circle"></i> No items in this order.</div>
+                  <% } %>
+                </div>
+
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="pill"><i class="fas fa-info-circle"></i> No orders found yet.</div>
+        <% } %>
+
+        <!-- SERVER PAGINATION (single place only) -->
+        <div class="pager">
+          <% if (currentPage > 1) { %>
+            <a class="btn-soft" href="/cart/orderhistory?page=<%= currentPage - 1 %>"><i class="fas fa-angle-left"></i> Previous</a>
+          <% } %>
+
+          <span class="pill">Page <%= currentPage %> / <%= totalPages %></span>
+
+          <% if (currentPage < totalPages) { %>
+            <a class="btn-soft" href="/cart/orderhistory?page=<%= currentPage + 1 %>">Next <i class="fas fa-angle-right"></i></a>
+          <% } %>
+        </div>
+
+      </div>
     </div>
-    <!-- End of pagination controls -->
+  </div>
 
+  <!-- Cancelled Orders Modal (DataTables) -->
+  <div class="modal fade" id="cancelledOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-ban mr-2"></i>Cancelled Orders</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="opacity:1;">
+            <span aria-hidden="true" style="font-weight:900;">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="table-responsive">
+            <table id="cancelledOrderTable" class="table table-borderless" style="width:100%;">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Order</th>
+                  <th>Items</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% cancelledOrders.forEach((order)=> { %>
+                  <tr>
+                    <td style="font-weight:900; white-space:nowrap;">
+                      <%= new Date(order.orderDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' }) %>
+                    </td>
+
+                    <td>
+                      <div style="font-weight:900;">#<%= order._id.toString().slice(-7).toUpperCase() %></div>
+                      <div style="font-weight:800; color: rgba(15,23,42,0.65); font-size:12px;">
+                        Amount: ₹<%= Number(order.totalPrice).toLocaleString('en-IN') %>
+                      </div>
+                    </td>
+
+                    <td>
+                      <% order.orderItems.forEach(item=> { %>
+                        <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+                          <div class="prod-img" style="width:44px; height:44px; border-radius:12px;">
+                            <img src="<%= item.productId.image[0] %>" alt="<%= item.productId.model %>" style="padding:6px;">
+                          </div>
+                          <div style="font-weight:800;">
+                            <div style="font-weight:900;"><%= item.productId.model %></div>
+                            <div style="font-size:12px; color: rgba(15,23,42,0.65);">Qty: <%= item.quantity %></div>
+                          </div>
+                        </div>
+                      <% }) %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="border-top:1px solid rgba(15,23,42,0.08);">
+          <button type="button" class="btn-soft" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.all.min.js"></script>
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <%- include("../user/footer") %>
 
-    <!-- Bootstrap JavaScript library -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-    <!-- DataTable JavaScript -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $('#cancelledOrderTable').DataTable({
-                "rowCallback": function (row, data, index) {
-                    if (index % 2 === 0) {
-                        $(row).css("background-color", "#d8f0dd");
-                    } else {
-                        $(row).css("background-color", "#e5e6de");
-                    }
-                }
-            });
+  <script>
+    // DataTables for cancelled orders (search + paging)
+    $(document).ready(function () {
+      const t = $('#cancelledOrderTable');
+      if (t.length) {
+        t.DataTable({
+          pageLength: 8,
+          lengthMenu: [5, 8, 15, 25],
+          pagingType: "simple_numbers",
+          autoWidth: false,
+          order: [],
+          language: {
+            search: "",
+            searchPlaceholder: "Search cancelled orders...",
+            lengthMenu: "Show _MENU_",
+            info: "Showing _START_ to _END_ of _TOTAL_",
+            infoEmpty: "No cancelled orders",
+            zeroRecords: "No matching records"
+          }
         });
+      }
+    });
 
-    </script>
- 
+    // Toast from ?successMessage=
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const msg = params.get('successMessage');
+      if (!msg) return;
 
-    <script>
-        // Function to get the query parameter value by name
-        function getQueryParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        // Check for 'error' parameter in the URL
-        const success = getQueryParameter('successMessage');
-
-        // If 'error' parameter exists, display it using Swal
-        if (success) {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                background: '#fff',
-                text: success.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
-                showConfirmButton: false,
-                
-            });
-        }
-    </script>
-
-
-
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        background: '#fff',
+        text: decodeURIComponent(msg.replace(/\+/g,' ')),
+        showConfirmButton: false,
+        timer: 2600
+      });
+    })();
+  </script>
 </body>
-
 </html>
