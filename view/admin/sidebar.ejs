@@ -1,5 +1,4 @@
-<!-- sidebar.ejs -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 <style>
   :root{
@@ -16,7 +15,6 @@
     --sb-z: 1040;
   }
 
-  /* Sidebar shell */
   .rm-admin-sidebar{
     position: fixed;
     inset: 0 auto 0 0;
@@ -24,8 +22,7 @@
     height: 100vh;
     z-index: var(--sb-z);
     padding: 14px;
-    background:
-      linear-gradient(135deg, rgba(60,246,150,0.92), rgba(34,214,127,0.88));
+    background: linear-gradient(135deg, rgba(60,246,150,0.92), rgba(34,214,127,0.88));
     border-right: 1px solid rgba(255,255,255,0.40);
     box-shadow: 0 18px 40px rgba(2,6,23,0.10);
     overflow: hidden;
@@ -34,15 +31,16 @@
     transition: width 180ms ease, transform 220ms ease;
   }
 
-  /* Desktop collapsed */
   body.sb-collapsed .rm-admin-sidebar{ width: var(--sb-w-collapsed); }
   body.sb-collapsed .rm-sb-text,
   body.sb-collapsed .rm-sb-sub,
-  body.sb-collapsed .rm-sb-hello{ display:none; }
+  body.sb-collapsed .rm-sb-hello,
+  body.sb-collapsed .rm-sb-small{ display:none; }
   body.sb-collapsed .rm-sb-nav a{ justify-content:center; padding: 12px 10px; }
   body.sb-collapsed .rm-sb-nav i{ margin:0; }
+  body.sb-collapsed .rm-sb-user{ justify-content:center; }
+  body.sb-collapsed .rm-sb-user > div{ display:none; }
 
-  /* Header */
   .rm-sb-head{
     display:flex;
     align-items:center;
@@ -117,7 +115,6 @@
     background: rgba(255,255,255,0.50);
   }
 
-  /* Hello card */
   .rm-sb-user{
     margin-top: 6px;
     border-radius: var(--rm-radius);
@@ -154,7 +151,6 @@
     color: rgba(15,23,42,0.70);
   }
 
-  /* Nav */
   .rm-sb-nav{
     margin-top: 14px;
     display:flex;
@@ -190,17 +186,9 @@
     color: rgba(15,23,42,0.92);
   }
 
-  /* Footer actions */
   .rm-sb-foot{
     margin-top:auto;
     padding-top: 12px;
-  }
-
-  .rm-sb-logout{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
   }
 
   .rm-sb-divider{
@@ -210,7 +198,26 @@
     border-radius: 999px;
   }
 
-  /* Mobile: off-canvas */
+  .rm-sb-logout{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 14px;
+    border-radius:16px;
+    font-weight:900;
+    color:rgba(15,23,42,0.92);
+    background:rgba(255,255,255,0.30);
+    border:1px solid rgba(255,255,255,0.45);
+    transition:background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+  .rm-sb-logout:hover{
+    transform: translateY(-1px);
+    background:rgba(255,255,255,0.45);
+    box-shadow:0 14px 26px rgba(2,6,23,0.12);
+    text-decoration:none;
+    color:rgba(15,23,42,0.92);
+  }
+
   .rm-sb-backdrop{
     position: fixed;
     inset: 0;
@@ -220,7 +227,6 @@
     display:none;
   }
 
-  /* On mobile, sidebar is hidden by default */
   @media (max-width: 991.98px){
     .rm-admin-sidebar{
       transform: translateX(-110%);
@@ -231,7 +237,6 @@
     body.sb-open .rm-sb-backdrop{ display:block; }
   }
 
-  /* Mobile open button (floating) */
   .rm-sb-fab{
     position: fixed;
     left: 14px;
@@ -295,7 +300,7 @@
 
   <div class="rm-sb-foot">
     <div class="rm-sb-divider"></div>
-    <a class="rm-sb-nav rm-sb-logout" href="/admin/logout" style="text-decoration:none;">
+    <a class="rm-sb-logout" href="/admin/logout">
       <div style="display:flex;align-items:center;gap:12px;">
         <i class="fas fa-sign-out-alt"></i>
         <span class="rm-sb-text">Logout</span>
@@ -315,45 +320,62 @@
     const fabBtn = document.getElementById('rmSbFab');
     const backdrop = document.getElementById('rmSbBackdrop');
 
-    // restore collapse state (desktop only)
-    try {
-      const saved = localStorage.getItem('rm_admin_sb_collapsed');
-      if (saved === '1') document.body.classList.add('sb-collapsed');
-    } catch(e){}
-
     function setCollapsed(next){
       if (next) document.body.classList.add('sb-collapsed');
       else document.body.classList.remove('sb-collapsed');
       try { localStorage.setItem('rm_admin_sb_collapsed', next ? '1' : '0'); } catch(e){}
     }
 
-    function closeMobile(){
-      document.body.classList.remove('sb-open');
-    }
-    function openMobile(){
-      document.body.classList.add('sb-open');
+    function syncToggleIcon() {
+      if (!toggleBtn) return;
+      const icon = toggleBtn.querySelector('i');
+      if (!icon) return;
+
+      if (document.body.classList.contains('sb-collapsed')) {
+        icon.classList.remove('fa-angle-left');
+        icon.classList.add('fa-angle-right');
+      } else {
+        icon.classList.remove('fa-angle-right');
+        icon.classList.add('fa-angle-left');
+      }
     }
 
-    // Desktop toggle: collapse/expand
+    function closeMobile(){ document.body.classList.remove('sb-open'); }
+    function openMobile(){ document.body.classList.add('sb-open'); }
+
+    try {
+      const saved = localStorage.getItem('rm_admin_sb_collapsed');
+      if (saved === '1') document.body.classList.add('sb-collapsed');
+    } catch(e){}
+
+    syncToggleIcon();
+
     toggleBtn && toggleBtn.addEventListener('click', function(){
-      // if mobile, treat as open/close
-      if (window.matchMedia('(max-width: 991.98px)').matches){
-        if (document.body.classList.contains('sb-open')) closeMobile();
-        else openMobile();
+      const isMobile = window.matchMedia('(max-width: 991.98px)').matches;
+
+      if (isMobile){
+        document.body.classList.toggle('sb-open');
         return;
       }
-      setCollapsed(!document.body.classList.contains('sb-collapsed'));
+
+      const next = !document.body.classList.contains('sb-collapsed');
+      setCollapsed(next);
+      syncToggleIcon();
     });
 
-    // Mobile FAB open
     fabBtn && fabBtn.addEventListener('click', openMobile);
     backdrop && backdrop.addEventListener('click', closeMobile);
 
-    // Close on route click (mobile)
     document.querySelectorAll('.rm-sb-nav a').forEach(a=>{
       a.addEventListener('click', function(){
         if (window.matchMedia('(max-width: 991.98px)').matches) closeMobile();
       });
+    });
+
+    window.addEventListener('resize', () => {
+      if (!window.matchMedia('(max-width: 991.98px)').matches) {
+        closeMobile();
+      }
     });
   })();
 </script>
