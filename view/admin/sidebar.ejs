@@ -1,147 +1,359 @@
-<div class="sidebar">
-  <h4><img src="/images/users-avatar-svgrepo-com.svg" alt="Logo" class="logo-small"
-      style="width:40px;height:40px;border:1px solid black;border-radius:50px;background-color:black"><span> Hello
-      Admin!..</span></h4>
-  <hr style="border: 1px solid black;"> <!-- Reduce border thickness -->
-  <button onclick="location.href='/admin/dashboard'"><img src="/images/dashboard-svgrepo-com.svg" alt="Logo"
-      class="logo-small" style="width:30px;height:30px"><span>Dashboard</span></button>
-  <button onclick="location.href='/admin/users'"><img src="/images/users.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Users</span></button>
-  <button onclick="location.href='/admin/products'"><img src="/images/product.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Products</span></button>
-  <button onclick="location.href='/admin/category'"><img src="/images/Category.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Category</span></button>
-  <button onclick="location.href='/admin/orders'"><img src="/images/orders-svgrepo-com.svg" alt="Logo"
-      class="logo-small" style="width:30px;height:30px"><span>Orders</span></button>
-  <button onclick="location.href='/admin/sales-report'"><img src="/images/revenue.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Sales Report</span></button>
-  <!-- <button onclick="location.href='/admin/banners'"><img src="/images/product.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Banners</span></button> -->
-  <button onclick="location.href='/coupon/coupon'"><img src="/images/c2.svg" alt="Logo" class="logo-small"
-      style="width:30px;height:30px"><span>Coupons</span></button>
-
-
-  <button onclick="location.href='/admin/logout'"><span>Logout</span><img src="/images/logout-svgrepo-com.svg"
-      alt="Logo" class="logo-small" style="float:right;width:30px;height:30px;"></button>
-</div>
+<!-- sidebar.ejs -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
 <style>
-  .sidebar {
-    background-color: #3cf696;
-    color: #fff;
-    height: 100%;
-    /* Set height to 100% */
-    width: 220px;
+  :root{
+    --rm-primary:#3cf696;
+    --rm-primary-2:#22d67f;
+    --rm-ink:#0f172a;
+    --rm-muted: rgba(15, 23, 42, 0.70);
+    --rm-border: rgba(15, 23, 42, 0.10);
+    --rm-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
+    --rm-radius: 18px;
+
+    --sb-w: 270px;
+    --sb-w-collapsed: 86px;
+    --sb-z: 1040;
+  }
+
+  /* Sidebar shell */
+  .rm-admin-sidebar{
     position: fixed;
-    /* Set position to fixed */
-    top: 0;
-    left: 0;
-    padding: 15px;
-    z-index: 0;
-    overflow-y: auto;
-    /* Enable vertical scrolling */
-
+    inset: 0 auto 0 0;
+    width: var(--sb-w);
+    height: 100vh;
+    z-index: var(--sb-z);
+    padding: 14px;
+    background:
+      linear-gradient(135deg, rgba(60,246,150,0.92), rgba(34,214,127,0.88));
+    border-right: 1px solid rgba(255,255,255,0.40);
+    box-shadow: 0 18px 40px rgba(2,6,23,0.10);
+    overflow: hidden;
+    display:flex;
+    flex-direction: column;
+    transition: width 180ms ease, transform 220ms ease;
   }
 
-  .sidebar h3 {
-    margin-bottom: 20px;
-    /* Increase margin */
+  /* Desktop collapsed */
+  body.sb-collapsed .rm-admin-sidebar{ width: var(--sb-w-collapsed); }
+  body.sb-collapsed .rm-sb-text,
+  body.sb-collapsed .rm-sb-sub,
+  body.sb-collapsed .rm-sb-hello{ display:none; }
+  body.sb-collapsed .rm-sb-nav a{ justify-content:center; padding: 12px 10px; }
+  body.sb-collapsed .rm-sb-nav i{ margin:0; }
+
+  /* Header */
+  .rm-sb-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    padding: 6px 6px 12px 6px;
   }
 
-  .sidebar h3,
-  .sidebar button {
-    color: #fff;
-    margin-bottom: 15px;
-    /* Add spacing between items */
+  .rm-sb-brand{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    text-decoration:none;
+    color: rgba(15,23,42,0.95);
   }
 
-  .sidebar button {
-    display: block;
-    background: none;
-    border: none;
+  .rm-sb-badge{
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 10px 18px rgba(2,6,23,0.10);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 auto;
+  }
+
+  .rm-sb-badge img{
     width: 100%;
-    /* Set width to 100% */
-    height: 45px;
-    border-radius: 20px;
-    text-align: left;
-    color: #fff;
-    cursor: pointer;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+    display:block;
   }
 
-  .sidebar button img {
-    margin-right: 10px;
-    /* Add spacing between icon and text */
+  .rm-sb-title{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
   }
-
-  .sidebar button:hover {
-    background-color: #e5e6de;
-    color: #000;
-    /* Change text color on hover */
-  }
-
-  @keyframes zoomInOut {
-
-    0%,
-    100% {
-      transform: scale(1);
-    }
-
-    50% {
-      transform: scale(1.2);
-    }
-  }
-
-  .sidebar button img {
-    animation: zoomInOut 1s infinite;
-  }
-
-  .sidebar hr {
-    margin-top: 10px;
-    /* Add margin to hr */
-    margin-bottom: 20px;
-    /* Add margin to hr */
-  }
-
-  @keyframes bounce {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  .sidebar button:hover img {
-    animation: bounce 0.6s;
-  }
-
-  .sidebar button span {
-    font-weight: bold;
+  .rm-sb-text{
+    margin:0;
+    font-weight: 900;
+    letter-spacing: 0.2px;
     font-size: 16px;
   }
-
-  @keyframes colorChange {
-    0% {
-      color: #fff;
-    }
-
-    100% {
-      color: #000;
-    }
+  .rm-sb-sub{
+    margin: 2px 0 0 0;
+    font-weight: 800;
+    font-size: 12px;
+    color: rgba(15,23,42,0.70);
   }
 
-  h4 span {
-    animation: colorChange 2s steps(10, end) infinite;
-    font-size: large;
-    font-weight: bold;
-
+  .rm-sb-toggle{
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.35);
+    color: rgba(15,23,42,0.90);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform 160ms ease, background 160ms ease;
   }
-  @media (max-width: 320px) {
-    .sidebar {
-        width: 100%;
+  .rm-sb-toggle:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.50);
+  }
+
+  /* Hello card */
+  .rm-sb-user{
+    margin-top: 6px;
+    border-radius: var(--rm-radius);
+    background: rgba(255,255,255,0.30);
+    border: 1px solid rgba(255,255,255,0.45);
+    box-shadow: 0 12px 18px rgba(2,6,23,0.08);
+    padding: 12px 12px;
+    display:flex;
+    gap: 10px;
+    align-items:center;
+  }
+
+  .rm-sb-avatar{
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    background: rgba(15,23,42,0.85);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex: 0 0 auto;
+  }
+  .rm-sb-avatar i{ color: rgba(255,255,255,0.90); }
+
+  .rm-sb-hello{
+    font-weight: 900;
+    margin:0;
+    color: rgba(15,23,42,0.92);
+  }
+  .rm-sb-small{
+    font-weight: 800;
+    margin: 3px 0 0 0;
+    font-size: 12px;
+    color: rgba(15,23,42,0.70);
+  }
+
+  /* Nav */
+  .rm-sb-nav{
+    margin-top: 14px;
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    overflow:auto;
+    padding-right: 2px;
+  }
+
+  .rm-sb-nav a{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    text-decoration:none;
+    font-weight: 900;
+    color: rgba(15,23,42,0.92);
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.42);
+    box-shadow: 0 10px 18px rgba(2,6,23,0.06);
+    transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+  }
+  .rm-sb-nav a:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,0.40);
+    box-shadow: 0 16px 26px rgba(2,6,23,0.10);
+  }
+
+  .rm-sb-nav i{
+    width: 22px;
+    text-align:center;
+    color: rgba(15,23,42,0.92);
+  }
+
+  /* Footer actions */
+  .rm-sb-foot{
+    margin-top:auto;
+    padding-top: 12px;
+  }
+
+  .rm-sb-logout{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .rm-sb-divider{
+    height: 1px;
+    background: rgba(255,255,255,0.45);
+    margin: 12px 4px;
+    border-radius: 999px;
+  }
+
+  /* Mobile: off-canvas */
+  .rm-sb-backdrop{
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.45);
+    backdrop-filter: blur(2px);
+    z-index: calc(var(--sb-z) - 1);
+    display:none;
+  }
+
+  /* On mobile, sidebar is hidden by default */
+  @media (max-width: 991.98px){
+    .rm-admin-sidebar{
+      transform: translateX(-110%);
+      width: 290px;
+      border-radius: 0 22px 22px 0;
     }
+    body.sb-open .rm-admin-sidebar{ transform: translateX(0); }
+    body.sb-open .rm-sb-backdrop{ display:block; }
+  }
+
+  /* Mobile open button (floating) */
+  .rm-sb-fab{
+    position: fixed;
+    left: 14px;
+    bottom: 14px;
+    z-index: calc(var(--sb-z) + 1);
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    border: none;
+    background: linear-gradient(135deg, var(--rm-primary), var(--rm-primary-2));
+    color: rgba(15,23,42,0.92);
+    box-shadow: 0 18px 30px rgba(34,214,127,0.22);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size: 18px;
+  }
+  @media (max-width: 991.98px){
+    .rm-sb-fab{ display:inline-flex; }
   }
 </style>
+
+<div class="rm-sb-backdrop" id="rmSbBackdrop" aria-hidden="true"></div>
+
+<aside class="rm-admin-sidebar" id="rmAdminSidebar" aria-label="Admin Sidebar">
+  <div class="rm-sb-head">
+    <a class="rm-sb-brand" href="/admin/dashboard">
+      <div class="rm-sb-badge">
+        <img src="/images/NavImg.jpg" alt="RMHUB Logo">
+      </div>
+      <div class="rm-sb-title">
+        <p class="rm-sb-text">RMHUB</p>
+        <p class="rm-sb-sub">Admin Console</p>
+      </div>
+    </a>
+
+    <button class="rm-sb-toggle" id="rmSbToggle" type="button" aria-label="Toggle sidebar">
+      <i class="fas fa-angle-left"></i>
+    </button>
+  </div>
+
+  <div class="rm-sb-user">
+    <div class="rm-sb-avatar" aria-hidden="true"><i class="fas fa-user"></i></div>
+    <div>
+      <p class="rm-sb-hello">Hello Admin!</p>
+      <p class="rm-sb-small">Manage RMHUB operations</p>
+    </div>
+  </div>
+
+  <div class="rm-sb-divider"></div>
+
+  <nav class="rm-sb-nav">
+    <a href="/admin/dashboard"><i class="fas fa-th-large"></i><span class="rm-sb-text">Dashboard</span></a>
+    <a href="/admin/users"><i class="fas fa-users"></i><span class="rm-sb-text">Users</span></a>
+    <a href="/admin/products"><i class="fas fa-box-open"></i><span class="rm-sb-text">Products</span></a>
+    <a href="/admin/category"><i class="fas fa-tags"></i><span class="rm-sb-text">Category</span></a>
+    <a href="/admin/orders"><i class="fas fa-receipt"></i><span class="rm-sb-text">Orders</span></a>
+    <a href="/admin/sales-report"><i class="fas fa-chart-line"></i><span class="rm-sb-text">Sales Report</span></a>
+    <a href="/coupon/coupon"><i class="fas fa-ticket-alt"></i><span class="rm-sb-text">Coupons</span></a>
+  </nav>
+
+  <div class="rm-sb-foot">
+    <div class="rm-sb-divider"></div>
+    <a class="rm-sb-nav rm-sb-logout" href="/admin/logout" style="text-decoration:none;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="rm-sb-text">Logout</span>
+      </div>
+      <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+</aside>
+
+<button class="rm-sb-fab" id="rmSbFab" type="button" aria-label="Open menu">
+  <i class="fas fa-bars"></i>
+</button>
+
+<script>
+  (function(){
+    const toggleBtn = document.getElementById('rmSbToggle');
+    const fabBtn = document.getElementById('rmSbFab');
+    const backdrop = document.getElementById('rmSbBackdrop');
+
+    // restore collapse state (desktop only)
+    try {
+      const saved = localStorage.getItem('rm_admin_sb_collapsed');
+      if (saved === '1') document.body.classList.add('sb-collapsed');
+    } catch(e){}
+
+    function setCollapsed(next){
+      if (next) document.body.classList.add('sb-collapsed');
+      else document.body.classList.remove('sb-collapsed');
+      try { localStorage.setItem('rm_admin_sb_collapsed', next ? '1' : '0'); } catch(e){}
+    }
+
+    function closeMobile(){
+      document.body.classList.remove('sb-open');
+    }
+    function openMobile(){
+      document.body.classList.add('sb-open');
+    }
+
+    // Desktop toggle: collapse/expand
+    toggleBtn && toggleBtn.addEventListener('click', function(){
+      // if mobile, treat as open/close
+      if (window.matchMedia('(max-width: 991.98px)').matches){
+        if (document.body.classList.contains('sb-open')) closeMobile();
+        else openMobile();
+        return;
+      }
+      setCollapsed(!document.body.classList.contains('sb-collapsed'));
+    });
+
+    // Mobile FAB open
+    fabBtn && fabBtn.addEventListener('click', openMobile);
+    backdrop && backdrop.addEventListener('click', closeMobile);
+
+    // Close on route click (mobile)
+    document.querySelectorAll('.rm-sb-nav a').forEach(a=>{
+      a.addEventListener('click', function(){
+        if (window.matchMedia('(max-width: 991.98px)').matches) closeMobile();
+      });
+    });
+  })();
+</script>
