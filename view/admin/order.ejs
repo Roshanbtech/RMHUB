@@ -369,7 +369,7 @@
                     <% request.orderItems.forEach((item)=> { %>
                       <tr>
                         <td>
-                          <img class="product-thumb" src="/<%= item.productId.image[0] %>" alt="<%= item.productId.model %>">
+                          <img class="product-thumb" src="<%= item.productId.image[0] %>" alt="<%= item.productId.model %>">
                         </td>
                         <td style="font-weight: 800;"><%= item.productId.model %></td>
                         <td style="font-weight: 800;"><%= item.quantity %></td>
