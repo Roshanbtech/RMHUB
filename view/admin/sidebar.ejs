@@ -320,13 +320,16 @@
     const fabBtn = document.getElementById('rmSbFab');
     const backdrop = document.getElementById('rmSbBackdrop');
 
+    const mqMobile = window.matchMedia('(max-width: 991.98px)');
+
     function setCollapsed(next){
       if (next) document.body.classList.add('sb-collapsed');
       else document.body.classList.remove('sb-collapsed');
       try { localStorage.setItem('rm_admin_sb_collapsed', next ? '1' : '0'); } catch(e){}
+      syncToggleIcon();
     }
 
-    function syncToggleIcon() {
+    function syncToggleIcon(){
       if (!toggleBtn) return;
       const icon = toggleBtn.querySelector('i');
       if (!icon) return;
@@ -343,24 +346,30 @@
     function closeMobile(){ document.body.classList.remove('sb-open'); }
     function openMobile(){ document.body.classList.add('sb-open'); }
 
-    try {
-      const saved = localStorage.getItem('rm_admin_sb_collapsed');
-      if (saved === '1') document.body.classList.add('sb-collapsed');
-    } catch(e){}
-
-    syncToggleIcon();
-
-    toggleBtn && toggleBtn.addEventListener('click', function(){
-      const isMobile = window.matchMedia('(max-width: 991.98px)').matches;
-
-      if (isMobile){
-        document.body.classList.toggle('sb-open');
+    function applyInitialState(){
+      if (mqMobile.matches){
+        document.body.classList.remove('sb-collapsed');
+        closeMobile();
+        syncToggleIcon();
         return;
       }
 
-      const next = !document.body.classList.contains('sb-collapsed');
-      setCollapsed(next);
+      try {
+        const saved = localStorage.getItem('rm_admin_sb_collapsed');
+        if (saved === '1') document.body.classList.add('sb-collapsed');
+        else document.body.classList.remove('sb-collapsed');
+      } catch(e){}
       syncToggleIcon();
+    }
+
+    applyInitialState();
+
+    toggleBtn && toggleBtn.addEventListener('click', function(){
+      if (mqMobile.matches){
+        document.body.classList.toggle('sb-open');
+        return;
+      }
+      setCollapsed(!document.body.classList.contains('sb-collapsed'));
     });
 
     fabBtn && fabBtn.addEventListener('click', openMobile);
@@ -368,14 +377,10 @@
 
     document.querySelectorAll('.rm-sb-nav a').forEach(a=>{
       a.addEventListener('click', function(){
-        if (window.matchMedia('(max-width: 991.98px)').matches) closeMobile();
+        if (mqMobile.matches) closeMobile();
       });
     });
 
-    window.addEventListener('resize', () => {
-      if (!window.matchMedia('(max-width: 991.98px)').matches) {
-        closeMobile();
-      }
-    });
+    mqMobile.addEventListener('change', applyInitialState);
   })();
 </script>
