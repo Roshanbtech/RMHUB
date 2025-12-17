@@ -2,202 +2,326 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Report</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Report</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg" />
 
-        .breadcrumb-option {
-            background-color: #e5e6de;
-            padding: 15px 0;
-        }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        .breadcrumb-item.active {
-            color: #3cf696;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #f6f8fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow-x: hidden;
+    }
 
-        .container {
-            margin-top: 20px;
-        }
+    .main-content {
+      margin-left: 260px;
+      padding: 28px;
+      transition: margin-left .2s ease;
+    }
 
-        .btn-toolbar {
-            margin-bottom: 20px;
-        }
+    body.sb-collapsed .main-content {
+      margin-left: 92px;
+    }
 
-        .btn-toolbar .btn {
-            margin-right: 10px;
-        }
+    @media (max-width: 991.98px) {
+      .main-content {
+        margin-left: 0;
+        padding: 18px;
+      }
+    }
 
-        table {
-            background-color: #fff;
-            border-radius: 5px;
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 20px;
-        }
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0 18px;
+      color: #0f172a;
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
 
-        table th,
-        table td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    .page-title i {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(60, 246, 150, .35);
+      background: rgba(60, 246, 150, .14);
+      color: #0b1220;
+      font-size: 18px;
+    }
 
-        table th {
-            background-color: #3cf696;
-            color: #fff;
-        }
+    .rm-card {
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      padding: 18px 18px 10px;
+    }
 
-        table tbody tr:hover {
-            background-color: #f2f2f2;
-        }
-    </style>
+    .rm-actions {
+      display: flex;
+      gap: 12px;
+      align-items: end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: end;
+    }
+
+    .filters .form-label {
+      font-weight: 800;
+      color: rgba(15, 23, 42, .8);
+      margin-bottom: 6px;
+    }
+
+    .filters .form-control {
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, .15);
+      padding: 10px 12px;
+      min-width: 200px;
+    }
+
+    .btn-rm {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-green {
+      background: #3cf696;
+      color: #0b1220;
+    }
+
+    .btn-green:hover {
+      filter: brightness(.95);
+    }
+
+    .btn-dark {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .btn-dark:hover {
+      filter: brightness(.95);
+    }
+
+    .btn-dangerish {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .btn-dangerish:hover {
+      filter: brightness(.95);
+    }
+
+    #salesReportTable thead th {
+      background: #3cf696 !important;
+      color: #0b1220 !important;
+      border-bottom: 0 !important;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    #salesReportTable tbody td {
+      vertical-align: middle;
+    }
+
+    .order-id {
+      font-weight: 900;
+      color: #ef4444;
+      letter-spacing: .35px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+      border-radius: 10px !important;
+      border: 1px solid rgba(15, 23, 42, .15) !important;
+      padding: 8px 10px !important;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+      border-radius: 10px !important;
+      border: 1px solid rgba(15, 23, 42, .15) !important;
+      padding: 6px 10px !important;
+    }
+
+    .products-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .products-list li {
+      margin-bottom: 4px;
+    }
+  </style>
 </head>
 
 <body>
-    <section class="breadcrumb-option">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-2">
-                    <li class="breadcrumb-item">
-                        <a class="link-body-emphasis" href="/admin/dashboard">
-                            <svg class="bi" width="16" height="16">
-                                <use xlink:href="#house-door-fill"></use>
-                            </svg>
-                            <span class="visually-hidden">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Sales Report
-                    </li>
-                </ol>
-            </nav>
+  <%- include("sidebar") %>
+
+  <div class="main-content">
+    <div class="page-title">
+      <i class="fa-solid fa-chart-line"></i>
+      <div>
+        <div style="font-size: 28px; line-height: 1;">Sales Report</div>
+        <div style="font-size: 13px; font-weight: 700; color: rgba(15,23,42,.6); margin-top: 4px;">
+          Filter by date range and export to Excel/PDF.
         </div>
-    </section>
-
-    <div class="container">
-        <h1>Sales Report</h1>
-        <div class="btn-toolbar">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="startDate">From:</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate" value="<%= startDate%>">
-                </div>
-                <div class="form-group">
-                    <label for="endDate">To:</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate" value="<%= endDate%>">
-                </div>
-                <button type="submit" class="btn btn-primary">Get Report</button>
-                <button type="button" class="btn btn-success" onclick="exportToExcel()">Export to Excel</button>
-                <button type="button" class="btn btn-danger" onclick="exportToPDF()">Export to PDF</button>
-            </form>
-        </div>
-
-        <table id="salesReportTable" class="table table-striped table-bordered" style="width:100%">
-            <thead>
-                <tr>
-                    <th>SI.No</th>
-                    <th>Order ID</th>
-                    <th>Order Date</th>
-                    <th>User</th>
-                    <th>Products</th>
-                    <th>Shipping Address</th>
-                    <th>Payment Method</th>
-                    <th>Status</th>
-                    <th>Total Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% orders.forEach((order, index)=> { %>
-                    <tr>
-                        <td>
-                            <%= index + 1 %>
-                        </td>
-                        <td>
-                            <%= order._id.toString().slice(-7).toUpperCase() %>
-                        </td>
-                        <td>
-                            <%= order.createdAt.toDateString() %>
-                        </td>
-                        <td>
-                            <%= order.customer[0] ? order.customer[0].firstName : 'N/A' %>
-                        </td>
-                        <td>
-                            <% if (order && order.orderedItems) { %>
-                                <ul>
-                                    <% order.orderedItems.forEach(item=> { %>
-                                        <li>
-                                            <%= item.product_name %>(₹<%= item.price.toFixed(2) %>)(<%= item.quantity %>
-                                                        )
-                                        </li>
-                                        <!-- <li><%= item.price.toFixed(2) %></li> -->
-
-                                        <% }) %>
-                                </ul>
-                                <% } else { %>
-                                    <p>No order items found.</p>
-                                    <% } %>
-
-                        </td>
-                        <td>
-                            <%= order.shippingAddress %>
-                        </td>
-                        <td>
-                            <%= order.paymentMethod %>
-                        </td>
-                        <td>
-                            <%= order.status %>
-                        </td>
-                        <td>₹<%= order.totalAmount %>
-                        </td>
-                    </tr>
-                    <% }) %>
-            </tbody>
-        </table>
+      </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#salesReportTable').DataTable();
-        });
+    <div class="rm-card">
+      <div class="rm-actions">
+        <form class="filters" method="GET" action="">
+          <div>
+            <label for="startDate" class="form-label">From</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" value="<%= startDate %>">
+          </div>
 
-        function getReport() {
-            var startDate = $('#startDate').val();
-            var endDate = $('#endDate').val();
-            // Code to fetch report with selected date range
-        }
+          <div>
+            <label for="endDate" class="form-label">To</label>
+            <input type="date" class="form-control" id="endDate" name="endDate" value="<%= endDate %>">
+          </div>
 
+          <div>
+            <label class="form-label" style="opacity:0;">Action</label>
+            <button type="submit" class="btn-rm btn-green">
+              <i class="fa-solid fa-filter"></i> Get Report
+            </button>
+          </div>
+        </form>
 
-        function exportToExcel() {
-            var startDate = $('#startDate').val();
-            var endDate = $('#endDate').val();
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button" class="btn-rm btn-dark" onclick="exportToExcel()">
+            <i class="fa-solid fa-file-excel"></i> Export Excel
+          </button>
+          <button type="button" class="btn-rm btn-dangerish" onclick="exportToPDF()">
+            <i class="fa-solid fa-file-pdf"></i> Export PDF
+          </button>
+        </div>
+      </div>
 
-            let url = `/admin/excel-salesreport?startDate=${startDate}&endDate=${endDate}`;
-            window.location.href = url;
+      <div class="table-responsive">
+        <table id="salesReportTable" class="table table-hover align-middle mb-0" style="width:100%">
+          <thead>
+            <tr>
+              <th>SI.No</th>
+              <th>Order ID</th>
+              <th>Order Date</th>
+              <th>User</th>
+              <th>Products</th>
+              <th>Shipping Address</th>
+              <th>Payment Method</th>
+              <th>Status</th>
+              <th>Total Amount</th>
+            </tr>
+          </thead>
 
-        }
+          <tbody>
+            <% orders.forEach((order, index)=> { %>
+              <tr>
+                <td><%= index + 1 %></td>
 
-        function exportToPDF() {
-            // Code to export table data to PDF
-            var startDate = $('#startDate').val();
-            var endDate = $('#endDate').val();
+                <td>
+                  <span class="order-id"><%= order._id.toString().slice(-7).toUpperCase() %></span>
+                </td>
 
-            let url = `/admin/pdf-salesreport?startDate=${startDate}&endDate=${endDate}`;
-            window.location.href = url;
-        }
-    </script>
+                <td style="font-weight: 800;">
+                  <%= order.createdAt.toDateString() %>
+                </td>
+
+                <td style="font-weight: 800;">
+                  <%= order.customer[0] ? order.customer[0].firstName : 'N/A' %>
+                </td>
+
+                <td style="min-width: 280px;">
+                  <% if (order && order.orderedItems) { %>
+                    <ul class="products-list">
+                      <% order.orderedItems.forEach(item=> { %>
+                        <li>
+                          <%= item.product_name %>
+                          (₹<%= item.price.toFixed(2) %>)
+                          (<%= item.quantity %>)
+                        </li>
+                      <% }) %>
+                    </ul>
+                  <% } else { %>
+                    <span style="font-weight:800; color:rgba(15,23,42,.7);">No items</span>
+                  <% } %>
+                </td>
+
+                <td style="min-width: 280px;">
+                  <%= order.shippingAddress %>
+                </td>
+
+                <td style="font-weight: 900; color:#2563eb;">
+                  <%= order.paymentMethod %>
+                </td>
+
+                <td style="font-weight: 900;">
+                  <%= order.status %>
+                </td>
+
+                <td style="font-weight: 900;">
+                  ₹<%= order.totalAmount %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+  <script>
+    $(function () {
+      $('#salesReportTable').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        order: [[0, 'asc']]
+      });
+    });
+
+    function exportToExcel() {
+      var startDate = $('#startDate').val();
+      var endDate = $('#endDate').val();
+      let url = `/admin/excel-salesreport?startDate=${startDate}&endDate=${endDate}`;
+      window.location.href = url;
+    }
+
+    function exportToPDF() {
+      var startDate = $('#startDate').val();
+      var endDate = $('#endDate').val();
+      let url = `/admin/pdf-salesreport?startDate=${startDate}&endDate=${endDate}`;
+      window.location.href = url;
+    }
+  </script>
 </body>
 
 </html>

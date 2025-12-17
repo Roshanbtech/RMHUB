@@ -1,540 +1,507 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>RMHUB - Coupon Management</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg" />
 
-        .main-content {
-            margin-left: 222px;
-            padding: 15px;
-            position: relative;
-            z-index: 0;
-            top: px;
-        }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        .user-search {
-            gap: 10px;
-            background-color: #e5e6de;
-            margin-left: 220px;
-            width: 1000px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 30px;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #f6f8fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow-x: hidden;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+    .main-content {
+      margin-left: 260px;
+      padding: 28px;
+      transition: margin-left .2s ease;
+    }
 
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
+    body.sb-collapsed .main-content {
+      margin-left: 92px;
+    }
 
-        th {
-            background-color: #e5e6de;
-            color: #3cf696;
-        }
+    @media (max-width: 991.98px) {
+      .main-content {
+        margin-left: 0;
+        padding: 18px;
+      }
+    }
 
-        td button {
-            display: flex;
-            justify-content: center;
-        }
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0 18px;
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
 
-        .block-button {
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+    .page-title img {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 2px solid #3cf696;
+      background: #eafff5;
+      padding: 6px;
+    }
 
-        td.last {
-            display: flex;
-            justify-content: center;
-        }
+    .rm-card {
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      padding: 18px 18px 10px;
+    }
 
-        .active {
-            color: green;
-            font-weight: bold;
-            text-align: center;
-        }
+    .rm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
 
-        .inactive {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
+    .btn-rm {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
 
-        #example {
-            width: 80%;
-        }
+    .btn-green {
+      background: #3cf696;
+      color: #0b1220;
+    }
 
-        #example thead th {
-            background-color: #3cf696;
-            color: black;
-            border: none;
-            padding: 10px;
-        }
+    .btn-green:hover {
+      filter: brightness(.95);
+    }
 
-        #example tbody tr td:nth-child(odd) {
-            background-color: #e5e6de;
-        }
+    #example thead th {
+      background: #3cf696 !important;
+      color: #0b1220 !important;
+      border-bottom: 0 !important;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
 
-        #example tbody tr:hover {
-            background-color: #c9c9c9;
-        }
+    #example tbody td {
+      vertical-align: middle;
+    }
 
-        #example tbody tr td:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+    .pill {
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 90px;
+    }
 
-        .action {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .pill-active {
+      background: rgba(34, 197, 94, .12);
+      color: #166534;
+      border: 1px solid rgba(34, 197, 94, .25);
+    }
 
-        .action button {
-            margin-top: 5px;
-        }
+    .pill-expired {
+      background: rgba(239, 68, 68, .12);
+      color: #7f1d1d;
+      border: 1px solid rgba(239, 68, 68, .25);
+    }
 
-        .add-coupon-button {
-            float: right;
-            margin-bottom: 10px;
-            background-color: #3cf696;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            color: white;
-        }
+    .cell-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-        .button-wrapper {
-            margin-bottom: 20px;
-            text-align: right;
-        }
+    .btn-mini {
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-weight: 800;
+      border: 0;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
 
-        @keyframes zoomInAndOut {
-            0% {
-                transform: scale(1);
-            }
+    .btn-edit {
+      background: rgba(60, 246, 150, .15);
+      border: 1px solid rgba(60, 246, 150, .35);
+      color: #0b1220;
+    }
 
-            50% {
-                transform: scale(1.1);
-            }
+    .btn-edit:hover {
+      background: rgba(60, 246, 150, .22);
+    }
 
-            100% {
-                transform: scale(1);
-            }
-        }
+    .btn-danger-mini {
+      background: #ef4444;
+      color: #fff;
+    }
 
-        .logo-small {
-            animation: zoomInAndOut 1s infinite;
-            animation-direction: alternate;
-            animation-timing-function: ease-in-out;
-        }
+    .btn-danger-mini:hover {
+      filter: brightness(.95);
+    }
 
-        .active {
-            color: green;
-            font-weight: bold;
-            text-align: center;
-        }
+    .dataTables_wrapper .dataTables_filter input {
+      border-radius: 10px !important;
+      border: 1px solid rgba(15, 23, 42, .15) !important;
+      padding: 8px 10px !important;
+    }
 
-        .expired {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
+    .dataTables_wrapper .dataTables_length select {
+      border-radius: 10px !important;
+      border: 1px solid rgba(15, 23, 42, .15) !important;
+      padding: 6px 10px !important;
+    }
 
-        #editCouponForm {
-            padding: 20px;
-        }
+    .modal-header {
+      background: #3cf696;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
 
-        #editCouponForm .form-group {
-            margin-bottom: 20px;
-        }
+    .modal-title {
+      font-weight: 900;
+      color: #0b1220;
+    }
 
-        #editCouponForm .form-label {
-            font-weight: bold;
-            color: black;
-        }
+    #editCouponForm .form-label {
+      font-weight: 800;
+      color: #0f172a;
+    }
 
-        #editCouponForm .form-control {
-            border-radius: 10px;
-            border: 1px solid #3CF696;
-            padding: 10px;
-            width: 100%;
-            background-color: #ffffff;
-            /* Set background color to white */
-        }
+    #editCouponForm .form-control {
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, .15);
+      padding: 10px;
+      background: #fff;
+    }
 
-        #editCouponForm .btn-primary {
-            background-color: #3CF696;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            color: #fff;
-            cursor: pointer;
-        }
+    #editCouponForm .btn-primary {
+      background: #3cf696;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 900;
+      color: #0b1220;
+    }
 
-        #editCouponForm .btn-primary:hover {
-            background-color: #32c084;
-        }
-
-        /* Title styles */
-        #editCouponModal .modal-title {
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 0;
-        }
-
-        #editCouponModal .modal-header {
-            background-color: #3CF696;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            padding: 15px 20px;
-        }
-    </style>
+    #editCouponForm .btn-primary:hover {
+      filter: brightness(.95);
+    }
+  </style>
 </head>
 
 <body>
-    <%- include("sidebar") %>
+  <%- include("sidebar") %>
 
-        <div class="main-content">
-            <div class="button-wrapper">
-                <button class="add-coupon-button" data-bs-toggle="modal" data-bs-target="#addCouponModal">Add
-                    Coupon</button>
-            </div>
-            <h3 style="text-align: center; font-weight:bold"><img src="/images/c2.svg" alt="Logo" class="logo-small"
-                    style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-                Coupon List</h3>
-            <table id="example" class="table table-hover" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Si. No</th>
-                        <th>Coupon Code</th>
-                        <th>Discount Value</th>
-                        <th>Expiration Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                        <th>Others</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% coupons.forEach((coupon, index)=> { %>
-                        <tr>
-                            <td>
-                                <%= index + 1 %>
-                            </td>
-                            <td>
-                                <%= coupon.code %>
-                            </td>
-                            <td>
-                                <% if (coupon.discountType==="percentage" ) { %>
-                                    <%= coupon.discountValue %>%<% } else if (coupon.discountType==="fixed" ) { %>
-                                            ₹<%= coupon.discountValue %>
-                                                <% } %>
-                            </td>
-                            <td>
-                                <%= new Date(coupon.expirationDate).toLocaleDateString('en-IN', {
-                                    timeZone: 'Asia/Kolkata' , weekday: 'long' }) %>
-                                    <%= new Date(coupon.expirationDate).toLocaleDateString('en-IN', {
-                                        timeZone: 'Asia/Kolkata' , day: 'numeric' , month: 'long' , year: 'numeric' })
-                                        %>
-                                        <%= new Date(coupon.expirationDate).toLocaleTimeString('en-IN', {
-                                            timeZone: 'Asia/Kolkata' , hour12: true }) %>
-                            </td>
-                            <td
-                                class="status <%= (coupon.isActive && new Date(coupon.expirationDate) > new Date()) ? 'active' : 'expired' %>">
-                                <% if (coupon.isActive && new Date(coupon.expirationDate)> new Date()) { %>
-                                    Active
-                                    <% } else { %>
-                                        Expired
-                                        <% } %>
-                            </td>
-                            <td>
-                                <button class="add-coupon-button edit-coupon-btn" data-bs-toggle="modal" data-bs-target="#editCouponModal" data-coupon-id="<%= coupon._id %>">Edit</button>
+  <div class="main-content">
+    <div class="page-title">
+      <img src="/images/c2.svg" alt="Coupons" />
+      <div>
+        <div style="font-size: 28px; line-height: 1;">Coupons</div>
+        <div style="font-size: 13px; font-weight: 600; color: rgba(15,23,42,.6); margin-top: 4px;">
+          Manage coupon lifecycle, discount strategy, and expiry governance.
+        </div>
+      </div>
+    </div>
 
+    <div class="rm-card">
+      <div class="rm-actions">
+        <div></div>
+        <div>
+          <button class="btn-rm btn-green" type="button" data-bs-toggle="modal" data-bs-target="#addCouponModal">
+            <i class="fa-solid fa-plus"></i> Add Coupon
+          </button>
+        </div>
+      </div>
 
-                            </td>
+      <div class="table-responsive">
+        <table id="example" class="table table-hover align-middle mb-0" style="width:100%">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Coupon Code</th>
+              <th>Discount</th>
+              <th>Expiration</th>
+              <th>Status</th>
+              <th style="text-align:center;">Edit</th>
+              <th style="text-align:center;">Delete</th>
+            </tr>
+          </thead>
 
-                            <!-- <td class="action">
-                            <br>
-                            <form action="/admin/toggle-coupon/<%= coupon.id %>" method="POST">
-                                <button class="toggle-button" style="border-radius: 5px">
-                                    <%= coupon.isActive ? 'Deactivate' : 'Activate' %>
-                                </button>
-                            </form>
-                            <br>
-                        </td> -->
-                            <td>
-                                <button style="background-color: red; border-radius: 5px;"
-                                    onclick="confirmDelete('<%= coupon.id %>')">Delete</button>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
+          <tbody>
+            <% coupons.forEach((coupon, index)=> { %>
+              <tr>
+                <td><%= index + 1 %></td>
+
+                <td style="font-weight: 900;"><%= coupon.code %></td>
+
+                <td style="font-weight: 900;">
+                  <% if (coupon.discountType === "percentage") { %>
+                    <%= coupon.discountValue %>%
+                  <% } else if (coupon.discountType === "fixed") { %>
+                    ₹<%= coupon.discountValue %>
+                  <% } %>
+                </td>
+
+                <td>
+                  <div style="font-weight: 800;">
+                    <%= new Date(coupon.expirationDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' }) %>
+                  </div>
+                  <div style="margin-top: 4px; color: rgba(15,23,42,.75); font-weight: 700;">
+                    <%= new Date(coupon.expirationDate).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true }) %>
+                  </div>
+                </td>
+
+                <td>
+                  <% const isValid = (coupon.isActive && new Date(coupon.expirationDate) > new Date()); %>
+                  <% if (isValid) { %>
+                    <span class="pill pill-active">Active</span>
+                  <% } else { %>
+                    <span class="pill pill-expired">Expired</span>
+                  <% } %>
+                </td>
+
+                <td style="text-align:center;">
+                  <button class="btn-mini btn-edit edit-coupon-btn" type="button"
+                    data-bs-toggle="modal" data-bs-target="#editCouponModal"
+                    data-coupon-id="<%= coupon._id %>">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                  </button>
+                </td>
+
+                <td style="text-align:center;">
+                  <button class="btn-mini btn-danger-mini" type="button" onclick="confirmDelete('<%= coupon.id %>')">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Coupon Modal -->
+  <div class="modal fade" id="editCouponModal" tabindex="-1" aria-labelledby="editCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="border-radius: 14px; overflow:hidden;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <!-- Edit Coupon Modal -->
-        <div class="modal fade" id="editCouponModal" tabindex="-1" aria-labelledby="editCouponModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editCouponForm" action="/coupon/editcoupon" method="POST"
-                            onsubmit="return validateEditForm()">
-                            <div class="mb-3">
-                                <label for="editCode" class="form-label">Coupon Code</label>
-                                <input type="text" class="form-control" id="editCode" name="code" 
-                                    >
-                                <div id="editCodeError" class="error"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editDiscountType" class="form-label">Discount Type</label>
-                                <select class="form-control" id="editDiscountType" name="discountType">
-                                    <option value="fixed">Fixed Discount</option>
-                                    <option value="percentage">Percentage Discount</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editDiscountValue" class="form-label">Discount Value</label>
-                                <input type="number" class="form-control" id="editDiscountValue" name="discountValue"
-                                    >
-                                <div id="editDiscountValueError" class="error"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="editExpirationDate" class="form-label">Expiration Date</label>
-                                <input type="date" class="form-control" id="editExpirationDate" name="expirationDate"
-                                    >
-                                <div id="editExpirationDateError" class="error"></div>
-                            </div>
-                            <input type="hidden" id="couponId" name="couponId">
-                            <button type="submit" class="btn btn-primary">Update Coupon</button>
-                        </form>
-                    </div>
-                </div>
+        <div class="modal-body">
+          <form id="editCouponForm" action="/coupon/editcoupon" method="POST" onsubmit="return validateEditForm()">
+            <div class="mb-3">
+              <label for="editCode" class="form-label">Coupon Code</label>
+              <input type="text" class="form-control" id="editCode" name="code">
+              <div id="editCodeError" class="error"></div>
             </div>
+
+            <div class="mb-3">
+              <label for="editDiscountType" class="form-label">Discount Type</label>
+              <select class="form-control" id="editDiscountType" name="discountType">
+                <option value="fixed">Fixed Discount</option>
+                <option value="percentage">Percentage Discount</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="editDiscountValue" class="form-label">Discount Value</label>
+              <input type="number" class="form-control" id="editDiscountValue" name="discountValue">
+              <div id="editDiscountValueError" class="error"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editExpirationDate" class="form-label">Expiration Date</label>
+              <input type="date" class="form-control" id="editExpirationDate" name="expirationDate">
+              <div id="editExpirationDateError" class="error"></div>
+            </div>
+
+            <input type="hidden" id="couponId" name="couponId">
+            <button type="submit" class="btn btn-primary w-100">Update Coupon</button>
+          </form>
         </div>
+      </div>
+    </div>
+  </div>
 
+  <%- include("couponmodal") %>
 
-        <%- include("couponmodal") %>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-                integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('#example').DataTable(); // Correctly initializes DataTable
-                });
-            </script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
-            <script>
-                function confirmDelete(couponId) {
-                    Swal.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3cf696",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If the user confirms, redirect to the delete route
-                            window.location.href = `/coupon/delcoupon/${couponId}`;
-                        }
-                    });
-                }
-            </script>
-            <script>
-                $(document).ready(function () {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const successMessage = urlParams.get('successMessage');
-                    const errorMessage = urlParams.get('error');
+  <script>
+    $(function () {
+      $('#example').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        order: [[0, 'asc']]
+      });
+    });
+  </script>
 
-                    if (successMessage) {
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: successMessage,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer);
-                                toast.addEventListener('mouseleave', Swal.resumeTimer);
-                            }
-                        });
-                    }
-                    if (errorMessage) {
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: errorMessage,
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true,
-                            didOpen: (toast) => {
-                                toast.addEventListener('mouseenter', Swal.stopTimer);
-                                toast.addEventListener('mouseleave', Swal.resumeTimer);
-                            }
-                        });
-                    }
-                });
+  <script>
+    function confirmDelete(couponId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3cf696",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/coupon/delcoupon/${couponId}`;
+        }
+      });
+    }
+  </script>
 
-                
-            </script>
-            <script>
-                // JavaScript to handle opening of the edit coupon modal
-$(document).ready(function () {
-    $('#editCouponModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var couponId = button.data('coupon-id'); // Extract coupon ID from data attribute
-        console.log(couponId);
+  <script>
+    $(document).ready(function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const successMessage = urlParams.get('successMessage');
+      const errorMessage = urlParams.get('error');
+
+      if (successMessage) {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'success',
+          title: successMessage,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+      }
+      if (errorMessage) {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          icon: 'error',
+          title: errorMessage,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+      }
+    });
+  </script>
+
+  <script>
+    $(document).ready(function () {
+      $('#editCouponModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var couponId = button.data('coupon-id');
         var modal = $(this);
-
-        // Store the couponId in a variable accessible within the event listener function
         window.couponId = couponId;
 
-        // Fetch coupon details from the server using AJAX
         $.get(`/coupon/editcoupon/${couponId}`, function (coupon) {
-            // Populate form fields in the modal with the retrieved data
-            modal.find('#editCode').val(coupon.code);
-            modal.find('#editDiscountType').val(coupon.discountType);
-            modal.find('#editDiscountValue').val(coupon.discountValue);
-            modal.find('#editExpirationDate').val(coupon.expirationDate);
+          modal.find('#editCode').val(coupon.code);
+          modal.find('#editDiscountType').val(coupon.discountType);
+          modal.find('#editDiscountValue').val(coupon.discountValue);
+          modal.find('#editExpirationDate').val(coupon.expirationDate);
         });
+      });
     });
-});
 
-// Add an event listener to the form submission
-document.getElementById('editCouponForm').addEventListener('submit', function(event) {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-    
-    // Retrieve couponId from the window object
-    const couponId = window.couponId;
+    document.getElementById('editCouponForm').addEventListener('submit', function (event) {
+      event.preventDefault();
 
-    // Serialize form data into JSON object
-    const formData = {
+      if (!validateEditForm()) return;
+
+      const couponId = window.couponId;
+
+      const formData = {
         code: document.getElementById('editCode').value,
         discountType: document.getElementById('editDiscountType').value,
         discountValue: document.getElementById('editDiscountValue').value,
         expirationDate: document.getElementById('editExpirationDate').value
-    };
-    
-    // Send AJAX request to the server
-    fetch(`/coupon/editcoupon/${couponId}`, {
+      };
+
+      fetch(`/coupon/editcoupon/${couponId}`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
-    })
-    .then(response => {
-        if (response.ok) {
-            // If the response is successful, redirect or handle the success message
+      })
+        .then(response => {
+          if (response.ok) {
             window.location.href = '/coupon/coupon?successMessage=Coupon updated successfully';
-        } else {
-            // If there is an error response, handle it appropriately
+          } else {
             throw new Error('Failed to update coupon');
-        }
-    })
-    .catch(error => {
-        // Handle any errors that occur during the AJAX request
-        console.error('Error updating coupon:', error);
-        // Optionally, display an error message to the user
+          }
+        })
+        .catch(() => {
+          Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'Failed to update coupon', showConfirmButton: false, timer: 3000 });
+        });
     });
-});
 
-</script>
-<script>
-    // JavaScript form validation
     function validateEditForm() {
-        const code = document.getElementById('editCode').value;
-        const discountType = document.getElementById('editDiscountType').value;
-        const discountValue = document.getElementById('editDiscountValue').value;
-        const expirationDate = document.getElementById('editExpirationDate').value;
+      const code = document.getElementById('editCode').value;
+      const discountValue = document.getElementById('editDiscountValue').value;
+      const expirationDate = document.getElementById('editExpirationDate').value;
 
-        let isValid = true;
+      let isValid = true;
 
-        // Validate Coupon Code
-        if (!code) {
-            document.getElementById('editCodeError').innerText = 'Coupon code is required';
-            isValid = false;
-        } else {
-            document.getElementById('editCodeError').innerText = '';
-        }
+      if (!code) {
+        document.getElementById('editCodeError').innerText = 'Coupon code is required';
+        isValid = false;
+      } else {
+        document.getElementById('editCodeError').innerText = '';
+      }
 
-        // Validate Discount Value
-        if (!discountValue) {
-            document.getElementById('editDiscountValueError').innerText = 'Discount value is required';
-            isValid = false;
-        } else if (discountValue <= 0) {
-            document.getElementById('editDiscountValueError').innerText = 'Discount value must be greater than zero';
-            isValid = false;
-        } else {
-            document.getElementById('editDiscountValueError').innerText = '';
-        }
+      if (!discountValue) {
+        document.getElementById('editDiscountValueError').innerText = 'Discount value is required';
+        isValid = false;
+      } else if (Number(discountValue) <= 0) {
+        document.getElementById('editDiscountValueError').innerText = 'Discount value must be greater than zero';
+        isValid = false;
+      } else {
+        document.getElementById('editDiscountValueError').innerText = '';
+      }
 
-        // Validate Expiration Date
-        if (!expirationDate) {
-            document.getElementById('editExpirationDateError').innerText = 'Expiration date is required';
-            isValid = false;
-        } else {
-            document.getElementById('editExpirationDateError').innerText = '';
-        }
+      if (!expirationDate) {
+        document.getElementById('editExpirationDateError').innerText = 'Expiration date is required';
+        isValid = false;
+      } else {
+        document.getElementById('editExpirationDateError').innerText = '';
+      }
 
-        return isValid;
+      return isValid;
     }
-
-    // Add event listener to form submission
-    document.getElementById('editCouponForm').addEventListener('submit', function(event) {
-        // Prevent the default form submission behavior if validation fails
-        if (!validateEditForm()) {
-            event.preventDefault();
-        }
-    });
-</script>
-
-
-
+  </script>
 </body>
 
 </html>

@@ -1,312 +1,340 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>RMHUB</title>
-    <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RMHUB</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg" />
 
-        .main-content {
-            margin-left: 222px;
-            /* This is equal to the width of the sidebar (200px) plus its padding (15px) */
-            padding: 15px;
-            position: relative;
-            z-index: 0;
-            top: px;
-            /* Add this to move it down from the navbar */
-        }
-        
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        .user-search {
-            gap: 10px;
-            background-color: #e5e6de;
-            margin-left: 220px;
-            width: 1000px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 30px;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #f6f8fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow-x: hidden;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            /* Add this to move it down from the search bar */
-        }
+    .main-content {
+      margin-left: 260px;
+      padding: 28px;
+      transition: margin-left .2s ease;
+    }
 
-        table,
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
+    body.sb-collapsed .main-content {
+      margin-left: 92px;
+    }
 
-        th {
-            background-color: #e5e6de;
-            color: #3cf696;
-        }
+    @media (max-width: 991.98px) {
+      .main-content {
+        margin-left: 0;
+        padding: 18px;
+      }
+    }
 
-        td button {
-            display: flex;
-            justify-content: center;
-        }
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 4px 0 18px;
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
 
-        .block-button {
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+    .page-title img {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      border: 2px solid #3cf696;
+      background: #eafff5;
+      padding: 6px;
+    }
 
-        td.last {
-            display: flex;
-            justify-content: center;
-        }
+    .rm-card {
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      padding: 18px 18px 10px;
+    }
 
-        .active {
-            color: green;
-            font-weight: bold;
-            text-align: center;
-        }
+    .rm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
 
-        .inactive {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
+    .rm-actions .left,
+    .rm-actions .right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
-        #example thead th {
-            background-color: #3cf696;
-            /* Header background color */
-            color: black;
-            /* Header text color */
-            border: none;
-            /* Remove border */
-            padding: 10px;
-            /* Add padding */
-        }
+    .btn-rm {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
 
-        #example tbody tr td:nth-child(odd) {
-            background-color: #e5e6de;
-            /* Odd row background color */
-        }
+    .btn-green {
+      background: #3cf696;
+      color: #0b1220;
+    }
 
-        #example tbody tr:hover {
-            background-color: #c9c9c9;
-            /* Hovered row background color */
-        }
+    .btn-green:hover {
+      filter: brightness(.95);
+    }
 
-        /* Alternate row color for better visibility */
-        #example tbody tr td:nth-child(even) {
-            background-color: #f9f9f9;
-            /* Even row background color */
-        }
+    .btn-soft {
+      background: rgba(60, 246, 150, .12);
+      color: #0b1220;
+      border: 1px solid rgba(60, 246, 150, .35);
+    }
 
-        #example tbody tr td.status.available {
-            color: green;
-            font-weight: bold;
-            text-align: center;
-        }
+    .btn-soft:hover {
+      background: rgba(60, 246, 150, .18);
+    }
 
-        #example tbody tr td.status.unavailable {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        .action {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    #example thead th {
+      background: #3cf696 !important;
+      color: #0b1220 !important;
+      border-bottom: 0 !important;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
 
-        .action button {
-            margin-top: 5px;
-            /* Adjust as needed */
-        }
+    #example tbody td {
+      vertical-align: middle;
+    }
 
+    .status-pill {
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+    }
 
-        .add-category-button {
-            float: right;
-            margin-bottom: 10px;
-            background-color: #3cf696;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            text-decoration: none;
-            color: white;
-        }
+    .status-available {
+      background: rgba(34, 197, 94, .12);
+      color: #166534;
+      border: 1px solid rgba(34, 197, 94, .25);
+    }
 
-        .button-wrapper {
-            margin-bottom: 20px;
-            text-align: right;
-        }
+    .status-unavailable {
+      background: rgba(239, 68, 68, .12);
+      color: #7f1d1d;
+      border: 1px solid rgba(239, 68, 68, .25);
+    }
 
-        @keyframes zoomInAndOut {
-            0% {
-                transform: scale(1);
-            }
+    .cell-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-            50% {
-                transform: scale(1.1);
-            }
+    .btn-mini {
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-weight: 800;
+      border: 0;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
 
-            100% {
-                transform: scale(1);
-            }
-        }
+    .btn-edit {
+      background: rgba(60, 246, 150, .15);
+      border: 1px solid rgba(60, 246, 150, .35);
+      color: #0b1220;
+    }
 
-        .logo-small {
+    .btn-edit:hover {
+      background: rgba(60, 246, 150, .22);
+    }
 
-            animation: zoomInAndOut 1s infinite;
-            animation-direction: alternate;
-            animation-timing-function: ease-in-out;
-        }
-        
-    </style>
-    <!-- DataTable HEADER -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    .btn-toggle {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .btn-toggle:hover {
+      filter: brightness(.95);
+    }
+
+    .btn-danger-mini {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .btn-danger-mini:hover {
+      filter: brightness(.95);
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+      border-radius: 10px !important;
+      border: 1px solid rgba(15, 23, 42, .15) !important;
+      padding: 8px 10px !important;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+      border-radius: 10px !important;
+      border: 1px solid rgba(15, 23, 42, .15) !important;
+      padding: 6px 10px !important;
+    }
+
+    form { margin: 0; }
+  </style>
 </head>
 
 <body>
-    <!-- <%- include("nav") %> -->
-        <%- include("sidebar") %>
+  <%- include("sidebar") %>
 
+  <div class="main-content">
+    <div class="page-title">
+      <img src="/images/Category.svg" alt="Category" />
+      <div>
+        <div style="font-size: 28px; line-height: 1;">Categories</div>
+        <div style="font-size: 13px; font-weight: 600; color: rgba(15,23,42,.6); margin-top: 4px;">
+          Manage category visibility and lifecycle controls.
+        </div>
+      </div>
+    </div>
 
-            <div class="main-content">
-                <div class="button-wrapper">
-                    <button class="add-category-button" onclick="location.href='/admin/addcategory'"><a>Add
-                        Category</a></button>
-                    <!-- <button class="add-category-button"><a href="/admin/addcategory">Add Category</a></button> -->
-                    <button style="background-color: #3cf696;  border-radius: 5px;float:left"
-                        onclick="location.href='/admin/cat-offers'">Category Offers</button>
+    <div class="rm-card">
+      <div class="rm-actions">
+        <div class="left">
+          <button class="btn-rm btn-green" type="button" onclick="location.href='/admin/addcategory'">
+            <i class="fa-solid fa-plus"></i> Add Category
+          </button>
 
-                </div>
-                <h3 style="text-align: center; font-weight:bold"><img src="/images/Category.svg" alt="Logo"
-                        class="logo-small"
-                        style="width:50px;height:50px;border: 2px solid #3cf696;border-radius:50%;background-color: #e5e6de;">
-                    Category List</h3>
-                <!-- <button class="btn" style="float:right;margin-bottom:30px;background-color:#3cf696"><a href="/admin/addcategory">Add Category</a></button> -->
-                <table id="example" class="table table-hover" style="width:100%">
+          <button class="btn-rm btn-soft" type="button" onclick="location.href='/admin/cat-offers'">
+            <i class="fa-solid fa-tags"></i> Category Offers
+          </button>
+        </div>
+        <div class="right"></div>
+      </div>
 
-                    <thead>
-                        <tr>
-                            <th>Si. No</th>
-                            <th>Category Name</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                            <th>Others</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% categories.forEach((category, index)=> { %>
-                            <tr>
-                                <td>
-                                    <%= index + 1 %>
-                                </td>
-                                <td>
-                                    <%= category.name %>
-                                </td>
-                                <td class="status">
-                                    <%= category.isListed ? 'Available' : 'SoftDeleted' %>
-                                </td>
-                                <td class="action">
-                                    <button style="background-color: #3cf696;border-radius: 5px"
-                                        onclick="location.href='/admin/editcategory/<%= category.id %>'">Edit</button>
-                                    <br>
-                                    <form action="/admin/toggle-category/<%= category.id %>" method="POST">
-                                        <button class="toggle-button" style="border-radius: 5px">
-                                            <%= category.isListed ? 'Unlist' : 'List' %>
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="others">
-                                    <button style="background-color: red; border-radius: 5px;"
-                                        onclick="confirmDelete('<%= category.id %>')">Delete</button>
-                                </td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
-            </div>
+      <div class="table-responsive">
+        <table id="example" class="table table-hover align-middle mb-0" style="width:100%">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Category Name</th>
+              <th>Status</th>
+              <th style="text-align:center;">Actions</th>
+              <th style="text-align:center;">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.forEach((category, index)=> { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td style="font-weight: 900;"><%= category.name %></td>
 
+                <td>
+                  <% if (category.isListed) { %>
+                    <span class="status-pill status-available">Available</span>
+                  <% } else { %>
+                    <span class="status-pill status-unavailable">SoftDeleted</span>
+                  <% } %>
+                </td>
 
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                <td style="text-align:center;">
+                  <div class="cell-actions">
+                    <button class="btn-mini btn-edit" type="button"
+                      onclick="location.href='/admin/editcategory/<%= category.id %>'">
+                      <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </button>
 
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-                integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                    <form action="/admin/toggle-category/<%= category.id %>" method="POST">
+                      <button class="btn-mini btn-toggle" type="submit">
+                        <%= category.isListed ? 'Unlist' : 'List' %>
+                      </button>
+                    </form>
+                  </div>
+                </td>
 
-            <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
-            <!-- <script>
-                new DataTable('#example');
-            </script> -->
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <td style="text-align:center;">
+                  <button class="btn-mini btn-danger-mini" type="button"
+                    onclick="confirmDelete('<%= category.id %>')">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-            <script>
-                $(document).ready(function () {
-                    $('#example').DataTable({
-                        responsive: true // Enable responsive option
-                    });
-                });
-                
-            </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
-            <script>
-                function confirmDelete(categoryId) {
-                    Swal.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3cf696",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If the user confirms, redirect to the delete route
-                            window.location.href = `/admin/delcategory/${categoryId}`;
-                        }
-                    });
-                }
-            </script>
+  <script>
+    $(function () {
+      $('#example').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        order: [[0, 'asc']]
+      });
+    });
+  </script>
 
-            <% if (successMessage) { %>
-                <script>
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "<%= successMessage %>",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                </script>
-                <% } %>
+  <script>
+    function confirmDelete(categoryId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3cf696",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/admin/delcategory/${categoryId}`;
+        }
+      });
+    }
+  </script>
 
+  <% if (successMessage) { %>
+    <script>
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "<%= successMessage %>",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    </script>
+  <% } %>
 
 </body>
-
 </html>

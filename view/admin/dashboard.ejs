@@ -2,904 +2,602 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    
-    <title>RMHUB Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl7/1L_dstPt3HV5HzF6Gvk/e9T9hXmJ58bldgTk+" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-        integrity="sha384-zp7QC8uN+9tBQWKOXy8QmjQf/sNmE/KjE09l9ZIpU7CdLNcVtBVjKZzCwQhjrC2zN/EpK7G0D9y8QhbQQVsN99xKVjgOuXwGpjr"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
-
-
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        .sidebar {
-            background-color: #3cf696;
-            color: #fff;
-            height: 100%;
-            width: 220px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 15px;
-            z-index: 1;
-            overflow-y: auto;
-        }
-
-        .sidebar h4 {
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar h4 img {
-            margin-right: 10px;
-        }
-
-        .sidebar hr {
-            margin-top: 10px;
-            margin-bottom: 20px;
-            border: 1px solid black;
-        }
-
-        .sidebar button {
-            display: flex;
-            align-items: center;
-            background: none;
-            border: none;
-            width: 100%;
-            height: 45px;
-            border-radius: 20px;
-            text-align: left;
-            color: #fff;
-            cursor: pointer;
-            margin-bottom: 15px;
-            padding: 0 10px;
-        }
-
-        .sidebar button img {
-            margin-right: 10px;
-            animation: zoomInOut 1s infinite;
-        }
-
-        .sidebar button:hover {
-            background-color: #e5e6de;
-            color: #000;
-        }
-
-        .sidebar button:hover img {
-            animation: bounce 0.6s;
-        }
-
-        .sidebar button span {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        @keyframes zoomInOut {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        h4 span {
-            animation: colorChange 2s steps(10, end) infinite;
-            font-size: large;
-            font-weight: bold;
-        }
-
-        @keyframes colorChange {
-            0% {
-                color: #fff;
-            }
-
-            100% {
-                color: #000;
-            }
-        }
-
-        .main {
-            margin-left: 240px;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        .card {
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease-in-out;
-            background-color: #fff;
-        }
-
-        .card:hover {
-            box-shadow: 0 8px 16px #3cf696;
-            background-color: #000;
-            color: #fff;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 400px;
-            width: 100%;
-        }
-
-        .btn {
-            margin: 5px;
-        }
-
-        .content-center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .text-black {
-            color: black;
-        }
-
-        .flex-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .flex-container>div {
-            flex: 1 1 45%;
-            margin: 10px;
-        }
-
-        .mt-5 {
-            margin-top: 3rem !important;
-        }
-
-        /* Enhanced Typography */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Roboto', sans-serif;
-        }
-
-        /* Enhanced Buttons */
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-
-        .btn-success {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-        .btn-warning {
-            background-color: #ffc107;
-            border-color: #ffc107;
-        }
-
-        .btn-info {
-            background-color: #3cf696;
-            border-color: #3cf696;
-        }
-
-        .btn-light {
-            background-color: #f8f9fa;
-            border-color: #f8f9fa;
-        }
-
-        .btn-dark {
-            background-color: #343a40;
-            border-color: #343a40;
-        }
-
-        .btn-link {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 320px) {
-            .sidebar {
-                width: 100%;
-            }
-
-            .main {
-                margin-left: 0;
-            }
-
-            .flex-container>div {
-                flex: 1 1 100%;
-            }
-        }
-
-        /* Custom CSS */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .dashboard-header h1 {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .dashboard-header .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .dashboard-header .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-
-        .dashboard-header .user-info span {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .dashboard-cards,
-        .best-selling-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .dashboard-cards .card,
-        .best-selling-section .card {
-            width: calc(25% - 15px);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .dashboard-cards .card:hover,
-        .best-selling-section .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .dashboard-cards .card .card-body,
-        .best-selling-section .card .card-body {
-            padding: 20px;
-        }
-
-        .dashboard-cards .card .card-title,
-        .best-selling-section .card .card-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #3cf696;
-            margin-bottom: 10px;
-        }
-
-
-
-        .dashboard-cards .card .card-text,
-        .best-selling-section .card .card-text {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 0;
-        }
-
-        .dashboard-charts {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .dashboard-charts .chart-container {
-            width: calc(49% - 10px);
-            margin-bottom: 20px;
-        }
-
-        .dashboard-charts .chart-container:nth-child(2n+1) {
-            margin-right: 10px;
-        }
-
-        .dashboard-charts .chart-container:nth-child(2n) {
-            margin-left: 10px;
-        }
-
-
-        .dashboard-footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-            border-top: 1px solid #ddd;
-            margin-top: 20px;
-        }
-
-        .dashboard-footer p {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0;
-        }
-
-        td {
-            border: 1px solid white;
-            padding: 5px;
-        }
-
-        td:hover {
-            cursor: pointer;
-            background-color: #d8f0dd;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RMHUB Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="/images/NavImg.jpg" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      background: #f6f8fb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      padding: 28px;
+      transition: margin-left .2s ease;
+    }
+
+    body.sb-collapsed .main-content {
+      margin-left: 92px;
+    }
+
+    @media (max-width: 991.98px) {
+      .main-content {
+        margin-left: 0;
+        padding: 18px;
+      }
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-header h1 {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, .08);
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .06);
+    }
+
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #3cf696;
+      border: 1px solid rgba(15, 23, 42, .25);
+      padding: 6px;
+    }
+
+    .user-info span {
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .rm-card {
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, .08);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+      padding: 18px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 1200px) {
+      .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 576px) {
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card {
+      border-radius: 16px;
+      border: 1px solid rgba(15, 23, 42, .08);
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .06);
+      padding: 16px;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, .10);
+    }
+
+    .stat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(60, 246, 150, .35);
+      background: rgba(60, 246, 150, .14);
+      color: #0b1220;
+      font-size: 18px;
+    }
+
+    .stat-title {
+      font-weight: 900;
+      color: rgba(15, 23, 42, .75);
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-weight: 950;
+      color: #0f172a;
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.2;
+    }
+
+    .section-title {
+      font-weight: 950;
+      color: #0f172a;
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .mini-table thead th {
+      background: #3cf696 !important;
+      color: #0b1220 !important;
+      border-bottom: 0 !important;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .mini-table tbody td {
+      vertical-align: middle;
+    }
+
+    .chart-card {
+      border-radius: 16px;
+      border: 1px solid rgba(15, 23, 42, .08);
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, .06);
+      padding: 16px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 360px;
+      width: 100%;
+    }
+
+    .btn-time {
+      border-radius: 10px;
+      font-weight: 900;
+      padding: 8px 12px;
+      border: 1px solid rgba(60, 246, 150, .35);
+      background: rgba(60, 246, 150, .14);
+      color: #0b1220;
+    }
+
+    .btn-time:hover {
+      background: rgba(60, 246, 150, .20);
+    }
+
+    .dashboard-footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 70px;
+      border-top: 1px solid rgba(15, 23, 42, .08);
+      margin-top: 18px;
+      color: rgba(15, 23, 42, .65);
+      font-weight: 700;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="sidebar">
-                    <h4>
-                        <img src="/images/users-avatar-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:40px;height:40px;border:1px solid black;border-radius:50px;background-color:black">
-                        <span> Hello Admin!..</span>
-                    </h4>
-                    <hr>
-                    <button onclick="location.href='/admin/dashboard'">
-                        <img src="/images/dashboard-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:30px;height:30px">
-                        <span>Dashboard</span>
-                    </button>
-                    <button onclick="location.href='/admin/users'">
-                        <img src="/images/users.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Users</span>
-                    </button>
-                    <button onclick="location.href='/admin/products'">
-                        <img src="/images/product.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Products</span>
-                    </button>
-                    <button onclick="location.href='/admin/category'">
-                        <img src="/images/Category.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Category</span>
-                    </button>
-                    <button onclick="location.href='/admin/orders'">
-                        <img src="/images/orders-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:30px;height:30px">
-                        <span>Orders</span>
-                    </button>
-                    <button onclick="location.href='/admin/sales-report'">
-                        <img src="/images/revenue.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Sales Report</span>
-                    </button>
-                    <!-- <button onclick="location.href='/admin/banners'">
-            <img src="/images/product.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-            <span>Banners</span>
-        </button> -->
-                    <button onclick="location.href='/coupon/coupon'">
-                        <img src="/images/c2.svg" alt="Logo" class="logo-small" style="width:30px;height:30px">
-                        <span>Coupons</span>
-                    </button>
-                    <button onclick="location.href='/admin/logout'">
-                        <img src="/images/logout-svgrepo-com.svg" alt="Logo" class="logo-small"
-                            style="width:30px;height:30px;">
-                        <span>Logout</span>
-                    </button>
-                </div>
+  <%- include("sidebar") %>
+
+  <div class="main-content">
+    <div class="dashboard-header">
+      <h1><%- locals.title %></h1>
+      <div class="user-info">
+        <img src="/images/users-avatar-svgrepo-com.svg" alt="User">
+        <span>Admin</span>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-head">
+          <div>
+            <p class="stat-title">Total Users</p>
+            <p class="stat-value" id="usersCount"><%- usersCount %></p>
+          </div>
+          <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-head">
+          <div>
+            <p class="stat-title">Total Products</p>
+            <p class="stat-value" id="productsCount"><%- productsCount %></p>
+          </div>
+          <div class="stat-icon"><i class="fa-solid fa-box"></i></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-head">
+          <div>
+            <p class="stat-title">Total Orders</p>
+            <p class="stat-value" id="ordersCount"><%- ordersCount %></p>
+          </div>
+          <div class="stat-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-head">
+          <div>
+            <p class="stat-title">Total Revenue</p>
+            <p class="stat-value" id="totalRevenue">₹ <%- Number(totalRevenue).toLocaleString('en-IN') %></p>
+          </div>
+          <div class="stat-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rm-card mb-3">
+      <div class="row g-3">
+        <div class="col-12 col-lg-4">
+          <div class="section-title">Top Categories</div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mini-table mb-0">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bestSellingCategories.forEach(category=> { %>
+                  <tr>
+                    <td style="font-weight: 900;"><%= category.categoryName %></td>
+                    <td style="font-weight: 900;"><%= category.count %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="section-title">Top Brands</div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mini-table mb-0">
+              <thead>
+                <tr>
+                  <th>Brand</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bestSellingBrands.forEach(brand=> { %>
+                  <tr>
+                    <td style="font-weight: 900;"><%= brand._id %></td>
+                    <td style="font-weight: 900;"><%= brand.count %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="section-title">Top Products</div>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mini-table mb-0">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Product</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% bestSellingProducts.forEach(product=> { %>
+                  <tr>
+                    <td>
+                      <img src="<%= product.productImage[0] %>" alt="Product" style="width:44px;height:44px;object-fit:cover;border-radius:12px;border:1px solid rgba(15,23,42,.12);background:#fff;">
+                    </td>
+                    <td style="font-weight: 900;"><%= product.productName %></td>
+                    <td style="font-weight: 900;"><%= product.count %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-lg-6">
+        <div class="chart-card">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="section-title mb-0">Total Sales Revenue</div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="salesChart btn-time" data="yearly">Yearly</button>
+              <button class="salesChart btn-time" data="weekly">Weekly</button>
+              <button class="salesChart btn-time" data="daily">Daily</button>
             </div>
-            <main class="main my-5 mt-2">
-                <div class="container">
-                    <div class="dashboard-header">
-                        <h1><%- locals.title %></h1>
-                        <div class="user-info">
-                            <img src="/images/users-avatar-svgrepo-com.svg"
-                                style="background-color: #3cf696;border:1px solid black" alt="User">
-                            <span>Admin</span>
-                        </div>
-                    </div>
+          </div>
+          <div class="chart-container mt-3">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+      </div>
 
-                    <div class="dashboard-cards">
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/users.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Users </h5>
-                                <h6 class="card-text" id="usersCount"><%- usersCount %></h6>
-                            </div>
-                        </div>
+      <div class="col-12 col-lg-6">
+        <div class="chart-card">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="section-title mb-0">Total Orders Placed</div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="ordersChart btn-time" data="yearly">Yearly</button>
+              <button class="ordersChart btn-time" data="weekly">Weekly</button>
+              <button class="ordersChart btn-time" data="daily">Daily</button>
+            </div>
+          </div>
+          <div class="chart-container mt-3">
+            <canvas id="myChartOrders"></canvas>
+          </div>
+        </div>
+      </div>
 
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/product.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Products</h5>
-                                <h6 class="card-text" id="productsCount"><%- productsCount %></h6>
-                            </div>
-                        </div>
+      <div class="col-12 col-lg-6">
+        <div class="chart-card">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="section-title mb-0">Types of Orders</div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="orderTypeChart btn-time" data="yearly">Yearly</button>
+              <button class="orderTypeChart btn-time" data="weekly">Weekly</button>
+              <button class="orderTypeChart btn-time" data="daily">Daily</button>
+            </div>
+          </div>
+          <div class="chart-container mt-3">
+            <canvas id="myChartOrderType"></canvas>
+          </div>
+        </div>
+      </div>
 
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/orders-svgrepo-com.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Orders</h5>
-                                <h6 class="card-text" id="ordersCount"><%- ordersCount %></h6>
-                            </div>
-                        </div>
+      <div class="col-12 col-lg-6">
+        <div class="chart-card">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="section-title mb-0">Category Wise Sales</div>
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="categoryChart btn-time" data="yearly">Yearly</button>
+              <button class="categoryChart btn-time" data="weekly">Weekly</button>
+              <button class="categoryChart btn-time" data="daily">Daily</button>
+            </div>
+          </div>
+          <div class="chart-container mt-3">
+            <canvas id="myChartCategoryWiseSales"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                        <div class="card">
-                            <div class="card-body">
-                                <img src="/images/revenue.svg" alt="Logo" class="logo-small"
-                                    style="width:30px;height:30px">
-                                <h5 class="card-title">Total Revenue</h5>
-                                <h6 class="card-text" id="totalRevenue">₹ <%-
-                                        Number(totalRevenue).toLocaleString('en-IN') %>
-                                </h6>
-                            </div>
-                        </div>
-                    </div>
+    <div class="dashboard-footer">
+      <p class="mb-0">&copy; 2023 RMHUB. All rights reserved.</p>
+    </div>
+  </div>
 
-                    <div class="container-fluid" style="margin-top: 40px;">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h3 class="text-center">Top Categories</h3>
-                                <table class="table table-striped" id="example">
-                                    <thead>
-                                        <tr style="background-color: #3cf696">
-                                            <th>Category Name</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% bestSellingCategories.forEach(category=> { %>
-                                            <tr
-                                                style="background-color: #e5e6de;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                                <td>
-                                                    <%= category.categoryName %>
-                                                </td>
-                                                <td>
-                                                    <%= category.count %>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-                            <div class="col-md-4">
-                                <h3 class="text-center">Top Brands</h3>
-                                <table class="table table-striped" id="example">
-                                    <thead>
-                                        <tr style="background-color: #3cf696">
-                                            <th>Brand Name</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% bestSellingBrands.forEach(brand=> { %>
-                                            <tr
-                                                style="background-color: #e5e6de;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                                <td>
-                                                    <%= brand._id %>
-                                                </td>
-                                                <td>
-                                                    <%= brand.count %>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
+  <script>
+    const ctx = document.getElementById('myChart');
+    const ctxOrder = document.getElementById('myChartOrders');
+    const ctxOrderType = document.getElementById('myChartOrderType');
+    const ctxCategoryWise = document.getElementById('myChartCategoryWiseSales');
 
-                            <div class="col-md-4">
-                                <h3 class="text-center">Top Products</h3>
-                                <table class="table table-striped" id="example">
-                                    <thead>
-                                        <tr style="background-color: #3cf696">
-                                            <th>Image</th>
-                                            <th>Product Name</th>
-                                            <th>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% bestSellingProducts.forEach(product=> { %>
-                                            <tr
-                                                style="background-color: #e5e6de;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                                                <td>
-                                                    <img src="<%= product.productImage[0] %>" alt="Product Image"
-                                                        style="width: 50px; height: 50px;">
-                                                </td>
-                                                <td>
-                                                    <%= product.productName %>
-                                                </td>
-                                                <td>
-                                                    <%= product.count %>
-                                                </td>
-                                            </tr>
-                                            <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    let salesTimeBase = 'yearly';
+    let orderChartTimeBase = 'yearly';
+    let orderTypeChartTimeBase = 'yearly';
+    let CategoryChartTimeBase = 'yearly';
 
+    let salesButtons = document.querySelectorAll('.salesChart');
+    let orderButtons = document.querySelectorAll('.ordersChart');
+    let orderTypeButtons = document.querySelectorAll('.orderTypeChart');
+    let categoryButtons = document.querySelectorAll('.categoryChart');
 
-                    <main>
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <h2 class="text-center m-5">Total Sales Revenue Chart</h2>
-                                    <div class="chart-container">
-                                        <canvas id="myChart"></canvas>
-                                    </div>
-                                    <div class="d-flex justify-content-center mt-3">
-                                        <button class="salesChart text-black ml-4 btn btn-info py-1 px-2"
-                                            data="yearly">Yearly</button>
-                                        <button class="salesChart text-black ml-4 btn btn-info py-1 px-2"
-                                            data="weekly">Weekly</button>
-                                        <button class="salesChart text-black ml-4 btn btn-info py-1 px-2"
-                                            data="daily">Daily</button>
-                                    </div>
-                                </div>
+    salesButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        salesTimeBase = btn.getAttribute('data');
+        updateData();
+      });
+    });
 
-                                <div class="col-lg-6">
-                                    <h2 class="text-center m-5">Total Orders Placed Chart</h2>
-                                    <div class="chart-container">
-                                        <canvas id="myChartOrders"></canvas>
-                                    </div>
-                                    <div class="d-flex justify-content-center mt-3">
-                                        <button class="ordersChart ml-4 py-1 px-2 text-black btn btn-info"
-                                            data="yearly">Yearly</button>
-                                        <button class="ordersChart ml-4 py-1 px-2 text-black btn btn-info"
-                                            data="weekly">Weekly</button>
-                                        <button class="ordersChart ml-4 py-1 px-2 text-black btn btn-info"
-                                            data="daily">Daily</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    orderButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        orderChartTimeBase = btn.getAttribute('data');
+        updateData();
+      });
+    });
 
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <h2 class="text-center m-5">Types Of Orders Chart</h2>
-                                <div class="chart-container">
-                                    <canvas id="myChartOrderType"></canvas>
-                                </div>
-                                <div class="d-flex justify-content-center mt-5">
-                                    <button class="orderTypeChart ml-4 text-black py-1 px-2 btn btn-info"
-                                        data="yearly">Yearly</button>
-                                    <button class="orderTypeChart ml-4 text-black py-1 px-2 btn btn-info"
-                                        data="weekly">Weekly</button>
-                                    <button class="orderTypeChart ml-4 text-black py-1 px-2 btn btn-info"
-                                        data="daily">Daily</button>
-                                </div>
-                            </div>
+    orderTypeButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        orderTypeChartTimeBase = btn.getAttribute('data');
+        updateData();
+      });
+    });
 
-                            <div class="col-lg-6">
-                                <h2 class="text-center m-5">Category Wise Sales Chart</h2>
-                                <div class="chart-container">
-                                    <canvas id="myChartCategoryWiseSales"></canvas>
-                                </div>
-                                <div class="d-flex justify-content-center mt-5">
-                                    <button class="categoryChart btn btn-info ml-4 text-black py-1 px-2"
-                                        data="yearly">Yearly</button>
-                                    <button class="categoryChart btn btn-info ml-4 text-black py-1 px-2"
-                                        data="weekly">Weekly</button>
-                                    <button class="categoryChart btn btn-info ml-4 text-black py-1 px-2"
-                                        data="daily">Daily</button>
-                                </div>
-                            </div>
-                        </div>
+    categoryButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        CategoryChartTimeBase = btn.getAttribute('data');
+        updateData();
+      });
+    });
 
-                    </main>
-                    
+    let salesChart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+        labels: ['loading'],
+        datasets: [{
+          label: 'Sales (rs)',
+          data: [0],
+          backgroundColor: ['#d8f0dd', '#3cf696', '#e5e6de', '#000', 'rgba(30, 160, 89, 0.2)'],
+          borderColor: '#000',
+          borderWidth: 2,
+        }],
+      },
+      options: { scales: { r: { beginAtZero: true, min: 0 } } }
+    });
 
+    let OrderChart = new Chart(ctxOrder, {
+      type: 'bar',
+      data: {
+        labels: ['loading'],
+        datasets: [{
+          label: 'Orders (no)',
+          data: [0],
+          backgroundColor: ['#d8f0dd', '#000', '#3cf696', '#e5e6de'],
+          borderColor: '#000',
+          borderWidth: 2,
+        }],
+      },
+      options: { scales: { y: { beginAtZero: true } } }
+    });
 
-                    <div class="dashboard-footer">
-                        <p>&copy; 2023 RMHUB. All rights reserved.</p>
-                    </div>
-                </div>
-            </main>
+    let orderTypeChart = new Chart(ctxOrderType, {
+      type: 'line',
+      data: {
+        labels: ['loading'],
+        datasets: [{
+          label: 'Orders (no)',
+          data: [0],
+          backgroundColor: '#d8f0dd',
+          borderColor: '#000',
+          borderWidth: 2,
+          fill: true,
+          stack: 'stream',
+        }],
+      },
+      options: { scales: { y: { beginAtZero: true } } }
+    });
 
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    let categoryChart = new Chart(ctxCategoryWise, {
+      type: 'pie',
+      data: {
+        labels: ['loading'],
+        datasets: [{
+          label: 'Orders (no)',
+          data: [0],
+          backgroundColor: ['#d8f0dd', '#3cf696', '#e5e6de'],
+          borderColor: ['#000'],
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        plugins: {
+          legend: { position: 'top', labels: { boxWidth: 20, font: { size: 12 } } }
+        }
+      }
+    });
 
-            <script defer>
-                const ctx = document.getElementById('myChart');
-                const ctxOrder = document.getElementById('myChartOrders');
-                const ctxOrderType = document.getElementById('myChartOrderType');
-                const ctxCategoryWise = document.getElementById('myChartCategoryWiseSales');
+    function updateData() {
+      const currentURL = window.location.origin;
+      fetch(`${currentURL}/admin/chart?salesChart=${salesTimeBase}&orderChart=${orderChartTimeBase}&orderType=${orderTypeChartTimeBase}&categoryChart=${CategoryChartTimeBase}`)
+        .then(response => response.json())
+        .then((Data) => {
+          let { saleChartInfo, orderTypeChartInfo, categoryChartInfo, orderQuantityChartInfo } = Data;
 
-                let salesTimeBase = 'yearly';
-                let orderChartTimeBase = 'yearly';
-                let orderTypeChartTimeBase = 'yearly';
-                let CategoryChartTimeBase = 'yearly';
+          updateChart(salesChart, saleChartInfo, 'totalSales', 'Sales (rs)');
+          updateChart(OrderChart, orderQuantityChartInfo, 'totalOrder', 'Orders (no)');
 
-                let salesButtons = document.querySelectorAll('.salesChart');
-                let orderButtons = document.querySelectorAll('.ordersChart');
-                let orderTypeButtons = document.querySelectorAll('.orderTypeChart');
-                let categoryButtons = document.querySelectorAll('.categoryChart');
+          let orderTypeLabel = orderTypeChartInfo.data.map((type) => type._id);
+          let orderTypeValues = orderTypeChartInfo.data.map((type) => type.totalOrder);
+          orderTypeChart.data.labels = orderTypeLabel;
+          orderTypeChart.data.datasets[0].data = orderTypeValues;
+          orderTypeChart.update();
 
-                salesButtons.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        let val = btn.getAttribute('data');
-                        salesTimeBase = val;
-                        updateData();
-                    });
-                });
+          let categoryWiseLabel = categoryChartInfo.data.map((type) => type._id);
+          let categoryWiseValues = categoryChartInfo.data.map((type) => type.count);
+          categoryChart.data.labels = categoryWiseLabel;
+          categoryChart.data.datasets[0].data = categoryWiseValues;
+          categoryChart.update();
+        });
+    }
 
-                orderButtons.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        let val = btn.getAttribute('data');
-                        orderChartTimeBase = val;
-                        updateData();
-                    });
-                });
+    function updateChart(chart, chartInfo, dataKey, label) {
+      let chartLabel;
+      let chartData;
 
-                orderTypeButtons.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        let val = btn.getAttribute('data');
-                        orderTypeChartTimeBase = val;
-                        updateData();
-                    });
-                });
+      if (chartInfo.timeBasis === 'yearly') {
+        let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        chartLabel = chartInfo.data.map((data) => months[data._id.month - 1]);
+        chartData = chartInfo.data.map((data) => data[dataKey]);
+      } else if (chartInfo.timeBasis === 'weekly') {
+        chartLabel = chartInfo.data.map((data) => data._id);
+        chartData = chartInfo.data.map((data) => data[dataKey]);
+      } else if (chartInfo.timeBasis === 'daily') {
+        chartLabel = chartInfo.data.map((data) => {
+          const hr = data._id.hour;
+          return `${hr}:00 - ${hr + 1}:00 UTC`;
+        });
+        chartData = chartInfo.data.map((data) => data[dataKey]);
+      }
 
-                categoryButtons.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        let val = btn.getAttribute('data');
-                        CategoryChartTimeBase = val;
-                        updateData();
-                    });
-                });
+      chart.data.labels = chartLabel;
+      chart.data.datasets[0].data = chartData;
+      chart.data.datasets[0].label = label;
+      chart.update();
+    }
 
-                let salesChart = new Chart(ctx, {
-                    type: 'polarArea', // Change chart type to 'polarArea'
-                    data: {
-                        labels: ['loading'],
-                        datasets: [{
-                            label: 'Sales (rs)',
-                            data: [0],
-                            backgroundColor: ['#d8f0dd', '#3cf696', '#e5e6de', '#000', 'rgba(30, 160, 89, 0.2)'],
-                            borderColor: '#000',
-                            borderWidth: 2,
-                        }],
-                    },
-                    options: {
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                min: 0,
-                            }
-                        }
-                    }
-                });
+    window.onload = updateData;
+  </script>
 
-                let OrderChart = new Chart(ctxOrder, {
-                    type: 'bar',
-                    data: {
-                        labels: ['loading'],
-                        datasets: [{
-                            label: 'Orders (no)',
-                            data: [0],
-                            backgroundColor: ['#d8f0dd', '#000', '#3cf696', '#e5e6de'], // Add custom colors here
-                            borderColor: '#000',
-                            borderWidth: 2,
-                        }],
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
+  <script>
+    function getQueryParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
 
-                let orderTypeChart = new Chart(ctxOrderType, {
-                    type: 'line', // Change chart type to 'line'
-                    data: {
-                        labels: ['loading'],
-                        datasets: [{
-                            label: 'Orders (no)',
-                            data: [0],
-                            backgroundColor: '#d8f0dd', // Change background color if needed
-                            borderColor: '#000', // Change border color if needed
-                            borderWidth: 2,
-                            fill: true, // Enable fill
-                            stack: 'stream', // Set stack mode to stream
-                        }],
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-
-
-                let categoryChart = new Chart(ctxCategoryWise, {
-                    type: 'pie',
-                    data: {
-                        labels: ['loading'],
-                        datasets: [{
-                            label: 'Orders (no)',
-                            data: [0], // Add your data here
-                            backgroundColor: ['#d8f0dd', '#3cf696', '#e5e6de'], // Add custom colors here
-                            borderColor: ['#000'],
-                            borderWidth: 2,
-                        }],
-                    },
-                    options: {
-                        plugins: {
-                            legend: {
-                                position: 'top', // Adjust legend position
-                                labels: {
-                                    boxWidth: 20, // Adjust legend box width
-                                    font: {
-                                        size: 12, // Adjust legend font size
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-
-
-                function updateData() {
-                    const currentURL = window.location.origin;
-
-                    fetch(`${currentURL}/admin/chart?salesChart=${salesTimeBase}&orderChart=${orderChartTimeBase}&orderType=${orderTypeChartTimeBase}&categoryChart=${CategoryChartTimeBase}`, {
-                        method: 'GET',
-                    })
-                        .then(response => response.json())
-                        .then((Data) => {
-                            let {
-                                saleChartInfo,
-                                orderTypeChartInfo,
-                                categoryChartInfo,
-                                orderQuantityChartInfo
-                            } = Data;
-
-                            // Update Sales Chart
-                            updateChart(salesChart, saleChartInfo, 'totalSales', 'Sales (rs)');
-
-                            // Update Orders Chart
-                            updateChart(OrderChart, orderQuantityChartInfo, 'totalOrder', 'Orders (no)');
-
-                            // Update Order Type Chart
-                            let orderTypeLabel = orderTypeChartInfo.data.map((type) => type._id);
-                            let orderTypeValues = orderTypeChartInfo.data.map((type) => type.totalOrder);
-                            orderTypeChart.data.labels = orderTypeLabel;
-                            orderTypeChart.data.datasets[0].data = orderTypeValues;
-                            orderTypeChart.update();
-
-                            // Update Category Chart
-                            let categoryWiseLabel = categoryChartInfo.data.map((type) => type._id);
-                            let categoryWiseValues = categoryChartInfo.data.map((type) => type.count);
-                            categoryChart.data.labels = categoryWiseLabel;
-                            categoryChart.data.datasets[0].data = categoryWiseValues;
-                            categoryChart.update();
-
-                            // Update button colors
-                            updateButtonColors();
-                        });
-                }
-
-                function updateChart(chart, chartInfo, dataKey, label) {
-                    let chartLabel;
-                    let chartData;
-
-                    if (chartInfo.timeBasis === 'yearly') {
-                        let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                        chartLabel = chartInfo.data.map((data) => {
-                            return months[data._id.month - 1];
-                        });
-                        chartData = chartInfo.data.map((data) => data[dataKey]);
-                    } else if (chartInfo.timeBasis === 'weekly') {
-                        chartLabel = chartInfo.data.map((data) => data._id);
-                        chartData = chartInfo.data.map((data) => data[dataKey]);
-                    } else if (chartInfo.timeBasis === 'daily') {
-                        chartLabel = chartInfo.data.map((data) => {
-                            const hr = data._id.hour;
-                            return `${hr}:00 - ${hr + 1}:00 UTC`;
-                        });
-                        chartData = chartInfo.data.map((data) => data[dataKey]);
-                    }
-
-                    chart.data.labels = chartLabel;
-                    chart.data.datasets[0].data = chartData;
-                    chart.data.datasets[0].label = label;
-                    chart.update();
-                }
-
-                function updateButtonColors() {
-                    salesButtons.forEach((btn) => {
-                        btn.style.color = (btn.getAttribute('data') === salesTimeBase) ? 'rgb(138, 240, 240)' : 'white';
-                    });
-
-                    orderButtons.forEach((btn) => {
-                        btn.style.color = (btn.getAttribute('data') === orderChartTimeBase) ? 'rgb(138, 240, 240)' : 'white';
-                    });
-
-                    orderTypeButtons.forEach((btn) => {
-                        btn.style.color = (btn.getAttribute('data') === orderTypeChartTimeBase) ? 'rgb(138, 240, 240)' : 'white';
-                    });
-
-                    categoryButtons.forEach((btn) => {
-                        btn.style.color = (btn.getAttribute('data') === CategoryChartTimeBase) ? 'rgb(138, 240, 240)' : 'white';
-                    });
-                }
-
-                window.onload = updateData;
-            </script>
-            <script>
-                // Function to get the query parameter value by name
-                function getQueryParameter(name) {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    return urlParams.get(name);
-                }
-
-                // Check for 'error' parameter in the URL
-                const error = getQueryParameter('message');
-
-                // If 'error' parameter exists, display it using Swal
-                if (error) {
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        icon: 'error',
-                        background: '#e5e6de',
-                        text: error.replace(/%20/g, ' '), // Replace URL-encoded spaces with actual spaces
-                        showConfirmButton: false,
-                        
-                    });
-                }
-            </script>
-
+    const error = getQueryParameter('message');
+    if (error) {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        background: '#e5e6de',
+        text: error.replace(/%20/g, ' '),
+        showConfirmButton: false
+      });
+    }
+  </script>
 </body>
 
 </html>
